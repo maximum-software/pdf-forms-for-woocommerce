@@ -1,0 +1,249 @@
+.pdf-forms-for-woocommerce-admin
+{
+	padding: 10px 10px !important;
+	box-sizing: border-box !important;
+}
+
+.pdf-forms-for-woocommerce-admin table.pdf-attachments td
+{
+	padding: 0 0 10px 0;
+}
+
+.pdf-forms-for-woocommerce-admin table.pdf-fields-mapper td
+{
+	padding: 4px;
+}
+
+.pdf-forms-for-woocommerce-admin table,
+.pdf-forms-for-woocommerce-admin input[type=file]
+{
+	width: 100%;
+	max-width: 100%;
+}
+
+.pdf-forms-for-woocommerce-admin .preload-data,
+.pdf-forms-for-woocommerce-admin .pdf-options-hidden,
+.pdf-forms-for-woocommerce-admin .pdf-attachment-row-template,
+.pdf-forms-for-woocommerce-admin .pdf-mapping-row-template,
+.pdf-forms-for-woocommerce-admin .pdf-mapping-row-valuemapping-template,
+.pdf-forms-for-woocommerce-admin .image-embeds-row-template
+{
+	display: none;
+}
+
+.pdf-forms-for-woocommerce-admin .filename-column
+{
+	width: 100%
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-attachment-row .pdf-filename
+{
+	word-break: break-all;
+}
+
+.pdf-forms-for-woocommerce-admin div.pdf-options
+{
+	padding: 10px;
+}
+
+.pdf-forms-for-woocommerce-admin div.pdf-options input
+{
+	float: none;
+}
+
+.pdf-forms-for-woocommerce-admin div.pdf-options div
+{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.pdf-forms-for-woocommerce-admin div.pdf-options > div.pdf-options-multiline
+{
+	border-bottom: 1px dotted gray;
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-buttons
+{
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table
+{
+	width: 100%;
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table th,
+.pdf-forms-for-woocommerce-admin .mapping-table td
+{
+	vertical-align: top;
+	text-align: center;
+	width: auto;
+	word-break: break-all;
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table td.mapping-arrow
+{
+	width: 1%;
+	white-space: nowrap;
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table td.buttons
+{
+	width: 1%;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table td,
+.pdf-forms-for-woocommerce-admin .mapping-table th
+{
+	vertical-align: middle;
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-fields-mapper td.woo-variable,
+.pdf-forms-for-woocommerce-admin .pdf-fields-mapper th.woo-variable,
+.pdf-forms-for-woocommerce-admin .pdf-fields-mapper td.pdf-field,
+.pdf-forms-for-woocommerce-admin .pdf-fields-mapper th.pdf-field
+{
+	width: 40%;
+	vertical-align: middle;
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-valuemapping-row td.woo-variable
+{
+	padding-left: 20px;
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-valuemapping-row td.pdf-field
+{
+	padding-right: 20px;
+}
+
+.pdf-forms-for-woocommerce-admin .pdf-valuemapping-row td
+{
+	background-color: rgba(100, 100, 100, 0.2);
+}
+
+.pdf-forms-for-woocommerce-admin .mapping-table input,
+.pdf-forms-for-woocommerce-admin .mapping-table textarea,
+.pdf-forms-for-woocommerce-admin .mapping-table select
+{
+	width: 100%;
+	min-width: 50px;
+}
+
+.pdf-forms-for-woocommerce-admin select
+{
+	width: 100%;
+	min-width: 50px;
+	text-overflow: ellipsis;
+	text-align: center;
+	background-color: #fff;
+	border: 1px solid #aaa;
+}
+
+.pdf-forms-for-woocommerce-admin .select-dropdown
+{
+	position: relative;
+}
+
+.pdf-forms-for-woocommerce-admin .select2-results__option
+{
+	margin-bottom: 0;
+}
+
+.pdf-forms-for-woocommerce-admin .select2-search__field
+{
+	min-width: 0 !important;
+}
+
+.pdf-forms-for-woocommerce-admin .footer
+{
+	padding-bottom: 15px;
+}
+
+.pdf-forms-for-woocommerce-admin .helpbox
+{
+	margin-top: 15px;
+}
+
+.pdf-forms-for-woocommerce-admin .help-button
+{
+	float: right;
+	padding-right: 10px;
+}
+
+.pdf-forms-for-woocommerce-admin .marked-row-background
+{
+	background-color: rgba(100, 100, 100, 0.2);
+}
+
+.pdf-forms-for-woocommerce-admin .image-embeds th.woo-variable,
+.pdf-forms-for-woocommerce-admin .image-embeds td.woo-variable,
+.pdf-forms-for-woocommerce-admin .image-embeds th.pdf-file,
+.pdf-forms-for-woocommerce-admin .image-embeds td.pdf-file
+{
+	width: 30%;
+}
+
+.pdf-forms-for-woocommerce-admin .image-embeds td,
+.pdf-forms-for-woocommerce-admin .image-embeds th
+{
+	vertical-align: middle;
+}
+
+.pdf-forms-for-woocommerce-admin .jcrop-container
+{
+	margin: 0 auto;
+	width: 700px;
+	overflow: hidden;
+}
+
+.pdf-forms-for-woocommerce-admin .jcrop-page
+{
+	width: 700px;
+}
+
+.pdf-forms-for-woocommerce-admin input.coordinate
+{
+	width: 100px !important;
+}
+
+.pdf-forms-for-woocommerce-admin .page-coordinates span
+{
+	margin: 0 5px;
+}
+
+.pdf-forms-for-woocommerce-admin .page-coordinates input
+{
+	float: none !important;
+}
+
+.pdf-forms-for-woocommerce-admin .image-region-selection-hint
+{
+	font-style: italic;
+}
+
+.woo-panel-field-list
+{
+	max-width: calc(100% - 10px) !important;
+	margin: 0 auto;
+}
+
+.pdf-forms-for-woocommerce-admin .image-embeds td.pdf-page
+{
+	width: 10%;
+}
+
+.pdf-forms-for-woocommerce-admin .messages .error,
+.pdf-forms-for-woocommerce-notice.notice-error
+{
+	color: red;
+}
+
+.pdf-forms-for-woocommerce-admin .messages .warning,
+.pdf-forms-for-woocommerce-notice.notice-warning
+{
+	color: #f0ad4e;
+}

@@ -1,0 +1,197 @@
+<div id="pdf-forms-for-woocommerce-product-settings" class="panel woocommerce_options_panel hidden pdf-forms-for-woocommerce-admin">
+	<div class="toolbar toolbar-top">
+		
+		{data-field}
+		<div class='preload-data'>{preload-data}</div>
+		
+		{messages}
+		
+		<p class="instructions">{instructions}</p>
+		
+		<!-- <a name="pdf-forms-for-woocommerce-messages"></a> -->
+		<div class="messages"></div>
+		
+		<table class="form-table pdf-attachments">
+			<tbody>
+				<tr class="pdf-buttons">
+					<td class="filename-column"></td>
+					<td class="pdf-buttons">
+						<input type="button" name="attach" class="button button-primary attach-btn" value="{attach-pdf}"/>
+					</td>
+				</tr>
+				<tr class="pdf-attachment-row-template">
+					<td class="filename-column">
+						<span class="pdf-filename"></span>
+						<div class="options_group pdf-options pdf-options-hidden" style="display:none">
+							<div class="form-field woocommerce-panel-field pdf-option-skip"><input data-option="skip_empty" type="checkbox"/> {skip-when-empty}</div>
+							<div class="form-field woocommerce-panel-field pdf-option-flatten"><input data-option="flatten" type="checkbox"/> {flatten}</div>
+							<div class="form-field woocommerce-panel-field pdf-option-filename pdf-options-multiline">
+								<div>{filename}</div>
+								<div><input id="pdf-forms-for-woocommerce-variables" data-option="filename" type="text" class="variables"/><span>.pdf</span></div>
+								<div>{leave-blank-to-disable}</div>
+							</div>
+							<div class="form-field woocommerce-panel-field pdf-option-save-directory pdf-options-multiline">
+								<div>{save-directory}</div>
+								<div><span>wp-content/uploads/</span><input id="pdf-forms-for-woocommerce-variables" data-option="save_directory" type="text" class="variables"/></div>
+								<div>{leave-blank-to-disable}</div>
+							</div>
+							<div class="form-field woocommerce-panel-field pdf-option-email-templates select-dropdown">
+								{email-templates}<br/>
+								<select class="email-templates-list" multiple="multiple" data-option="emailTemplates"></select>
+							</div>
+						</div>
+					</td>
+					<td class="pdf-buttons">
+						<a class="button button-secondary pdf-options-button" href="#">{options}</a>
+						<a class="button button-secondary delete-button" href="#">{delete}</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<hr/>
+		
+		<div class="field-mapping-tool">
+			<div>
+				<span class="dashicons dashicons-randomize"></span>
+				<strong>{field-mapping}</strong>
+				<a class="help-button" href="#">{hide-help}</a>
+				<div class="helpbox">
+					<span class="dashicons dashicons-editor-help"></span>
+					{field-mapping-help}
+				</div>
+			</div>
+			
+			<table class="form-table pdf-fields-mapper mapping-table">
+				<tbody>
+					<tr>
+						<th class="woo-variable">{woo-variable}</th>
+						<th></th>
+						<th class="pdf-field">{pdf-field}</th>
+					</tr>
+					<tr class="marked-row-background">
+						<td class="woo-variable select-dropdown">
+							<select class="woo-variable-list"></select>
+						</td>
+						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
+						<td class="pdf-field select-dropdown"><select class="pdf-field-list"></select></td>
+						<td class="buttons">
+							<a class="button button-primary add-mapping-button" href="#">{add-mapping}</a>
+						</td>
+					</tr>
+					<tr class="pdf-mapping-row-template">
+						<td class="variables">
+							<textarea spellcheck="false" class="variables"></textarea>
+						</td>
+						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
+						<td class="pdf-field"><span class="pdf-field-name"></span></td>
+						<td class="buttons">
+							<a class="button button-small delete-mapping-button" href="#">{delete}</a>
+							<a class="button button-small map-value-button" href="#">{map-value}</a>
+						</td>
+					</tr>
+					<tr class="pdf-mapping-row-valuemapping-template">
+						<td class="woo-variable"><input type="text" class="woo-value"/></td>
+						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right"></span></td>
+						<td class="pdf-field"><input type="text" class="pdf-value"/></td>
+						<td class="buttons">
+							<a class="button button-small delete-valuemapping-button" href="#">{delete}</a>
+						</td>
+					</tr>
+					<tr class="delete-all-row">
+						<td colspan="3"></td>
+						<td class="buttons">
+							<a class="button button-small delete-all-mappings-button" href="#">{delete-all-mappings}</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<hr/>
+		
+		<div class="image-embedding-tool">
+			
+			<div>
+				<span class="dashicons dashicons-media-document"></span>
+				<strong>{image-embedding}</strong>
+				<a class="help-button" href="#">{hide-help}</a>
+				
+				<div class="helpbox">
+					<span class="dashicons dashicons-editor-help"></span>
+					{image-embedding-help}
+				</div>
+			</div>
+			
+			<table class="form-table image-embeds mapping-table">
+				<tbody>
+					<tr>
+						<th class="woo-variable">{woo-variable}</th>
+						<th></th>
+						<th class="pdf-file">{pdf-file}</th>
+						<th>{page}</th>
+						<th></th>
+					</tr>
+					<tr>
+						<td class="woo-variable select-dropdown">
+							<select class="woo-variable-list"></select>
+						</td>
+						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
+						<td class="pdf-file select-dropdown"><select class="pdf-files-list" name="embed-pdf-list"></select></td>
+						<td class="pdf-page select-dropdown"><select class="page-list" name="embed-page"></select></td>
+						<td class="buttons"><a class="button button-primary add-woo-variable-embed-button" href="#">{add-woo-variable-embed}</a></td>
+					</tr>
+					<tr class="image-embeds-row-template">
+						<td colspan="5">
+							<hr/>
+						</td>
+					</tr>
+					<tr class="image-embeds-row-template">
+						<td class="variables">
+							<textarea spellcheck="false" class="variables"></textarea>
+						</td>
+						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
+						<td class="pdf-file pdf-file-caption"></td>
+						<td class="page-caption"></td>
+						<td class="buttons"><a class="button button-small delete-embed-button" href="#">{delete-woo-variable-embed}</a></td>
+					</tr>
+					<tr class="image-embeds-row-template page-selector-row">
+						<td colspan="5">
+							<div class="image-region-selection-hint">{image-region-selection-hint}</div>
+							<div class="jcrop-container">
+								<img class="jcrop-page" width="500" height="600" />
+							</div>
+							<div class="page-coordinates">
+								<span>
+									{left}
+									<input type="number" min="0" name="left" class="coordinate" value="10"/> {pts};
+								</span>
+								<span>
+									{top}
+									<input type="number" min="0" name="top" class="coordinate" value="10"/> {pts};
+								</span>
+								<span>
+									{width}
+									<input type="number" min="0" name="width" class="coordinate" value="50"/> {pts};
+								</span>
+								<span>
+									{height}
+									<input type="number" min="0" name="height" class="coordinate" value="50"/> {pts};
+								</span>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+		
+		<hr/>
+		
+		<div class="footer">
+			<span class="dashicons dashicons-editor-help"></span>
+			{help-message}
+		</div>
+		
+	</div>
+</div>
