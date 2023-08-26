@@ -950,29 +950,17 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 					$destfilename = wp_basename( empty( $destfilename ) ? $filepath : $destfilename, '.pdf' );
 					$destfile = $this->create_tmp_filepath( $destfilename . '.pdf' );
 					
-					try
-					{
-						$service = $this->get_service();
-						$filled = false;
-						
-						if( $service )
-							// we only want to use the API when something needs to be done to the file
-							if( $attachment_affected )
-								$filled = $service->api_fill_embed( $destfile, $attachment_id, $data, $embeds_data, $options );
-						
-						if( ! $filled )
-							copy( $filepath, $destfile );
-						$files[] = array( 'attachment_id' => $attachment_id, 'file' => $destfile, 'filename' => $destfilename . '.pdf', 'options' => $attachment['options'] );
-					}
-					catch(Exception $e)
-					{
-						throw new Exception(
-							self::replace_tags(
-								__( "Error generating PDF: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' ),
-								array( 'error-message' => $e->getMessage(), 'error-file' => wp_basename( $e->getFile() ), 'error-line' => $e->getLine() )
-							)
-						);
-					}
+					$service = $this->get_service();
+					$filled = false;
+					
+					if( $service )
+						// we only want to use the API when something needs to be done to the file
+						if( $attachment_affected )
+							$filled = $service->api_fill_embed( $destfile, $attachment_id, $data, $embeds_data, $options );
+					
+					if( ! $filled )
+						copy( $filepath, $destfile );
+					$files[] = array( 'attachment_id' => $attachment_id, 'file' => $destfile, 'filename' => $destfilename . '.pdf', 'options' => $attachment['options'] );
 				}
 				
 				if( count( $files ) > 0 )
