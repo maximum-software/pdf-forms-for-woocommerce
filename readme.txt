@@ -1,4 +1,4 @@
-=== PDF Forms Filler for WPForms ===
+=== PDF Forms Filler for WooCommerce ===
 Version: 1.0.0
 Stable tag: 1.0.0
 Requires at least: 5.4
@@ -55,4 +55,5 @@ Special thanks to the following sponsors of this plugin:
 1. Install the [WooCommerce](https://wordpress.org/plugins/woocommerce/) plugin.
 2. Upload this plugin's folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen directly.
 3. Activate the plugin through the 'Plugins' screen in WordPress.
-4. Start using the 'PDF Forms' section in the WPForms editor under settings.
+4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
+

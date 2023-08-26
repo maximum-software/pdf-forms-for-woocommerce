@@ -852,12 +852,6 @@ jQuery(document).ready(function($) {
 		
 		var mapping = getMapping(data.mapping_id);
 		
-		/*
-		var wpfField = null;
-		if(mapping && mapping.hasOwnProperty('wpf_field'))
-			wpfField = getWpfFieldData(mapping.wpf_field);
-		*/
-		
 		var pdfField = getPdfFieldData(data.pdf_field);
 		
 		var template = jQuery('.pdf-forms-for-woocommerce-admin .pdf-mapping-row-valuemapping-template');

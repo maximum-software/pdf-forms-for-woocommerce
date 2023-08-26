@@ -1,4 +1,4 @@
-# PDF Forms Filler for WPForms
+# PDF Forms Filler for WooCommerce
 
 Automatically fill PDF forms with WooCommerce orders. Attach filled PDFs to orders and order email notifications.
 
@@ -23,7 +23,7 @@ Requirements:
 * Chrome 60, Firefox 56 (or equivalent) or newer
 
 Known problems:
-* Some third party plugins may break the functionality of this plugin (see a list below). Try troubleshooting the problem by disabling likely plugins that may cause issues, such as plugins that modify WordPress or WPForms in radical ways.
+* Some third party plugins may break the functionality of this plugin (see a list below). Try troubleshooting the problem by disabling likely plugins that may cause issues, such as plugins that modify WordPress or WooCommerce in radical ways.
 * Some image optimization plugins optimize PDFs and strip PDF forms from PDF files. This may cause your existing forms to break at a random point in the future (when PDF file cache times out at the API).
 
 Known incompatible plugins:

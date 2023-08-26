@@ -163,7 +163,7 @@
 				if( ! $this->key )
 				{
 					// don't try to get the key from the API on every page load!
-					$fail = get_transient( 'pdf_forms_for_wpforms_pdfninja_key_failure' );
+					$fail = get_transient( 'pdf_forms_for_woocommerce_pdfninja_key_failure' );
 					if( $fail )
 						throw new Exception( __( "Failed to get the Pdf.Ninja API key on last attempt.", 'pdf-forms-for-woocommerce' ) );
 					
@@ -171,7 +171,7 @@
 					try { $key = $this->generate_key(); }
 					catch (Exception $e)
 					{
-						set_transient( 'pdf_forms_for_wpforms_pdfninja_key_failure', true, 12 * HOUR_IN_SECOND );
+						set_transient( 'pdf_forms_for_woocommerce_pdfninja_key_failure', true, 12 * HOUR_IN_SECOND );
 						throw $e;
 					}
 					
@@ -188,7 +188,7 @@
 			{
 				$this->key = $value;
 				update_option( 'pdf-forms-for-woocommerce-settings-api-key', $value );
-				delete_transient( 'pdf_forms_for_wpforms_pdfninja_key_failure' );
+				delete_transient( 'pdf_forms_for_woocommerce_pdfninja_key_failure' );
 				return true;
 			}
 			
@@ -803,8 +803,8 @@
 			public function admin_notices()
 			{
 				try { $this->get_key(); } catch(Exception $e) { }
-				$fail = get_transient( 'pdf_forms_for_wpforms_pdfninja_key_failure' );
-				if( isset( $fail ) && $fail && current_user_can( wpforms_get_capability_manage_options() ) )
+				$fail = get_transient( 'pdf_forms_for_woocommerce_pdfninja_key_failure' );
+				if( isset( $fail ) && $fail && current_user_can( 'manage_woocommerce' ) )
 					echo Pdf_Forms_For_WooCommerce::render_error_notice( 'pdf-ninja-new-key-failure', array(
 						'label' => esc_html__( "PDF Forms Filler for WooCommerce Error", 'pdf-forms-for-woocommerce' ),
 						'message' =>
