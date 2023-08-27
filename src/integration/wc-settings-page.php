@@ -33,20 +33,17 @@
 			
 			/**
 			 * Add section to the settings page
-			 *
-			 * @return array( key => array( id => id, title => title, settings => settings ) )
+			 * 
+			 * @param array( key => array( id => id, title => title, settings => settings ) ) $section Section data
 			 */
 			public function add_section( $section )
 			{
-				$id = $section['id'];
-				if( count( $this->sections ) == 0 )
-					$id = '';
-				$this->sections[$id] = $section;
+				$this->sections[$section['id']] = $section;
 			}
 			
 			/**
 			 * Get sections
-			 *
+			 * 
 			 * @return array(key => title)
 			 */
 			public function get_sections()
@@ -58,64 +55,30 @@
 			}
 			
 			/**
-			 * Output the sections list
-			 */
-			public function output_sections()
-			{
-				global $current_section;
-				
-				$sections = $this->get_sections();
-				
-				if( empty( $sections ) || 1 === sizeof( $sections ) )
-					return;
-				
-				$array_keys = array_keys( $sections );
-				
-				echo '<ul class="subsubsub">';
-				foreach ( $sections as $id => $label )
-					echo '<li><a href="' . admin_url( 'admin.php?page=wc-settings&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . $label . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
-				echo '</ul><br class="clear" />';
-			}
-			
-			/**
 			 * Get settings array
-			 *
+			 * 
+			 * @param string $section Section ID
 			 * @return array
 			 */
-			public function get_settings()
+			public function get_settings( $section = '' )
 			{
-				global $current_section;
-				
-				if( count( $this->sections ) == 0 )
-					return array();
-				
-				if( isset( $this->sections[$current_section] ) )
-					$settings = $this->sections[$current_section];
+				if( isset( $this->sections[$section] ) )
+					$settings = $this->sections[$section];
 				else
 					$settings = reset( $this->sections );
 				$settings = $settings['settings'];
 				
-				return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings );
+				return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $section );
 			}
 			
 			/**
-			 * Output the settings
+			 * Used to output raw html options
+			 * 
+			 * @param array
 			 */
-			public function output()
-			{
-				$settings = $this->get_settings();
-				WC_Admin_Settings::output_fields( $settings );
-			}
-			
 			public function output_custom_html( $value )
 			{
 				print( $value['html'] );
-			}
-			
-			public function save()
-			{
-				$settings = $this->get_settings();
-				WC_Admin_Settings::save_fields( $settings );
 			}
 		}
 	}

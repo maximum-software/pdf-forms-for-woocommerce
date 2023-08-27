@@ -31,7 +31,7 @@
 			public function register_settings()
 			{
 				$settings = array(
-					'id' => 'pdf.ninja',
+					'id' => 'pdf-ninja',
 					'title' => __( 'Pdf.Ninja API', 'pdf-forms-for-woocommerce' ),
 					'settings' =>
 						array(
@@ -39,7 +39,7 @@
 								'title' => __( 'Pdf.Ninja API', 'pdf-forms-for-woocommerce' ),
 								'type' => 'title',
 								'desc' =>  __( 'The following form allows you to edit your API settings.', 'pdf-forms-for-woocommerce' ),
-								'id' => 'pdf-forms-for-woocommerce-settings-title'
+								'is_option' => false,
 							),
 							array(
 								'title' => __( 'API Key', 'pdf-forms-for-woocommerce' ),
@@ -51,7 +51,7 @@
 								),
 								'default' => WooCommerce_Pdf_Ninja::get_instance()->get_key(),
 								'class' => 'pdf-ninja-key',
-								'id' => 'pdf-forms-for-woocommerce-settings-api-key'
+								'id' => 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-key'
 							),
 							array(
 								'title' => __( 'Get new API key', 'pdf-forms-for-woocommerce' ),
@@ -64,7 +64,7 @@
 											'get-new-key-label' => esc_html__( 'Get New Key', 'pdf-forms-for-woocommerce' ),
 										)
 									),
-								'id' => 'pdf-forms-for-woocommerce-settings-new-api-key'
+								'is_option' => false,
 							),
 							array(
 								'title' => __( 'API URL', 'pdf-forms-for-woocommerce' ),
@@ -72,7 +72,7 @@
 								'desc' =>  __( 'Enter your API URL', 'pdf-forms-for-woocommerce' ),
 								'desc_tip' =>  true,
 								'default' => self::API_URL,
-								'id' => 'pdf-forms-for-woocommerce-settings-api-url'
+								'id' => 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-url'
 							),
 							array(
 								'title' => __( 'API version', 'pdf-forms-for-woocommerce' ),
@@ -84,18 +84,18 @@
 									'2' => 'Version 2'
 								),
 								'default' => '2',
-								'id' => 'pdf-forms-for-woocommerce-settings-api-version'
+								'id' => 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-version'
 							),
 							array(
 								'title' => __( 'Data Security', 'pdf-forms-for-woocommerce' ),
 								'type' => 'checkbox',
 								'desc' =>  __( 'Ignore SSL errors', 'pdf-forms-for-woocommerce' ),
 								'default' => 'no',
-								'id' => 'pdf-forms-for-woocommerce-settings-ignore-ssl-errors'
+								'id' => 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors'
 							),
 							array(
 								'type' => 'sectionend',
-								'id'   => 'pdf-forms-for-woocommerce-settings-title',
+								'is_option' => false,
 							)
 						)
 					);
@@ -150,7 +150,7 @@
 					return $this->key;
 				
 				if( ! $this->key )
-					$this->key = get_option( 'pdf-forms-for-woocommerce-settings-api-key', null );
+					$this->key = get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-key', null );
 				
 				if( ! $this->key )
 				{
@@ -187,7 +187,7 @@
 			public function set_key( $value )
 			{
 				$this->key = $value;
-				update_option( 'pdf-forms-for-woocommerce-settings-api-key', $value );
+				update_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-key', $value );
 				delete_transient( 'pdf_forms_for_woocommerce_pdfninja_key_failure' );
 				return true;
 			}
@@ -239,7 +239,7 @@
 				catch( Exception $e )
 				{
 					// if we are not running for the first time, throw an error
-					$old_key = get_option( 'pdf-forms-for-woocommerce-settings-api-key', false );
+					$old_key = get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-key', false );
 					if( $old_key )
 						throw $e;
 					
@@ -263,7 +263,7 @@
 			public function get_api_url()
 			{
 				if( ! $this->api_url )
-					$this->api_url = get_option( 'pdf-forms-for-woocommerce-settings-api-url', self::API_URL );
+					$this->api_url = get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-url', self::API_URL );
 				
 				return $this->api_url;
 			}
@@ -275,7 +275,7 @@
 			{
 				if( $this->api_version === null )
 				{
-					$value = get_option( 'pdf-forms-for-woocommerce-settings-api-version', '2' );
+					$value = get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-version', '2' );
 					if( $value == '1' ) $this->api_version = 1;
 					if( $value == '2' ) $this->api_version = 2;
 				}
@@ -289,7 +289,7 @@
 			public function get_ignore_ssl_errors()
 			{
 				if( $this->ignore_ssl_errors === null )
-					$this->ignore_ssl_errors = (bool)get_option( 'pdf-forms-for-woocommerce-settings-ignore-ssl-errors', false );
+					$this->ignore_ssl_errors = boolval( get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', false ) );
 				
 				return $this->ignore_ssl_errors;
 			}
@@ -300,7 +300,7 @@
 			public function set_ignore_ssl_errors( $value )
 			{
 				$this->ignore_ssl_errors = $value;
-				update_option( 'pdf-forms-for-woocommerce-settings-ignore-ssl-errors', $value );
+				update_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', $value );
 				return true;
 			}
 			
@@ -811,7 +811,7 @@
 							Pdf_Forms_For_WooCommerce::replace_tags(
 								esc_html__( "Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-service-page}Please retry manually{/a}.", 'pdf-forms-for-woocommerce' ),
 								array(
-									'a-href-edit-service-page' => "<a href='".esc_url( add_query_arg( array( 'view' => 'pdf-ninja' ), menu_page_url( 'wpforms-settings', false ) ) )."'>",
+									'a-href-edit-service-page' => "<a href='".esc_url( add_query_arg( array( 'tab' => 'pdf-forms-for-woocommerce-settings', 'section' => 'pdf-ninja' ), menu_page_url( 'wc-settings', false ) ) )."'>",
 									'/a' => "</a>",
 								)
 							)
