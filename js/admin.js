@@ -142,12 +142,10 @@ jQuery(document).ready(function($) {
 		}
 	);
 	
-	jQuery.fn.initializeMultipleSelect2Field = function(attachment_options) {
+	jQuery.fn.initializeMultipleSelect2Field = function(shared_data_element, selected_options) {
 		
-		var option = jQuery(this).data('option');
-		
-		if(!option)
-			return;
+		if(typeof selected_options !== 'object' || !Array.isArray(selected_options))
+			selected_options = [];
 		
 		var class_name = this[0].className;
 		var attachment_id = jQuery(this).data('attachment_id');
@@ -161,7 +159,7 @@ jQuery(document).ready(function($) {
 				ajax: {},
 				width: '100%',
 				//dropdownAutoWidth: true,
-				sharedDataElement: option,
+				sharedDataElement: shared_data_element,
 				dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 				dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
 			})
@@ -171,11 +169,7 @@ jQuery(document).ready(function($) {
 				setAttachmentOption(attachment_id, option, value);
 			});
 		
-		var select2Data = select2SharedData[option];
-		var selected_options = attachment_options[option];
-		if(typeof selected_options !== 'object' || !Array.isArray(selected_options))
-			selected_options = [];
-		
+		var select2Data = select2SharedData[shared_data_element];
 		for(var j = 0; j < select2Data.length; ++j)
 			if(selected_options.indexOf(String(select2Data[j].id)) != -1)
 			{
@@ -582,9 +576,7 @@ jQuery(document).ready(function($) {
 				var option = jQuery(this).data('option');
 				jQuery(this).val(options[option]);
 			});
-			tag.find('.pdf-options select.email-templates-list').each(function() {
-				jQuery(this).initializeMultipleSelect2Field(options);
-			});
+			tag.find('.pdf-options select.email-templates-list').initializeMultipleSelect2Field('emailTemplates', options['email_templates']);
 			
 			// set unique ids
 			tag.find('.pdf-option-save-directory label').attr('for', 'pdf-option-save-directory-variables-'+attachment_id);

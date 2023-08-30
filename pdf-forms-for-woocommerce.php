@@ -310,7 +310,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			wp_send_json_success();
 		}
 		
-		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'emailTemplates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "" );
+		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'email_templates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "" );
 		
 		/**
 		 * Returns MIME type of the file
@@ -565,8 +565,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 								{
 									if( isset( $pdfs['options'] )
 									&& is_array( $options = $pdfs['options'] )
-									&& isset( $options['emailTemplates'] )
-									&& is_array( $email_templates = $options['emailTemplates'] )
+									&& isset( $options['email_templates'] )
+									&& is_array( $email_templates = $options['email_templates'] )
 									&& in_array( $email_id, $email_templates ) )
 									{
 										// TODO
@@ -1313,16 +1313,16 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 								$attachment['options']['flatten'] = boolval( $attachment['options']['flatten'] );
 							
 							// check email templates
-							if( isset( $attachment['options']['emailTemplates'] ) )
+							if( isset( $attachment['options']['email_templates'] ) )
 							{
-								$option_value = $attachment['options']['emailTemplates'];
+								$option_value = $attachment['options']['email_templates'];
 								if( ! is_array( $option_value ) )
 									$option_value = array();
 								if( count( $option_value ) > 0 )
 									foreach( $option_value as $etid => $email_template )
 										// check to make sure this notification is valid
 										if( ! in_array( $email_template, $email_templates ) )
-											unset( $attachment['options']['emailTemplates'][$etid] );
+											unset( $attachment['options']['email_templates'][$etid] );
 							}
 						}
 						
