@@ -1103,7 +1103,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			return self::replace_tags( file_get_contents( $template_filepath ) , $attributes );
 		}
 		
-		
 		/**
 		 * Adds the 'PDF Forms' tab on WooCommerce product page
 		 */
