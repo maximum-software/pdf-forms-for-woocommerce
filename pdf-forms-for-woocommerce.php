@@ -72,6 +72,10 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
 			
+			add_action( 'woocommerce_email_order_details', array( $this, 'woocommerce_email_order_details' ), 10, 1 );
+			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_order_details_table' ), 10, 1 );
+			// TODO: remove order files when orders are deleted
+			
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
 			add_action( 'woocommerce_product_data_panels', array( $this, 'print_product_data_tab_contents' ) );
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_data' ) );
@@ -310,7 +314,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			wp_send_json_success();
 		}
 		
-		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'email_templates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "" );
+		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'email_templates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "", 'save_order_file' => true );
 		
 		/**
 		 * Returns MIME type of the file
@@ -1003,6 +1007,24 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							$storage->set_subpath( $save_directory );
 							$storage->save( $filedata['file'], $filedata['filename'] );
 						}
+						
+						$save_order_file = $filedata['options']['save_order_file'];
+						if ( $save_order_file )
+						{
+							$order = $variable_processor->get_order();
+							if( $order )
+							{
+								$order_id = $order->get_id();
+								$order_directory = self::get_meta( $order_id, 'order-filepath' );
+								if( ! $order_directory )
+								{
+									$order_directory = 'pdf-forms-for-woocommerce/order-files/' . wp_hash( wp_rand() . microtime() );
+									self::set_meta( $order_id, 'order-filepath', $order_directory );
+								}
+								$storage->set_subpath( $order_directory );
+								$storage->save( $filedata['file'], $filedata['filename'] );
+							}
+						}
 					}
 				}
 			}
@@ -1022,6 +1044,73 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			return $email_attachments;
 		}
 		
+		/**
+		 * Adds a download link to order details
+		 */		
+		public function woocommerce_order_details_table( $order_id )
+		{
+			if( $order_id <= 0 )
+				return;
+			
+			$this->woocommerce_email_order_details( new WC_Order( $order_id ) );
+		}
+		public function woocommerce_email_order_details( $order )
+		{
+			try
+			{
+				if( ! $order )
+					return;
+				
+				$access_allowed = current_user_can( 'manage_woocommerce' ) || $order->get_customer_id() === get_current_user_id();
+				if( ! $access_allowed )
+					return;
+				
+				$order_directory = self::get_meta( $order->get_id(), 'order-filepath' );
+				if( ! $order_directory )
+					return;
+				
+				$storage = $this->get_storage();
+				$storage->set_subpath( $order_directory );
+				
+				if( ! is_dir( $storage->get_full_path() ) )
+					return;
+				
+				$files = $storage->get_files( $order_directory );
+				if( ! is_array( $files ) )
+					return;
+				
+				$items = '';
+				
+				// TODO: check if the customer is allowed to download the file based on the order statuses allowed for the file
+				
+				foreach( $files as $file )
+				{
+					$items .= "<li>" . 
+						self::replace_tags(
+							esc_html__( "{icon} {a-href-url}{filename}{/a} {i}({size}){/i}", 'pdf-forms-for-woocommerce' ),
+							array(
+								'icon' => '<span class="dashicons dashicons-download"></span>',
+								'a-href-url' => '<a href="' . esc_attr( $file['url'] ) . '" download>',
+								'filename' => esc_html( $file['filename'] ),
+								'/a' => '</a>',
+								'i' => '<span class="file-size">',
+								'size' => esc_html( size_format( filesize( $file['filepath'] ) ) ),
+								'/i' => '</span>',
+							)
+						) . "</li>";
+				}
+				
+				print( self::render( "order-download-list", array(
+					'title' => __( 'Order Files', 'pdf-forms-for-woocommerce' ),
+					'items' => $items,
+				) ) );
+			}
+			catch( Exception $e )
+			{
+				// ignore errors
+			}
+		}
+
 		/**
 		 * Takes html template from the html folder and renders it with the given attributes
 		 */
@@ -1217,6 +1306,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 					'flatten' => esc_html__( 'Flatten', 'pdf-forms-for-woocommerce' ),
 					'filename' => esc_html__( 'New filled PDF file name (variables allowed):', 'pdf-forms-for-woocommerce' ),
 					'save-directory'=> esc_html__( 'Path for saving filled PDF file (variables allowed):', 'pdf-forms-for-woocommerce' ),
+					'save-order-file' => esc_html__( 'Save filled PDF file in order details', 'pdf-forms-for-woocommerce' ),
 					'leave-blank-to-disable'=> esc_html__( '(leave blank to disable this option)', 'pdf-forms-for-woocommerce' ),
 					'field-mapping' => esc_html__( 'Field Mapper Tool', 'pdf-forms-for-woocommerce' ),
 					'field-mapping-help' => esc_html__( 'This tool can be used to link form fields and variables with fields in the attached PDF files. WooCommerce fields can also be generated from PDF fields. When your users submit the form, input from form fields and other variables will be inserted into the correspoinding fields in the PDF file. WooCommerce to PDF field value mappings can also be created to enable the replacement of WooCommerce data when PDF fields are filled.', 'pdf-forms-for-woocommerce' ),

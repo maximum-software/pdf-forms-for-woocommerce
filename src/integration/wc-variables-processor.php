@@ -24,12 +24,28 @@
 			}
 			
 			/**
+			 * Returns current email
+			 */
+			public function get_email()
+			{
+				return $this->email;
+			}
+			
+			/**
 			 * Sets current order
 			 */
 			public function set_order( $order )
 			{
 				$this->order = $order;
 				return $this;
+			}
+			
+			/**
+			 * Returns current order
+			 */
+			public function get_order()
+			{
+				return $this->order;
 			}
 			
 			/**
@@ -42,12 +58,28 @@
 			}
 			
 			/**
+			 * Returns current product ID
+			 */
+			public function get_product_id()
+			{
+				return $this->product_id;
+			}
+						
+			/**
 			 * Sets current order item
 			 */
 			public function set_order_item( $order_item )
 			{
 				$this->order_item = $order_item;
 				return $this;
+			}
+			
+			/**
+			 * Returns current order item
+			 */
+			public function get_order_item()
+			{
+				return $this->order_item;
 			}
 			
 			/**

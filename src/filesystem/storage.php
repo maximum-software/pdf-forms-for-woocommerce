@@ -10,9 +10,16 @@
 			private static $instance = null;
 			
 			private $storage_path = null;
+			private $storage_url = null;
 			private $subpath = null;
 			
-			private function __construct() { }
+			private function __construct()
+			{
+				$uploads = wp_upload_dir( null, false );
+				$this->storage_path = $uploads['basedir'];
+				$this->storage_url = $uploads['baseurl'];
+				$this->subpath = 'pdf-forms-for-woocommerce';
+			}
 			
 			/*
 			* Returns a global instance of this class
@@ -26,25 +33,19 @@
 			}
 			
 			/**
-			 * Returns a storage path
-			 */
-			private function generate_storage_path()
-			{
-				$uploads = wp_upload_dir( null, false );
-				$storage_path = $uploads['basedir'];
-				
-				return $storage_path;
-			}
-			
-			/**
 			 * Returns storage path
 			 */
 			public function get_storage_path()
 			{
-				if( ! $this->storage_path )
-					$this->set_storage_path( $this->generate_storage_path() );
-				
 				return $this->storage_path;
+			}
+			
+			/**
+			 * Returns storage url
+			 */
+			public function get_storage_url()
+			{
+				return $this->storage_url;
 			}
 			
 			/**
@@ -81,12 +82,29 @@
 			}
 			
 			/**
+			 * Returns full url, including the subpath
+			 */
+			public function get_full_url()
+			{
+				return path_join( $this->get_storage_url(), $this->get_subpath() );
+			}
+			
+			/**
 			 * Recurively creates path directories and prevents directory listing
 			 */
 			private function initialize_path( $path )
 			{
 				$path = wp_normalize_path( $path );
-				wp_mkdir_p( $path );
+				
+				if( ! is_dir( $path ) )
+				{
+					wp_mkdir_p( $path );
+					
+					// prevent directory listing
+					$index_file = path_join( $path, 'index.php' );
+					if( ! file_exists( $index_file ) )
+						file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+				}
 			}
 			
 			/**
@@ -102,6 +120,33 @@
 				$filename = wp_unique_filename( $full_path, $filename );
 				
 				copy($srcfile, trailingslashit( $full_path ) . $filename);
+			}
+			
+			/**
+			 * Returns a list of files in the storage location
+			 */
+			public function get_files()
+			{
+				$full_path = $this->get_full_path();
+				$full_url = $this->get_full_url();
+				
+				$this->initialize_path( $full_path );
+				
+				$files = scandir( $full_path );
+				$files = array_diff( $files, array( '.', '..', 'index.php' ) );
+				$files_with_info = array();
+				foreach( $files as $file )
+				{
+					$info = array(
+						'filename' => $file,
+						'filepath' => path_join( $full_path, $file ),
+						'url' => path_join( $full_url, $file ),
+					);
+					
+					$files_with_info[] = $info;
+				}
+				
+				return $files_with_info;
 			}
 		}
 	}
