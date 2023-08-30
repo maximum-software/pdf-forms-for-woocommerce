@@ -513,7 +513,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		 */
 		public static function encode_form_settings( $data )
 		{
-			return self::json_encode( $data );
+			return Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
 		}
 		
 		/**
@@ -1207,7 +1207,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				self::render( 'product-settings', array(
 					'messages' => $messages,
 					'data-field' => $woocommerce_wp_data_input,
-					'preload-data' => esc_html( self::json_encode( $preload_data ) ),
+					'preload-data' => esc_html( Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $preload_data ) ),
 					'instructions' => esc_html__( "You can use this section to attach a PDF file to your product, add new order fields to your form, and link them to fields in the PDF file. You can also embed images (from URLs or attached files) into the PDF file. Changes here are applied when the form is saved.", 'pdf-forms-for-woocommerce' ),
 					'attach-pdf' => esc_html__( "Attach a PDF File", 'pdf-forms-for-woocommerce' ),
 					'delete' => esc_html__( 'Delete', 'pdf-forms-for-woocommerce' ),
@@ -1614,7 +1614,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			$info['page'] = $pages;
 			
 			// set fields cache
-			self::set_meta( $attachment_id, 'info', self::json_encode( $info ) );
+			self::set_meta( $attachment_id, 'info', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $info ) );
 			
 			return $info;
 		}
@@ -1626,31 +1626,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		{
 			$info = $this->get_info( $attachment_id );
 			return $info['fields'];
-		}
-		
-		/**
-		 * PHP version specific wrapper for json_encode function
-		 */
-		public static function json_encode( $value )
-		{
-			return json_encode( $value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-		}
-		
-		/**
-		 * Multibyte trim
-		 */
-		public static function mb_trim( $str )
-		{
-			return preg_replace( '/(^\s+)|(\s+$)/us', '', $str );
-		}
-		
-		private static function escape_tag_value( $value )
-		{
-			$value = esc_attr( $value );
-			$escape_characters = array( "\\","]","|" );
-			$escape_table = array( '&#92;', '&#93;','&#124;' );
-			$value = str_replace( $escape_characters, $escape_table, $value );
-			return $value;
 		}
 		
 		/**

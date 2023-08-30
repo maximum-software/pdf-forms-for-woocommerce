@@ -3,6 +3,9 @@
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
+	require_once( untrailingslashit( __DIR__ ) . '/service.php' );
+	require_once( untrailingslashit( __DIR__ ) . '/../wrapper.php' );
+	
 	if( ! class_exists( 'WooCommerce_Pdf_Ninja' ) )
 	{
 		class WooCommerce_Pdf_Ninja extends Pdf_Forms_For_WooCommerce_Service
@@ -704,11 +707,11 @@
 				}
 				unset($embed);
 				
-				$encoded_data = Pdf_Forms_For_WooCommerce::json_encode( $data );
+				$encoded_data = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
 				if( $encoded_data === FALSE || $encoded_data === null )
 					throw new Exception( __( "Failed to encode JSON data", 'pdf-forms-for-woocommerce' ) );
 				
-				$encoded_embeds = Pdf_Forms_For_WooCommerce::json_encode( $embeds );
+				$encoded_embeds = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $embeds );
 				if( $encoded_embeds === FALSE || $encoded_embeds === null )
 					throw new Exception( __( "Failed to encode JSON data", 'pdf-forms-for-woocommerce' ) );
 				
