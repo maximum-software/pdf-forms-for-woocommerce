@@ -1463,10 +1463,10 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 									// don't create a new download if one already exists
 									if( $download_id == '' && $product)
 									{
-										$download = new WC_Product_Download();
-										$download->set_name( __( "Filled PDF", 'pdf-forms-for-woocommerce' ) );
-										$download->set_file( $attachment_url );
-										$downloads[] = $download;
+										$downloads[] = array(
+											'name' => __( "Filled PDF", 'pdf-forms-for-woocommerce' ),
+											'file' => $attachment_url,
+										);
 										$product->set_downloads( $downloads );
 										$product->save();
 										
