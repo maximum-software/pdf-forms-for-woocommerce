@@ -1281,7 +1281,11 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			foreach( $this->get_variable_processor()->get_variables() as $variable )
 			{
 				$tag = '{'.$variable['key'].'}';
-				$woocommerce_variables[] = array( 'id' => count( $woocommerce_variables ), 'text' => $tag, 'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $tag ) );
+				$woocommerce_variables[] = array(
+					'id' => count( $woocommerce_variables ),
+					'text' => $tag,
+					'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $tag ),
+				);
 			}
 			
 			// capture function output in a variable
