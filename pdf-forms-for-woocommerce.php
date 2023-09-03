@@ -1403,22 +1403,19 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 						
 						// check options
 						if( !isset( $attachment['options'] ) || !is_array( $attachment['options'] ) )
-							$attachment['options'] = array();
+							$attachment['options'] = self::DEFAULT_PDF_OPTIONS;
 						else
 						{
 							// add missing options
 							foreach( self::DEFAULT_PDF_OPTIONS as $option_name => $option_value )
-							{
 								if( ! isset( $attachment['options'][$option_name] ) )
 									$attachment['options'][$option_name] = $option_value;
-							}
 							
 							// remove non-existing options
+							$allowed_options = array_keys( self::DEFAULT_PDF_OPTIONS );
 							foreach( $attachment['options'] as $option_name => $option_value )
-							{
-								if( ! isset( self::DEFAULT_PDF_OPTIONS[$option_name] ) )
+								if( ! in_array( $option_name, $allowed_options ) )
 									unset( $attachment['options'][$option_name] );
-							}
 							
 							// check skip_empty to make sure it is a boolean value
 							if( isset( $attachment['options']['skip_empty'] ) && ! is_bool( $attachment['options']['skip_empty'] ) )
