@@ -533,7 +533,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		/**
 		 * Fills PDFs and attaches them to email notifications
 		 */
-		public function attach_pdfs( $attachments, $email_id, $object, $email )
+		public function attach_pdfs( $email_attachments, $email_id, $object, $email )
 		{
 			if( $email_id !== null
 			&& $object !== null && is_object( $object ) && $object instanceof WC_Order
@@ -562,12 +562,12 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							
 							if( is_array( $settings )
 							&& isset( $settings['attachments'] )
-							&& is_array( $pdfs = $settings['attachments'] ) )
+							&& is_array( $attachments = $settings['attachments'] ) )
 							{
-								foreach( $pdfs as $pdfs )
+								foreach( $attachments as $attachment )
 								{
-									if( isset( $pdfs['options'] )
-									&& is_array( $options = $pdfs['options'] )
+									if( isset( $attachment['options'] )
+									&& is_array( $options = $attachment['options'] )
 									&& isset( $options['email_templates'] )
 									&& is_array( $email_templates = $options['email_templates'] )
 									&& in_array( $email_id, $email_templates ) )
@@ -576,7 +576,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 										//$qty = $item->get_quantity();
 										//for( $i = 0; $i < $qty; $i++ )
 										
-										$attachments = array_merge( $attachments, $this->fill_pdfs( $settings, $variable_processor ) );
+										$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $variable_processor ) );
 										break;
 									}
 								}
@@ -598,7 +598,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				}
 			}
 			
-			return $attachments;
+			return $email_attachments;
 		}
 		
 		public function woocommerce_get_item_downloads( $files, $order_item, $order )
