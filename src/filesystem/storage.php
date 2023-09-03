@@ -114,18 +114,21 @@
 				$path = $this->get_storage_path();
 				$subpath = $this->get_subpath();
 				$subpath = trim( $subpath, "/\\" );
-				foreach( explode( '/', $subpath ) as $dir )
+				if( $subpath != '' )
 				{
-					$path = path_join( $path, $dir );
-					
-					if( ! is_dir( $path ) )
+					foreach( explode( '/', $subpath ) as $dir )
 					{
-						wp_mkdir_p( $path );
+						$path = path_join( $path, $dir );
 						
-						// prevent directory listing in each directory in subpath
-						$index_file = path_join( $path, 'index.php' );
-						if( ! file_exists( $index_file ) )
-							file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+						if( ! is_dir( $path ) )
+						{
+							wp_mkdir_p( $path );
+							
+							// prevent directory listing in each directory in subpath
+							$index_file = path_join( $path, 'index.php' );
+							if( ! file_exists( $index_file ) )
+								file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+						}
 					}
 				}
 			}
