@@ -162,11 +162,6 @@ jQuery(document).ready(function($) {
 				sharedDataElement: shared_data_element,
 				dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 				dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
-			})
-			.change(function() {
-				var attachment_id = jQuery(this).data('attachment_id');
-				var value = jQuery(this).val(), option = jQuery(this).data('option');
-				setAttachmentOption(attachment_id, option, value);
 			});
 		
 		var select2Data = select2SharedData[shared_data_element];
@@ -590,7 +585,7 @@ jQuery(document).ready(function($) {
 			var option = jQuery(this).data('option');
 			setAttachmentOption(attachment_id, option, jQuery(this)[0].checked);
 		});
-		tag.find('.pdf-options input[type=text]').change(function() {
+		tag.find('.pdf-options input[type=text], .pdf-options select').change(function() {
 			var attachment_id = jQuery(this).data('attachment_id');
 			var option = jQuery(this).data('option');
 			setAttachmentOption(attachment_id, option, jQuery(this).val());
