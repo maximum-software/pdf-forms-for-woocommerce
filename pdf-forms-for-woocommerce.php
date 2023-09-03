@@ -1443,19 +1443,25 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							}
 							
 							// create a new downloadable file if necessary
-							if( isset( $attachment['options']['download_id'] ) )
+							if( ! empty( $attachment['options']['download_id'] ) )
 							{
+								$product = wc_get_product( $product_id );
+								
+								// make sure product is downloadable
+								if( ! $product->get_downloadable() )
+									$product->set_downloadable( true );
+								
+								$downloads = $product->get_downloads();
+								
 								if( $attachment['options']['download_id'] == 'create-new-download' )
 								{
-									$attachment['options']['download_id'] = null;
+									$attachment['options']['download_id'] = '';
 									
 									// create the product's downloadable file entry
 									$download_id = '';
+									$attachment_url = wp_get_attachment_url( $attachment_id );
 									
 									// check if download already exists
-									$product = wc_get_product( $product_id );
-									$downloads = $product->get_downloads();
-									$attachment_url = wp_get_attachment_url( $attachment_id );
 									foreach( $downloads as $download )
 										if( $download->get_file() == $attachment_url )
 											$download_id = $download->get_id();
@@ -1481,6 +1487,21 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 									
 									// update download id in options
 									$attachment['options']['download_id'] = $download_id;
+								}
+								
+								// make sure download id is valid
+								if( ! empty( $attachment['options']['download_id'] ) )
+								{
+									$download_id = $attachment['options']['download_id'];
+									$download_exists = false;
+									foreach( $downloads as $download )
+										if( $download->get_id() == $download_id )
+										{
+											$download_exists = true;
+											break;
+										}
+									if( ! $download_exists )
+										$attachment['options']['download_id'] = '';
 								}
 							}
 						}
