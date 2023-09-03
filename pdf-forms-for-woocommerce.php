@@ -427,19 +427,19 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		public static function get_tmp_path()
 		{
 			$upload_dir = wp_upload_dir();
-			$tmp_path = empty( $upload_dir['error'] && ! empty( $upload_dir['path'] ) ) ? ( trailingslashit( $upload_dir['path'] ) . 'tmp' ) : get_temp_dir();
+			$tmp_path = trailingslashit( empty( $upload_dir['error'] && ! empty( $upload_dir['basedir'] ) ) ? $upload_dir['basedir'] : get_temp_dir() );
 			
-			$dir = trailingslashit( $tmp_path ) . 'pdf-forms-for-woocommerce';
+			$dir = trailingslashit( $tmp_path . 'pdf-forms-for-woocommerce' ) . 'tmp';
 			
 			if( ! is_dir( $dir ) )
 			{
 				wp_mkdir_p( $dir );
-				$index_file = trailingslashit( $dir ) . 'index.php';
+				$index_file = path_join( $dir , 'index.php' );
 				if( ! file_exists( $index_file ) )
 					file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
 			}
 			
-			return trailingslashit( $dir );
+			return $dir;
 		}
 		
 		/**
