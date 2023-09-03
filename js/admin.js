@@ -232,6 +232,7 @@ jQuery(document).ready(function($) {
 		pageList: [],
 		emailTemplates: [],
 		woocommerceVariables: [],
+		downloads: []
 	};
 	
 	jQuery('.pdf-forms-for-woocommerce-admin .woo-variable-list').select2({
@@ -572,6 +573,25 @@ jQuery(document).ready(function($) {
 				jQuery(this).val(options[option]);
 			});
 			tag.find('.pdf-options select.email-templates-list').initializeMultipleSelect2Field('emailTemplates', options['email_templates']);
+			tag.find('.pdf-options select.downloads-list').each(function() {
+				jQuery(this).select2({
+					ajax: {},
+					width: '100%',
+					sharedDataElement: "downloads",
+					dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
+					dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
+				});
+				var option = jQuery(this).data('option');
+				
+				var index = 0;
+				for(var i=0, l=select2SharedData.downloads.length; i<l; i++)
+					if(select2SharedData.downloads[i].id == options[option])
+					{
+						index = i;
+						break;
+					}
+				jQuery(this).resetSelect2Field(index);
+			});
 			
 			// set unique ids
 			tag.find('.pdf-option-save-directory label').attr('for', 'pdf-option-save-directory-variables-'+attachment_id);
@@ -668,6 +688,10 @@ jQuery(document).ready(function($) {
 			select2SharedData.woocommerceVariables = preload_data.woocommerce_variables;
 			jQuery('.pdf-forms-for-woocommerce-admin .woo-variable-list').resetSelect2Field();
 		}
+		
+		// load information about product downloads
+		if(preload_data.hasOwnProperty('downloads'))
+			select2SharedData.downloads = preload_data.downloads;
 		
 		// load default PDF options
 		if(preload_data.hasOwnProperty('default_pdf_options'))

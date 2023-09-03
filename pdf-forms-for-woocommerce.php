@@ -72,8 +72,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
 			
-			add_action( 'woocommerce_email_order_details', array( $this, 'woocommerce_email_order_details' ), 10, 1 );
-			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_order_details_table' ), 10, 1 );
+			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			// TODO: remove order files when orders are deleted
 			
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
@@ -314,7 +313,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			wp_send_json_success();
 		}
 		
-		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'email_templates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "", 'save_order_file' => true );
+		const DEFAULT_PDF_OPTIONS = array( 'skip_empty' => false, 'flatten' => false, 'email_templates' => array( "customer_completed_order" ), 'filename' => "", 'save_directory'=> "", 'download_id' => "" );
 		
 		/**
 		 * Returns MIME type of the file
@@ -600,6 +599,68 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			}
 			
 			return $attachments;
+		}
+		
+		public function woocommerce_get_item_downloads( $files, $order_item, $order )
+		{
+			if( is_array( $files ) && is_object( $order_item ) && is_object( $order ) )
+			{
+				$product_id = $order_item->get_product_id();
+				$order_item_id = $order_item->get_id();
+				
+				foreach( $files as $download_id => &$file )
+				{
+					$product_data = self::get_meta( $product_id, 'data' );
+					if( isset( $product_data ) )
+					{
+						$settings = self::decode_form_settings( $product_data );
+						
+						if( is_array( $settings )
+						&& isset( $settings['attachments'] )
+						&& is_array( $attachments = $settings['attachments'] ) )
+						{
+							foreach( $attachments as $attachment )
+							{
+								if( isset( $attachment['options'] )
+								&& is_array( $options = $attachment['options'] )
+								&& isset( $options['download_id'] )
+								&& $options['download_id'] == $download_id )
+								{
+									// TODO: what happens if the attachment is not being attached to any emails? we need to fill the PDF someplace else
+									// $variable_processor = $this->get_variable_processor();
+									// $variable_processor->set_order( $order );
+									// $variable_processor->set_order_item( $order_item );
+									// $variable_processor->set_product_id( $product_id );
+									// $files = $this->fill_pdfs( $settings, $variable_processor );
+									// foreach( $files as $file )
+									// {
+									// 	//...
+									// }
+									
+									$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
+									if( $downloadable_files_json )	
+									{
+										$downloadable_files = json_decode( $downloadable_files_json, true );
+										$attachment_id = $attachment['attachment_id'];
+										if( is_array( $downloadable_files ) && isset( $downloadable_files[$attachment_id] ) )
+										{
+											$downloadable_file = $downloadable_files[$attachment_id];
+											if( isset( $downloadable_file['file'] ) )
+											{
+												$file['name'] = $downloadable_file['filename'];
+												$file['file'] = $downloadable_file['file']; // relative to site root
+												$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			return $files;
 		}
 		
 		/**
@@ -1008,21 +1069,36 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							$storage->save( $filedata['file'], $filedata['filename'] );
 						}
 						
-						$save_order_file = $filedata['options']['save_order_file'];
-						if ( $save_order_file )
+						$save_order_file = $filedata['options']['download_id'];
+						if ( ! empty( $save_order_file ) )
 						{
 							$order = $variable_processor->get_order();
-							if( $order )
+							$order_item = $variable_processor->get_order_item();
+							if( $order && $order_item )
 							{
 								$order_id = $order->get_id();
+								$order_item_id = $order_item->get_id();
 								$order_directory = self::get_meta( $order_id, 'order-filepath' );
 								if( ! $order_directory )
 								{
-									$order_directory = 'pdf-forms-for-woocommerce/order-files/' . wp_hash( wp_rand() . microtime() );
+									$order_directory = 'pdf-forms-for-woocommerce/order-files/' . $order_id . '-' . wp_hash( wp_rand() . microtime() );
 									self::set_meta( $order_id, 'order-filepath', $order_directory );
 								}
-								$storage->set_subpath( $order_directory );
-								$storage->save( $filedata['file'], $filedata['filename'] );
+								$storage->set_subpath( trailingslashit( $order_directory ) . $order_item_id );
+								$dstfilename = $storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
+								
+								// record file data in order item meta
+								$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
+								if( ! $downloadable_files_json )
+									$downloadable_files = array();
+								else
+									$downloadable_files = json_decode( $downloadable_files_json, true );
+								$downloadable_files[$attachment_id] = array(
+									'attachment_id' => $attachment_id,
+									'file' => trailingslashit( $storage->get_site_root_relative_path() ) . $dstfilename,
+									'filename' => $filedata['filename'],
+								);
+								self::set_meta( $order_item_id, 'downloadable-files', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $downloadable_files ) );
 							}
 						}
 					}
@@ -1044,73 +1120,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			return $email_attachments;
 		}
 		
-		/**
-		 * Adds a download link to order details
-		 */		
-		public function woocommerce_order_details_table( $order_id )
-		{
-			if( $order_id <= 0 )
-				return;
-			
-			$this->woocommerce_email_order_details( new WC_Order( $order_id ) );
-		}
-		public function woocommerce_email_order_details( $order )
-		{
-			try
-			{
-				if( ! $order )
-					return;
-				
-				$access_allowed = current_user_can( 'manage_woocommerce' ) || $order->get_customer_id() === get_current_user_id();
-				if( ! $access_allowed )
-					return;
-				
-				$order_directory = self::get_meta( $order->get_id(), 'order-filepath' );
-				if( ! $order_directory )
-					return;
-				
-				$storage = $this->get_storage();
-				$storage->set_subpath( $order_directory );
-				
-				if( ! is_dir( $storage->get_full_path() ) )
-					return;
-				
-				$files = $storage->get_files( $order_directory );
-				if( ! is_array( $files ) )
-					return;
-				
-				$items = '';
-				
-				// TODO: check if the customer is allowed to download the file based on the order statuses allowed for the file
-				
-				foreach( $files as $file )
-				{
-					$items .= "<li>" . 
-						self::replace_tags(
-							esc_html__( "{icon} {a-href-url}{filename}{/a} {i}({size}){/i}", 'pdf-forms-for-woocommerce' ),
-							array(
-								'icon' => '<span class="dashicons dashicons-download"></span>',
-								'a-href-url' => '<a href="' . esc_attr( $file['url'] ) . '" download>',
-								'filename' => esc_html( $file['filename'] ),
-								'/a' => '</a>',
-								'i' => '<span class="file-size">',
-								'size' => esc_html( size_format( filesize( $file['filepath'] ) ) ),
-								'/i' => '</span>',
-							)
-						) . "</li>";
-				}
-				
-				print( self::render( "order-download-list", array(
-					'title' => __( 'Order Files', 'pdf-forms-for-woocommerce' ),
-					'items' => $items,
-				) ) );
-			}
-			catch( Exception $e )
-			{
-				// ignore errors
-			}
-		}
-
 		/**
 		 * Takes html template from the html folder and renders it with the given attributes
 		 */
@@ -1284,11 +1293,29 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			) );
 			$woocommerce_wp_data_input = ob_get_clean();
 			
+			// get product's downloads
+			$downloads = array(
+				array( 'id' => '', 'text' => __( "None", 'pdf-forms-for-woocommerce' ) ),
+				array( 'id' => 'create-new-download', 'text' => __( "Create a new downloadable file", 'pdf-forms-for-woocommerce') ),
+			);
+			$product = wc_get_product( $product_id );
+			if( $product )
+			{
+				$list = $product->get_downloads();
+				if( is_array( $list ) )
+					foreach( $list as $download )
+						$downloads[] = array(
+							'id' => $download->get_id(),
+							'text' => $download->get_name(),
+						);
+			}
+			
 			$preload_data = array(
 				'default_pdf_options' => self::DEFAULT_PDF_OPTIONS,
 				'attachments' => $attachments,
 				'email_templates' => $email_templates,
 				'woocommerce_variables' => $woocommerce_variables,
+				'downloads' => $downloads,
 			);
 			
 			echo self::render( 'spinner' ).
@@ -1306,7 +1333,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 					'flatten' => esc_html__( 'Flatten', 'pdf-forms-for-woocommerce' ),
 					'filename' => esc_html__( 'New filled PDF file name (variables allowed):', 'pdf-forms-for-woocommerce' ),
 					'save-directory'=> esc_html__( 'Path for saving filled PDF file (variables allowed):', 'pdf-forms-for-woocommerce' ),
-					'save-order-file' => esc_html__( 'Save filled PDF file in order details', 'pdf-forms-for-woocommerce' ),
+					'download-link' => esc_html__( "Provide a download link to the filled PDF file via the product's downloadable file:", 'pdf-forms-for-woocommerce' ),
 					'leave-blank-to-disable'=> esc_html__( '(leave blank to disable this option)', 'pdf-forms-for-woocommerce' ),
 					'field-mapping' => esc_html__( 'Field Mapper Tool', 'pdf-forms-for-woocommerce' ),
 					'field-mapping-help' => esc_html__( 'This tool can be used to link form fields and variables with fields in the attached PDF files. WooCommerce fields can also be generated from PDF fields. When your users submit the form, input from form fields and other variables will be inserted into the correspoinding fields in the PDF file. WooCommerce to PDF field value mappings can also be created to enable the replacement of WooCommerce data when PDF fields are filled.', 'pdf-forms-for-woocommerce' ),
@@ -1412,6 +1439,48 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 										// check to make sure this notification is valid
 										if( ! in_array( $email_template, $email_templates ) )
 											unset( $attachment['options']['email_templates'][$etid] );
+							}
+							
+							// create a new downloadable file if necessary
+							if( isset( $attachment['options']['download_id'] ) )
+							{
+								if( $attachment['options']['download_id'] == 'create-new-download' )
+								{
+									$attachment['options']['download_id'] = null;
+									
+									// create the product's downloadable file entry
+									$download_id = '';
+									
+									// check if download already exists
+									$product = wc_get_product( $product_id );
+									$downloads = $product->get_downloads();
+									$attachment_url = wp_get_attachment_url( $attachment_id );
+									foreach( $downloads as $download )
+										if( $download->get_file() == $attachment_url )
+											$download_id = $download->get_id();
+									
+									// don't create a new download if one already exists
+									if( $download_id == '' && $product)
+									{
+										$download = new WC_Product_Download();
+										$download->set_name( __( "Filled PDF", 'pdf-forms-for-woocommerce' ) );
+										$download->set_file( $attachment_url );
+										$downloads[] = $download;
+										$product->set_downloads( $downloads );
+										$product->save();
+										
+										$downloads = $product->get_downloads();
+										
+										// get download id
+										$download_id = '';
+										foreach( $downloads as $download )
+											if( $download->get_file() == $attachment_url )
+												$download_id = $download->get_id();
+									}
+									
+									// update download id in options
+									$attachment['options']['download_id'] = $download_id;
+								}
 							}
 						}
 						

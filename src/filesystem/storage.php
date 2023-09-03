@@ -41,6 +41,14 @@
 			}
 			
 			/**
+			 * Returns storage path relative to site root
+			 */
+			public function get_site_root_relative_storage_path()
+			{
+				return str_replace( ABSPATH, '', $this->get_storage_path() );
+			}
+			
+			/**
 			 * Returns storage url
 			 */
 			public function get_storage_url()
@@ -62,6 +70,7 @@
 			 */
 			public function set_subpath( $subpath )
 			{
+				$subpath = wp_normalize_path( $subpath );
 				$this->subpath = ltrim( $subpath, "/\\." );
 			}
 			
@@ -82,6 +91,14 @@
 			}
 			
 			/**
+			 * Returns full path relative to site root
+			 */
+			public function get_site_root_relative_path()
+			{
+				return str_replace( ABSPATH, '', $this->get_full_path() );
+			}
+			
+			/**
 			 * Returns full url, including the subpath
 			 */
 			public function get_full_url()
@@ -92,34 +109,44 @@
 			/**
 			 * Recurively creates path directories and prevents directory listing
 			 */
-			private function initialize_path( $path )
+			private function initialize_path()
 			{
-				$path = wp_normalize_path( $path );
-				
-				if( ! is_dir( $path ) )
+				$path = $this->get_storage_path();
+				$subpath = $this->get_subpath();
+				$subpath = trim( $subpath, "/\\" );
+				foreach( explode( '/', $subpath ) as $dir )
 				{
-					wp_mkdir_p( $path );
+					$path = path_join( $path, $dir );
 					
-					// prevent directory listing
-					$index_file = path_join( $path, 'index.php' );
-					if( ! file_exists( $index_file ) )
-						file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+					if( ! is_dir( $path ) )
+					{
+						wp_mkdir_p( $path );
+						
+						// prevent directory listing in each directory in subpath
+						$index_file = path_join( $path, 'index.php' );
+						if( ! file_exists( $index_file ) )
+							file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+					}
 				}
 			}
 			
 			/**
 			 * Copy a source file to the storage location, ensuring a unique file name
 			 */
-			public function save( $srcfile, $filename )
+			public function save( $srcfile, $filename, $overwrite = false )
 			{
+				$this->initialize_path();
+				
 				$full_path = $this->get_full_path();
 				
-				$this->initialize_path( $full_path );
-				
 				$filename = sanitize_file_name( $filename );
-				$filename = wp_unique_filename( $full_path, $filename );
+				if( ! $overwrite )
+					$filename = wp_unique_filename( $full_path, $filename );
 				
-				copy($srcfile, trailingslashit( $full_path ) . $filename);
+				$dstfile = trailingslashit( $full_path ) . $filename;
+				copy($srcfile, $dstfile);
+				
+				return $filename;
 			}
 			
 			/**
@@ -127,10 +154,10 @@
 			 */
 			public function get_files()
 			{
+				$this->initialize_path();
+				
 				$full_path = $this->get_full_path();
 				$full_url = $this->get_full_url();
-				
-				$this->initialize_path( $full_path );
 				
 				$files = scandir( $full_path );
 				$files = array_diff( $files, array( '.', '..', 'index.php' ) );
