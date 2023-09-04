@@ -536,7 +536,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		public function attach_pdfs( $email_attachments, $email_id, $object, $email )
 		{
 			if( $email_id !== null
-			&& $object !== null && is_object( $object ) && $object instanceof WC_Order
+			&& $object !== null && is_object( $object ) && is_a( $object, 'WC_Order' )
 			&& $email !== null )
 			{
 				try
@@ -670,6 +670,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		{
 			try
 			{
+				$output_files = array();
+				
 				$attachments = array();
 				$mappings = array();
 				$embeds = array();
@@ -1033,7 +1035,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 					$storage = $this->get_storage();
 					foreach( $files as $id => $filedata )
 					{
-						$email_attachments[] = $filedata['file'];
+						$output_files[] = $filedata['file'];
 						
 						$save_directory = strval( $filedata['options']['save_directory'] );
 						if( $save_directory !== "" )
@@ -1103,9 +1105,14 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 						}
 					}
 				}
+				
+				return $output_files;
 			}
 			catch( Exception $e )
 			{
+				// clean up
+				$this->remove_tmp_dir();
+				
 				$error_message = self::replace_tags(
 					__( "Error generating PDF: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' ),
 					array( 'error-message' => $e->getMessage(), 'error-file' => wp_basename( $e->getFile() ), 'error-line' => $e->getLine() )
@@ -1115,9 +1122,9 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				wc_get_logger()->error( $error_message, array( 'source' => 'pdf-forms-for-woocommerce' ) );
 				
 				// TODO: notify store owner of error
+				
+				return array();
 			}
-			
-			return $email_attachments;
 		}
 		
 		/**
