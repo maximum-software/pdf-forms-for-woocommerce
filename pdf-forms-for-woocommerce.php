@@ -69,6 +69,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
 			
+			add_filter( 'woocommerce_order_status_changed', array( $this, 'process_order_status_change' ), 10, 4 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
 			
@@ -531,6 +532,25 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		}
 		
 		/**
+		 * Runs when order status is changed
+		 */
+		public function process_order_status_change( $order_id, $old_status, $new_status, $order )
+		{
+			if( $order && is_a( $order, 'WC_Order' ) )
+			{
+				// the problem with downloadable product files is that when the order status changes, the PDF forms have to be re-filled because the data may have changed
+				// but we don't want to redo it every time status changes, only as needed
+				// so, we should delete the old PDF files and recreate them only when needed
+				
+				// remove order item downloadable files
+				$items = $order->get_items();
+				if( is_array( $items ) )
+					foreach( $items as $item )
+						self::unset_downloadable_files( $item->get_id() );
+			}
+		}
+		
+		/**
 		 * Fills PDFs and attaches them to email notifications
 		 */
 		public function attach_pdfs( $email_attachments, $email_id, $object, $email )
@@ -601,6 +621,72 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			return $email_attachments;
 		}
 		
+		public static function get_downloadable_files( $order_item_id )
+		{
+			$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
+			if( $downloadable_files_json )
+			{
+				$downloadable_files = json_decode( $downloadable_files_json, true );
+				if( is_array( $downloadable_files ) )
+					return $downloadable_files;
+			}
+			
+			return array();
+		}
+		
+		public static function set_downloadable_files( $order_item_id, $downloadable_files )
+		{
+			if( ! is_array( $downloadable_files ) )
+				$downloadable_files = array();
+			self::set_meta( $order_item_id, 'downloadable-files', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $downloadable_files ) );
+		}
+		
+		public static function get_downloadable_file( $order_item_id, $attachment_id )
+		{
+			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			if( isset( $downloadable_files[$attachment_id] ) )
+				return $downloadable_files[$attachment_id];
+			return null;
+		}
+		
+		public static function set_downloadable_file( $order_item_id, $attachment_id, $fileurl, $filename )
+		{
+			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			$downloadable_files[$attachment_id] = array(
+				'attachment_id' => $attachment_id,
+				'file' => $fileurl,
+				'filename' => $filename,
+			);
+			self::set_downloadable_files( $order_item_id, $downloadable_files );
+		}
+		
+		public static function unset_downloadable_files( $order_item_id )
+		{
+			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			
+			// delete files
+			foreach( $downloadable_files as $downloadable_file )
+				if( isset( $downloadable_file['file'] ) )
+					@unlink( $downloadable_file['file'] );
+			
+			self::unset_meta( $order_item_id, 'downloadable-files' );
+		}
+		
+		public static function unset_downloadable_file( $order_item_id, $attachment_id )
+		{
+			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			if( isset( $downloadable_files[$attachment_id] ) )
+			{
+				// delete file
+				if( isset( $downloadable_files[$attachment_id]['file'] ) )
+					@unlink( $downloadable_files[$attachment_id]['file'] );
+				
+				unset( $downloadable_files[$attachment_id] );
+				
+				self::set_downloadable_files( $order_item_id, $downloadable_files );
+			}
+		}
+		
 		public function woocommerce_get_item_downloads( $files, $order_item, $order )
 		{
 			if( is_array( $files ) && is_object( $order_item ) && is_object( $order ) )
@@ -621,37 +707,32 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 						{
 							foreach( $attachments as $attachment )
 							{
+								$attachment_id = $attachment['attachment_id'];
+								
 								if( isset( $attachment['options'] )
 								&& is_array( $options = $attachment['options'] )
 								&& isset( $options['download_id'] )
 								&& $options['download_id'] == $download_id )
 								{
-									// TODO: what happens if the attachment is not being attached to any emails? we need to fill the PDF someplace else
-									// $variable_processor = $this->get_variable_processor();
-									// $variable_processor->set_order( $order );
-									// $variable_processor->set_order_item( $order_item );
-									// $variable_processor->set_product_id( $product_id );
-									// $files = $this->fill_pdfs( $settings, $variable_processor );
-									// foreach( $files as $file )
-									// {
-									// 	//...
-									// }
+									$downloadable_file = self::get_downloadable_file( $order_item_id, $attachment_id );
 									
-									$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
-									if( $downloadable_files_json )	
+									if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
 									{
-										$downloadable_files = json_decode( $downloadable_files_json, true );
-										$attachment_id = $attachment['attachment_id'];
-										if( is_array( $downloadable_files ) && isset( $downloadable_files[$attachment_id] ) )
-										{
-											$downloadable_file = $downloadable_files[$attachment_id];
-											if( isset( $downloadable_file['file'] ) )
-											{
-												$file['name'] = $downloadable_file['filename'];
-												$file['file'] = $downloadable_file['file']; // relative to site root
-												$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
-											}
-										}
+										// what happens if the attachment is not being attached to any emails? we need to fill the PDF
+										$variable_processor = $this->get_variable_processor();
+										$variable_processor->set_order( $order );
+										$variable_processor->set_order_item( $order_item );
+										$variable_processor->set_product_id( $product_id );
+										
+										$this->fill_pdfs( $settings, $variable_processor );
+										$downloadable_file = self::get_downloadable_file( $order_item_id, $attachment_id );
+									}
+									
+									if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
+									{
+										$file['name'] = $downloadable_file['filename'];
+										$file['file'] = $downloadable_file['file']; // relative to site root
+										$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 									}
 								}
 							}
@@ -1090,17 +1171,12 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 								$dstfilename = $storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
 								
 								// record file data in order item meta
-								$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
-								if( ! $downloadable_files_json )
-									$downloadable_files = array();
-								else
-									$downloadable_files = json_decode( $downloadable_files_json, true );
-								$downloadable_files[$attachment_id] = array(
-									'attachment_id' => $attachment_id,
-									'file' => trailingslashit( $storage->get_site_root_relative_path() ) . $dstfilename,
-									'filename' => $filedata['filename'],
+								self::set_downloadable_file(
+									$order_item_id,
+									$attachment_id,
+									trailingslashit( $storage->get_site_root_relative_path() ) . $dstfilename,
+									$filedata['filename']
 								);
-								self::set_meta( $order_item_id, 'downloadable-files', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $downloadable_files ) );
 							}
 						}
 					}
