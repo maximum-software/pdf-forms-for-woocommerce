@@ -942,6 +942,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				
 				$files = array();
 				
+				$service = $this->get_service();
+				
 				// preprocess embedded images
 				$embed_files = array();
 				foreach( $embeds as $id => $embed )
@@ -1270,7 +1272,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 					$destfilename = wp_basename( empty( $destfilename ) ? $filepath : $destfilename, '.pdf' );
 					$destfile = $this->create_tmp_filepath( $destfilename . '.pdf' );
 					
-					$service = $this->get_service();
 					$filled = false;
 					
 					if( $service )
