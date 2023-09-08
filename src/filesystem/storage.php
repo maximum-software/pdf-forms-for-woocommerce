@@ -13,7 +13,7 @@
 			private $storage_url = null;
 			private $subpath = null;
 			
-			private function __construct()
+			public function __construct()
 			{
 				$uploads = wp_upload_dir( null, false );
 				$this->storage_path = $uploads['basedir'];
@@ -29,7 +29,7 @@
 				if ( empty( self::$instance ) )
 					self::$instance = new self;
 				
-				return self::$instance;
+				return clone self::$instance;
 			}
 			
 			/**

@@ -32,7 +32,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		private $pdf_ninja_service = null;
 		private $service = null;
 		private $registered_services = false;
-		private $storage = null;
 		private $tmp_dir = null;
 		
 		private function __construct()
@@ -211,15 +210,10 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		/**
 		 * Loads and returns the storage module
 		 */
-		private function get_storage()
+		private static function get_storage()
 		{
-			if( ! $this->storage )
-			{
-				require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/filesystem/storage.php';
-				$this->storage = Pdf_Forms_For_WooCommerce_Storage::get_instance();
-			}
-			
-			return $this->storage;
+			require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/filesystem/storage.php';
+			return Pdf_Forms_For_WooCommerce_Storage::get_instance();
 		}
 		
 		/**
@@ -1186,7 +1180,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				
 				if( count( $files ) > 0 )
 				{
-					$storage = $this->get_storage();
+					$storage = self::get_storage();
 					foreach( $files as $id => $filedata )
 					{
 						$output_files[] = $filedata['file'];
