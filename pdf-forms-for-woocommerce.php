@@ -80,7 +80,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
 			add_action( 'woocommerce_product_data_panels', array( $this, 'print_product_data_tab_contents' ) );
-			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_data' ) );
+			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_data' ), 99 );
 			
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'register_settings' ) );
 			
