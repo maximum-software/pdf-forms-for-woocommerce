@@ -26,6 +26,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		const MAX_WC_VERSION = '8.0.99';
 		private static $BLACKLISTED_WC_VERSIONS = array();
 		
+		const META_KEY = '_pdf-forms-for-woocommerce-data';
+		
 		private static $instance = null;
 		private $pdf_ninja_service = null;
 		private $service = null;
@@ -67,6 +69,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_query_page_image', array( $this, 'wp_ajax_query_page_image' ) );
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_generate_pdf_ninja_key', array( $this, 'wp_ajax_generate_pdf_ninja_key') );
 			
+			add_action( 'init', array( $this, 'register_meta' ) );
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
 			
 			add_filter( 'woocommerce_order_status_changed', array( $this, 'process_order_status_change' ), 10, 4 );
@@ -88,6 +91,19 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				if( $service != $this->pdf_ninja_service )
 					$this->pdf_ninja_service->plugin_init();
 			}
+		}
+		
+		/*
+		 * Registers the meta key for settings
+		 */
+		public function register_meta()
+		{
+			register_meta( 'post', self::META_KEY, array(
+				'show_in_rest' => false,
+				'single' => true,
+				'type' => 'array',
+				'auth_callback' => '__return_false',
+			) );
 		}
 		
 		/**
@@ -279,6 +295,63 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		public static function unset_meta( $post_id, $key )
 		{
 			delete_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key );
+		}
+		
+		/*
+		 * Function for retrieving metadata
+		 */
+		public static function get_metadata( $post_id, $key = null )
+		{
+			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
+			if( ! is_array( $data ) )
+				return null;
+			
+			if( $key === null)
+				return $data;
+			
+			if( isset( $data[$key] ) )
+				return $data[$key];
+			else
+				return null;
+		}
+		
+		/*
+		 * Function for setting metadata
+		 */
+		public static function set_metadata( $post_id, $key = null, $value = null )
+		{
+			// TODO: fix race condition
+			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
+			if( ! is_array( $data ) )
+				$data = array();
+			
+			if( $key === null )
+				$data = $value;
+			else
+			{
+				if( $value === null )
+					unset( $data[$key] );
+				else
+					$data[$key] = $value;
+			}
+			
+			if( empty( $data ) )
+				delete_post_meta( $post_id, self::META_KEY );
+			else
+			{
+				// wp bug workaround
+				// https://developer.wordpress.org/reference/functions/update_post_meta/#workaround
+				$data = wp_slash( $data );
+				
+				update_post_meta( $post_id, self::META_KEY, $data );
+			}
+			
+			return $value;
+		}
+		
+		public static function unset_metadata( $post_id, $key = null )
+		{
+			return self::set_metadata( $post_id, $key, null );
 		}
 		
 		/**
