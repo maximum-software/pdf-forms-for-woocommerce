@@ -311,6 +311,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		
 		/*
 		 * Function for setting metadata
+		 * If $key is null, the whole metadata element is removed
+		 * If $value is null, the metadata subelement with the given key is removed
 		 */
 		public static function set_metadata( $post_id, $key = null, $value = null )
 		{
@@ -320,7 +322,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				$data = array();
 			
 			if( $key === null )
-				$data = $value;
+				$data = null;
 			else
 			{
 				if( $value === null )
