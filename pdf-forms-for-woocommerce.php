@@ -76,7 +76,8 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
 			
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
-			// TODO: remove order files when orders are deleted
+			
+			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 1, 2 );
 			
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
 			add_action( 'woocommerce_product_data_panels', array( $this, 'print_product_data_tab_contents' ) );
@@ -611,11 +612,9 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 				// but we don't want to redo it every time status changes, only as needed
 				// so, we should delete the old PDF files and recreate them only when needed
 				
-				// remove order item downloadable files
-				$items = $order->get_items();
-				if( is_array( $items ) )
-					foreach( $items as $item )
-						self::unset_downloadable_files( $item->get_id() );
+				if( $new_status != 'new' )
+					// remove order downloadable files
+					self::unset_downloadable_files( $order->get_id() );
 			}
 		}
 		
@@ -690,65 +689,134 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			return $email_attachments;
 		}
 		
-		public static function get_downloadable_files( $order_item_id )
+		public static function get_order_storage( $order_id )
 		{
-			$downloadable_files_json = self::get_meta( $order_item_id, 'downloadable-files' );
-			if( $downloadable_files_json )
+			// TODO: fix race condition
+			$storage = self::get_storage();
+			$storage_directory = self::get_metadata( $order_id, 'storage-dir' );
+			$order_directory = self::get_metadata( $order_id, 'order-dir' );
+			if( $storage_directory && $order_directory )
 			{
-				$downloadable_files = json_decode( $downloadable_files_json, true );
-				if( is_array( $downloadable_files ) )
+				$storage->set_site_root_relative_storage_path( $storage_directory );
+				$storage->set_subpath( $order_directory );
+			}
+			else
+			{
+				$storage_directory = $storage->get_site_root_relative_storage_path();
+				$order_directory = 'pdf-forms-for-woocommerce/order-files/' . $order_id . '-' . wp_hash( wp_rand() . microtime() );
+				$storage->set_subpath( $order_directory );
+				self::set_metadata( $order_id, 'storage-dir', $storage_directory );
+				self::set_metadata( $order_id, 'order-dir', $order_directory );
+			}
+			
+			return $storage;
+		}
+		
+		public static function delete_order_storage( $order_id )
+		{
+			// TODO: fix race condition
+			$storage_directory = self::get_metadata( $order_id, 'storage-dir' );
+			$order_directory = self::get_metadata( $order_id, 'order-dir' );
+			if( $storage_directory && $order_directory )
+			{
+				$storage = self::get_storage();
+				$storage->set_site_root_relative_storage_path( $storage_directory );
+				$storage->set_subpath( $order_directory );
+				$storage->delete_subpath_recursively();
+				self::unset_metadata( $order_id, 'storage-dir' );
+				self::unset_metadata( $order_id, 'order-dir' );
+			}
+		}
+		
+		public static function get_downloadable_files( $order_id, $order_item_id = null )
+		{
+			$downloadable_files = self::get_metadata( $order_id, 'downloadable-files' );
+			if( is_array( $downloadable_files ) )
+			{
+				if( $order_item_id === null )
 					return $downloadable_files;
+				
+				if( isset( $downloadable_files[$order_item_id] ) )
+				{
+					$order_item_files = $downloadable_files[$order_item_id];
+					if( is_array( $order_item_files ) )
+						return $order_item_files;
+				}
 			}
 			
 			return array();
 		}
 		
-		public static function set_downloadable_files( $order_item_id, $downloadable_files )
+		public static function set_downloadable_files( $order_id, $order_item_id = null, $order_item_files = null )
 		{
+			// TODO: fix race condition
+			$downloadable_files = self::get_metadata( $order_id, 'downloadable-files' );
 			if( ! is_array( $downloadable_files ) )
 				$downloadable_files = array();
-			self::set_meta( $order_item_id, 'downloadable-files', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $downloadable_files ) );
+			
+			if( $order_item_files === null )
+			{
+				if( $order_item_id === null )
+					$downloadable_files = array();
+				else
+					unset( $downloadable_files[$order_item_id] );
+			}
+			else if( $order_item_id !== null )
+				$downloadable_files[$order_item_id] = $order_item_files;
+			
+			self::set_metadata( $order_id, 'downloadable-files', $downloadable_files );
 		}
 		
-		public static function get_downloadable_file( $order_item_id, $attachment_id )
+		public static function get_downloadable_file( $order_id, $order_item_id, $attachment_id )
 		{
-			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
 			if( isset( $downloadable_files[$attachment_id] ) )
 				return $downloadable_files[$attachment_id];
 			return null;
 		}
 		
-		public static function set_downloadable_file( $order_item_id, $attachment_id, $fileurl, $filename )
+		public static function set_downloadable_file( $order_id, $order_item_id, $attachment_id, $fileurl, $filename )
 		{
-			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			// TODO: fix race condition
+			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
 			$downloadable_files[$attachment_id] = array(
 				'attachment_id' => $attachment_id,
 				'file' => $fileurl,
 				'filename' => $filename,
 			);
-			self::set_downloadable_files( $order_item_id, $downloadable_files );
+			self::set_downloadable_files( $order_id, $order_item_id, $downloadable_files );
 		}
 		
-		public static function unset_downloadable_files( $order_item_id )
+		public static function unset_downloadable_files( $order_id, $order_item_id = null )
 		{
-			$downloadable_files = self::get_downloadable_files( $order_item_id );
+			// TODO: fix race condition
+			
+			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			
+			if( $order_item_id !== null )
+				$downloadable_files = array( $downloadable_files );
 			
 			// delete files
-			foreach( $downloadable_files as $downloadable_file )
-				if( isset( $downloadable_file['file'] ) )
-					@unlink( $downloadable_file['file'] );
+			foreach( $downloadable_files as $downloadable_file_set )
+				foreach( $downloadable_file_set as $downloadable_file )
+					if( isset( $downloadable_file['file'] ) )
+						@unlink( trailingslashit( ABSPATH ) . $downloadable_file['file'] );
 			
-			self::unset_meta( $order_item_id, 'downloadable-files' );
+			self::set_downloadable_files( $order_id, $order_item_id, null );
 		}
 		
-		public static function unset_downloadable_file( $order_item_id, $attachment_id )
+		public static function unset_downloadable_file( $order_id, $order_item_id, $attachment_id )
 		{
-			$downloadable_files = self::get_downloadable_files( $order_item_id );
-			if( isset( $downloadable_files[$attachment_id] ) )
+			// TODO: fix race condition
+			
+			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			if( is_array( $downloadable_files ) && isset( $downloadable_files[$attachment_id] ) )
 			{
 				// delete file
-				if( isset( $downloadable_files[$attachment_id]['file'] ) )
-					@unlink( $downloadable_files[$attachment_id]['file'] );
+				if( isset( $downloadable_files[$attachment_id] )
+				&& is_array( $downloadable_file = $downloadable_files[$attachment_id] )
+				&& isset( $downloadable_file['file'] ) )
+					@unlink( $downloadable_file['file'] );
 				
 				unset( $downloadable_files[$attachment_id] );
 				
@@ -760,8 +828,9 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		{
 			if( is_array( $files ) && is_object( $order_item ) && is_object( $order ) )
 			{
-				$product_id = $order_item->get_product_id();
+				$order_id = $order->get_id();
 				$order_item_id = $order_item->get_id();
+				$product_id = $order_item->get_product_id();
 				
 				foreach( $files as $download_id => &$file )
 				{
@@ -783,7 +852,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 								&& isset( $options['download_id'] )
 								&& $options['download_id'] == $download_id )
 								{
-									$downloadable_file = self::get_downloadable_file( $order_item_id, $attachment_id );
+									$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 									
 									if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
 									{
@@ -794,7 +863,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 										$variable_processor->set_product_id( $product_id );
 										
 										$this->fill_pdfs( $settings, $variable_processor );
-										$downloadable_file = self::get_downloadable_file( $order_item_id, $attachment_id );
+										$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 									}
 									
 									if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
@@ -811,6 +880,41 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			}
 			
 			return $files;
+		}
+		
+		/*
+		 * Runs when post is deleted to clean up files
+		 */
+		public function before_delete_post( $post_id )
+		{
+			$type = get_post_type( $post_id );
+			// delete the order directory
+			if($type == 'shop_order')
+				$this->before_delete_order( $post_id, wc_get_order( $post_id ) );
+			// delete the order item's downloadable files
+			else if($type == 'line_item')
+				$this->before_delete_order_item( $post_id );
+		}
+		
+		/*
+		 * Runs when order is deleted to clean up order's items' downloadable files
+		 */
+		public function before_delete_order( $order_id, $order )
+		{
+			// remove downloadable files
+			self::unset_downloadable_files( $order_id );
+			
+			// delete order directory
+			self::delete_order_storage( $order_id );
+		}
+		
+		/*
+		 * Runs when order item is deleted to clean up order item's downloadable files
+		 */
+		public function before_delete_order_item( $order_item_id )
+		{
+			// remove order item downloadable files
+			self::unset_downloadable_files( wc_get_order_id_by_order_item_id( $order_item_id ), $order_item_id );
 		}
 		
 		/**
@@ -1230,20 +1334,15 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							{
 								$order_id = $order->get_id();
 								$order_item_id = $order_item->get_id();
-								$order_directory = self::get_meta( $order_id, 'order-filepath' );
-								if( ! $order_directory )
-								{
-									$order_directory = 'pdf-forms-for-woocommerce/order-files/' . $order_id . '-' . wp_hash( wp_rand() . microtime() );
-									self::set_meta( $order_id, 'order-filepath', $order_directory );
-								}
-								$storage->set_subpath( trailingslashit( $order_directory ) . $order_item_id );
-								$dstfilename = $storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
+								$order_storage = self::get_order_storage( $order_id );
+								$dstfilename = $order_storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
 								
-								// record file data in order item meta
+								// record file data in order meta
 								self::set_downloadable_file(
+									$order_id,
 									$order_item_id,
 									$attachment_id,
-									trailingslashit( $storage->get_site_root_relative_path() ) . $dstfilename,
+									trailingslashit( $order_storage->get_site_root_relative_path() ) . $dstfilename,
 									$filedata['filename']
 								);
 							}
