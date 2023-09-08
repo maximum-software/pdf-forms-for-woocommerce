@@ -59,10 +59,18 @@
 			/**
 			 * Sets subpath, automatically removing preceeding invalid special characters
 			 */
-			private function set_storage_path( $path )
+			public function set_storage_path( $path )
 			{
 				$this->storage_path = wp_normalize_path( $path );
 				return $this;
+			}
+			
+			/**
+			 * Sets storage path relative to site root
+			 */
+			public function set_site_root_relative_storage_path( $path )
+			{
+				return $this->set_storage_path( path_join( ABSPATH, $path ) );
 			}
 			
 			/**
@@ -162,14 +170,22 @@
 				$full_path = $this->get_full_path();
 				$full_url = $this->get_full_url();
 				
-				$files = scandir( $full_path );
+				$files = @scandir( $full_path );
+				if( $files === false)
+					return array();
+				
 				$files = array_diff( $files, array( '.', '..', 'index.php' ) );
+				
 				$files_with_info = array();
 				foreach( $files as $file )
 				{
+					$filepath = path_join( $full_path, $file );
+					if( is_dir( $filepath ) )
+						continue;
+					
 					$info = array(
 						'filename' => $file,
-						'filepath' => path_join( $full_path, $file ),
+						'filepath' => $filepath,
 						'url' => path_join( $full_url, $file ),
 					);
 					
@@ -177,6 +193,43 @@
 				}
 				
 				return $files_with_info;
+			}
+			
+			/*
+			* Deletes a directory tree recursively
+			*/
+			public function delete_directory_recursively( $dir )
+			{
+				if( ! is_dir( $dir ) )
+					return;
+				
+				$files = @scandir( $dir );
+				if( $files === false )
+					return;
+				
+				$files = array_diff( $files, array( '.', '..' ) );
+				
+				foreach( $files as $file )
+				{
+					$filepath = path_join( $dir, $file );
+					if( is_dir( $filepath ) && ! is_link( $filepath ) )
+						$this->delete_directory_recursively( $filepath );
+					else
+						@unlink( $filepath );
+				}
+				
+				@rmdir( $dir );
+			}
+			
+			/*
+			* Deletes the subpath recursively
+			*/
+			public function delete_subpath_recursively()
+			{
+				if( $this->subpath == '' )
+					return;
+				
+				$this->delete_directory_recursively( $this->get_full_path() );
 			}
 		}
 	}
