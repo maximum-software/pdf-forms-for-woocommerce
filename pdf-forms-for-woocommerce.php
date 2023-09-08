@@ -1224,7 +1224,6 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 							continue;
 					}
 					
-					// TODO: figure out what to do about saving files, we may have to remove this feature
 					$save_directory = strval( $attachment['options']['save_directory'] );
 					
 					$options = array();
