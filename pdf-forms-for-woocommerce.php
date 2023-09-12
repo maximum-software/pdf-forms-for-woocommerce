@@ -606,7 +606,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function process_order_status_change( $order_id, $old_status, $new_status, $order )
 		{
-			if( $order && is_a( $order, 'WC_Order' ) )
+			if( is_a( $order, 'WC_Order' ) )
 			{
 				// the problem with downloadable product files is that when the order status changes, the PDF forms have to be re-filled because the data may have changed
 				// but we don't want to redo it every time status changes, only as needed
@@ -623,9 +623,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function attach_pdfs( $email_attachments, $email_id, $object, $email )
 		{
-			if( $email_id !== null
-			&& $object !== null && is_object( $object ) && is_a( $object, 'WC_Order' )
-			&& $email !== null )
+			if( $email_id !== null && is_a( $object, 'WC_Order' ) && is_a( $email, 'WC_Email' ) )
 			{
 				try
 				{

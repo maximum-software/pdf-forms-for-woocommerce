@@ -156,7 +156,7 @@
 			 */
 			private function process_order_variables( $content )
 			{
-				if( $this->order )
+				if( is_a( $this->order, 'WC_Order' ) )
 				{
 					$search = array();
 					foreach( self::get_checkout_fields() as $section )
@@ -193,7 +193,7 @@
 			
 			private function process_order_item_meta( $content )
 			{
-				if( $this->order_item )
+				if( is_a( $this->order_item, 'WC_Order_Item_Product' ) )
 				{
 					$content = preg_replace_callback(
 						// TODO: make this work with escape sequences for curly braces in meta key
