@@ -17,7 +17,7 @@
 require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/tgm-config.php';
 require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/wrapper.php';
 
-if( ! class_exists('Pdf_Forms_For_WooCommerce') )
+if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 {
 	class Pdf_Forms_For_WooCommerce
 	{
@@ -61,7 +61,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 			
-			if( ! class_exists('WooCommerce') || ! defined( 'WC_VERSION' ) )
+			if( ! class_exists( 'WooCommerce' ) || ! defined( 'WC_VERSION' ) )
 				return;
 			
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_get_attachment_data', array( $this, 'wp_ajax_get_attachment_data' ) );
@@ -138,7 +138,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 		 */
 		public function admin_notices()
 		{
-			if( ! class_exists('WooCommerce') || ! defined( 'WC_VERSION' ) )
+			if( ! class_exists( 'WooCommerce' ) || ! defined( 'WC_VERSION' ) )
 			{
 				if( current_user_can( 'install_plugins' ) && current_user_can( 'activate_plugins' ) )
 					echo Pdf_Forms_For_WooCommerce::render_error_notice( 'woocommerce-not-installed', array(
@@ -1841,7 +1841,7 @@ if( ! class_exists('Pdf_Forms_For_WooCommerce') )
 			wp_register_script( 'pdf_forms_for_woocommerce_notices_script', plugins_url( 'js/notices.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 			wp_enqueue_script( 'pdf_forms_for_woocommerce_notices_script' );
 			
-			if( ! class_exists('WooCommerce') || ! defined( 'WC_VERSION' ) )
+			if( ! class_exists( 'WooCommerce' ) || ! defined( 'WC_VERSION' ) )
 				return;
 			
 			wp_register_script( 'pdf_forms_filler_spinner_script', plugins_url( 'js/spinner.js', __FILE__ ), array('jquery'), '1.0.0' );

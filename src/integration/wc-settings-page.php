@@ -3,7 +3,7 @@
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
-	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Settings_Page' ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Settings_Page', false ) )
 	{
 		class Pdf_Forms_For_WooCommerce_Settings_Page extends WC_Settings_Page
 		{

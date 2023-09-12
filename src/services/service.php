@@ -3,7 +3,7 @@
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
-	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Service' ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Service', false ) )
 	{
 		abstract class Pdf_Forms_For_WooCommerce_Service
 		{

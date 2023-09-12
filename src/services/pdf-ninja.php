@@ -6,7 +6,7 @@
 	require_once( untrailingslashit( __DIR__ ) . '/service.php' );
 	require_once( untrailingslashit( __DIR__ ) . '/../wrapper.php' );
 	
-	if( ! class_exists( 'WooCommerce_Pdf_Ninja' ) )
+	if( ! class_exists( 'WooCommerce_Pdf_Ninja', false ) )
 	{
 		class WooCommerce_Pdf_Ninja extends Pdf_Forms_For_WooCommerce_Service
 		{

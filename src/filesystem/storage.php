@@ -3,7 +3,7 @@
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
-	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Storage' ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Storage', false ) )
 	{
 		class Pdf_Forms_For_WooCommerce_Storage
 		{
