@@ -879,7 +879,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
 									{
 										$file['name'] = $downloadable_file['filename'];
-										$file['file'] = $downloadable_file['file']; // relative to site root
+										$file['file'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 										$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 									}
 								}
