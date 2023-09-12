@@ -163,6 +163,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							),
 					) );
 			
+			// TODO: add notices about last backend errors using wc_add_notice( $e->getMessage(), 'error');
+			
 			if( $service = $this->get_service() )
 			{
 				$service->admin_notices();
@@ -504,6 +506,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public static function get_tmp_path()
 		{
+			// TODO: maybe switch to using storage class
+			
 			$upload_dir = wp_upload_dir();
 			$tmp_path = trailingslashit( empty( $upload_dir['error'] && ! empty( $upload_dir['basedir'] ) ) ? $upload_dir['basedir'] : get_temp_dir() );
 			
@@ -880,6 +884,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									{
 										$file['name'] = $downloadable_file['filename'];
 										$file['file'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+										// TODO: use 'secure' download URL
 										$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 									}
 								}
@@ -932,6 +937,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		private function fill_pdfs( $settings, $variable_processor )
 		{
+			// TODO: figure out why this function is called too many times
 			try
 			{
 				$output_files = array();
@@ -1301,6 +1307,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					{
 						$output_files[] = $filedata['file'];
 						
+						// TODO: the file is saved to the storage multiple times because we are calling fill_pdfs() for each email notification and download pdf generation, this potentially creates a huge number of files needlessly, we probably want to overwrite the file
 						$save_directory = strval( $filedata['options']['save_directory'] );
 						if( $save_directory !== "" )
 						{

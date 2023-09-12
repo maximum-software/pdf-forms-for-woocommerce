@@ -1,5 +1,7 @@
 <?php
 	
+	// TODO: change 'variable' to 'placeholder' as it is a more widely used term
+	
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
