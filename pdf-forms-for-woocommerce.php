@@ -1477,21 +1477,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Returns possible woocommerce fields
-		 */
-		private static function get_woocommerce_fields( $product_id )
-		{
-			$woocommerce_fields = array();
-			
-			$fields = WC()->checkout()->get_checkout_fields();
-			foreach($fields as $section)
-				foreach($section as $field_key => $field_args)
-					$woocommerce_fields[] = array( 'alias' => $field_key, 'label' => $field_args['label'] );
-			
-			return $woocommerce_fields;
-		}
-		
-		/**
 		 * Prints 'PDF Forms' tab HTML contents
 		 */
 		public function print_product_data_tab_contents()
