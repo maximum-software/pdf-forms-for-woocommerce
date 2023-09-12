@@ -867,7 +867,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 										$variable_processor->set_order_item( $order_item );
 										$variable_processor->set_product_id( $product_id );
 										
-										$this->fill_pdfs( $settings, $variable_processor );
+										// fill PDFs so that they are also saved to the order directory
+										$temporary_pdfs = $this->fill_pdfs( $settings, $variable_processor );
+										
+										// clean up temporary files
+										$this->remove_tmp_dir();
+										
 										$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 									}
 									
