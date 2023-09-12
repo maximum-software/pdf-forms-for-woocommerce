@@ -158,7 +158,6 @@ jQuery(document).ready(function($) {
 			.select2({
 				ajax: {},
 				width: '100%',
-				//dropdownAutoWidth: true,
 				sharedDataElement: shared_data_element,
 				dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 				dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
@@ -257,7 +256,6 @@ jQuery(document).ready(function($) {
 	jQuery('.pdf-forms-for-woocommerce-admin .pdf-files-list').select2({
 		ajax: {},
 		width: '100%',
-		//dropdownAutoWidth: true,
 		sharedDataElement: "pdfSelect2Files",
 		dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 		dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
@@ -265,7 +263,6 @@ jQuery(document).ready(function($) {
 	jQuery('.pdf-forms-for-woocommerce-admin .page-list').select2({
 		ajax: {},
 		width: '100%',
-		//dropdownAutoWidth: true,
 		sharedDataElement: "pageList",
 		dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 		dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
