@@ -248,12 +248,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Creates a new instance of the variable processor
+		 * Creates a new instance of the placeholder processor
 		 */
-		public function get_variable_processor()
+		public function get_placeholder_processor()
 		{
-			require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/integration/wc-variables-processor.php';
-			return new Pdf_Forms_For_WooCommerce_Variable_Processor();
+			require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/integration/wc-placeholder-processor.php';
+			return new Pdf_Forms_For_WooCommerce_Placeholder_Processor();
 		}
 		
 		/**
@@ -638,19 +638,19 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			{
 				try
 				{
-					$variable_processor = $this->get_variable_processor();
-					$variable_processor->set_email( $email );
-					$variable_processor->set_order( $object );
+					$placeholder_processor = $this->get_placeholder_processor();
+					$placeholder_processor->set_email( $email );
+					$placeholder_processor->set_order( $object );
 					
 					// compile a list of product settings
 					$items = $object->get_items();
 					foreach( $items as $item )
 					{
-						$variable_processor->set_order_item( $item );
+						$placeholder_processor->set_order_item( $item );
 						
 						$product_id = $item->get_product_id();
 						
-						$variable_processor->set_product_id( $product_id );
+						$placeholder_processor->set_product_id( $product_id );
 						
 						$product_data = self::get_meta( $product_id, 'data' );
 						if( isset( $product_data ) )
@@ -673,7 +673,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 										//$qty = $item->get_quantity();
 										//for( $i = 0; $i < $qty; $i++ )
 										
-										$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $variable_processor ) );
+										$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $placeholder_processor ) );
 										break;
 									}
 								}
@@ -866,13 +866,13 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
 									{
 										// what happens if the attachment is not being attached to any emails? we need to fill the PDF
-										$variable_processor = $this->get_variable_processor();
-										$variable_processor->set_order( $order );
-										$variable_processor->set_order_item( $order_item );
-										$variable_processor->set_product_id( $product_id );
+										$placeholder_processor = $this->get_placeholder_processor();
+										$placeholder_processor->set_order( $order );
+										$placeholder_processor->set_order_item( $order_item );
+										$placeholder_processor->set_product_id( $product_id );
 										
 										// fill PDFs so that they are also saved to the order directory
-										$temporary_pdfs = $this->fill_pdfs( $settings, $variable_processor );
+										$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
 										
 										// clean up temporary files
 										$this->remove_tmp_dir();
@@ -935,7 +935,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		/**
 		 * Fills PDFs
 		 */
-		private function fill_pdfs( $settings, $variable_processor )
+		private function fill_pdfs( $settings, $placeholder_processor )
 		{
 			// TODO: figure out why this function is called too many times
 			try
@@ -970,8 +970,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					
 					$url = null;
 					
-					if( isset( $embed['variables'] ) ) 
-						$url = $variable_processor->process( $embed["variables"] );
+					if( isset( $embed['placeholders'] ) ) 
+						$url = $placeholder_processor->process( $embed["placeholders"] );
 					
 					if( $url != null )
 					{
@@ -1059,9 +1059,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						
 						$multiple = isset( $fields[$field]['flags'] ) && in_array( 'MultiSelect', $fields[$field]['flags'] );
 						
-						if( isset( $mapping["variables"] ) )
+						if( isset( $mapping["placeholders"] ) )
 						{
-							$data[$field] = $variable_processor->process( $mapping["variables"] );
+							$data[$field] = $placeholder_processor->process( $mapping["placeholders"] );
 							
 							if( $multiple )
 							{
@@ -1281,7 +1281,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					
 					$filename = strval( $attachment['options']['filename'] );
 					if ( $filename !== "" )
-						$destfilename = $variable_processor->process( $filename );
+						$destfilename = $placeholder_processor->process( $filename );
 					else
 						$destfilename = $filepath;
 					
@@ -1318,11 +1318,11 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							$trim_characters = "/\\. \t\n\r\0\x0B";
 							$save_directory = trim( $save_directory, $trim_characters );
 							
-							// replace variables in path elements
+							// replace placeholders in path elements
 							$path_elements = explode( "/", $save_directory );
 							$tag_replaced_path_elements = array();
 							foreach ( $path_elements as $key => $value )
-								$tag_replaced_path_elements[$key] = $variable_processor->process( $value );
+								$tag_replaced_path_elements[$key] = $placeholder_processor->process( $value );
 							
 							foreach( $tag_replaced_path_elements as $elmid => &$new_element )
 							{
@@ -1345,8 +1345,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						$save_order_file = $filedata['options']['download_id'];
 						if ( ! empty( $save_order_file ) )
 						{
-							$order = $variable_processor->get_order();
-							$order_item = $variable_processor->get_order_item();
+							$order = $placeholder_processor->get_order();
+							$order_item = $placeholder_processor->get_order_item();
 							if( $order && $order_item )
 							{
 								$order_id = $order->get_id();
@@ -1494,7 +1494,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$messages = '';
 			$attachments = array();
 			$email_templates = array();
-			$woocommerce_variables = array();
+			$woocommerce_placeholders = array();
 			
 			$service = $this->get_service();
 			$messages .= $service->form_notices();
@@ -1530,12 +1530,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $email_class->title ),
 				);
 			
-			// prepare woocommerce variables for select2
-			foreach( $this->get_variable_processor()->get_variables() as $variable )
+			// prepare woocommerce placeholders for select2
+			foreach( $this->get_placeholder_processor()->get_placeholders() as $placeholder )
 			{
-				$tag = '{'.$variable['key'].'}';
-				$woocommerce_variables[] = array(
-					'id' => count( $woocommerce_variables ),
+				$tag = '{'.$placeholder['key'].'}';
+				$woocommerce_placeholders[] = array(
+					'id' => count( $woocommerce_placeholders ),
 					'text' => $tag,
 					'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $tag ),
 				);
@@ -1571,7 +1571,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				'default_pdf_options' => self::DEFAULT_PDF_OPTIONS,
 				'attachments' => $attachments,
 				'email_templates' => $email_templates,
-				'woocommerce_variables' => $woocommerce_variables,
+				'woocommerce_placeholders' => $woocommerce_placeholders,
 				'downloads' => $downloads,
 			);
 			
@@ -1588,21 +1588,21 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					'skip-when-empty' => esc_html__( 'Skip when empty', 'pdf-forms-for-woocommerce' ),
 					'email-templates' => esc_html__( 'Attach the filled PDF file to the following emails:', 'pdf-forms-for-woocommerce' ),
 					'flatten' => esc_html__( 'Flatten', 'pdf-forms-for-woocommerce' ),
-					'filename' => esc_html__( 'New filled PDF file name (variables allowed):', 'pdf-forms-for-woocommerce' ),
-					'save-directory'=> esc_html__( 'Path for saving filled PDF file (variables allowed):', 'pdf-forms-for-woocommerce' ),
+					'filename' => esc_html__( 'New filled PDF file name (placeholders allowed):', 'pdf-forms-for-woocommerce' ),
+					'save-directory'=> esc_html__( 'Path for saving filled PDF file (placeholders allowed):', 'pdf-forms-for-woocommerce' ),
 					'download-link' => esc_html__( "Provide a download link to the filled PDF file via the product's downloadable file:", 'pdf-forms-for-woocommerce' ),
 					'leave-blank-to-disable'=> esc_html__( '(leave blank to disable this option)', 'pdf-forms-for-woocommerce' ),
 					'field-mapping' => esc_html__( 'Field Mapper Tool', 'pdf-forms-for-woocommerce' ),
-					'field-mapping-help' => esc_html__( 'This tool can be used to link form fields and variables with fields in the attached PDF files. WooCommerce fields can also be generated from PDF fields. When your users submit the form, input from form fields and other variables will be inserted into the correspoinding fields in the PDF file. WooCommerce to PDF field value mappings can also be created to enable the replacement of WooCommerce data when PDF fields are filled.', 'pdf-forms-for-woocommerce' ),
+					'field-mapping-help' => esc_html__( 'This tool can be used to link WooCommerce placeholders with fields in the attached PDF files. When your users submit the order, text with placeholder data will be inserted into the correspoinding fields in the PDF file.', 'pdf-forms-for-woocommerce' ),
 					'pdf-field' => esc_html__( 'PDF field', 'pdf-forms-for-woocommerce' ),
-					'woo-variable' => esc_html__( 'WooCommerce variables', 'pdf-forms-for-woocommerce' ),
+					'woo-placeholder' => esc_html__( 'WooCommerce placeholders', 'pdf-forms-for-woocommerce' ),
 					'add-mapping' => esc_html__( 'Add Mapping', 'pdf-forms-for-woocommerce' ),
 					'delete-all-mappings' => esc_html__( 'Delete All', 'pdf-forms-for-woocommerce' ),
 					'new-field' => esc_html__( 'New Field:', 'pdf-forms-for-woocommerce' ),
 					'image-embedding' => esc_html__( 'Image Embedding Tool', 'pdf-forms-for-woocommerce' ),
 					'image-embedding-help'=> esc_html__( 'This tool allows embedding images into PDF files.  Images are taken from field attachments or field values that are URLs.  You must select a PDF file, its page and draw a bounding box for image insertion.', 'pdf-forms-for-woocommerce' ),
-					'add-woo-variable-embed' => esc_html__( 'Embed Image', 'pdf-forms-for-woocommerce' ),
-					'delete-woo-variable-embed' => esc_html__( 'Delete', 'pdf-forms-for-woocommerce' ),
+					'add-woo-placeholder-embed' => esc_html__( 'Embed Image', 'pdf-forms-for-woocommerce' ),
+					'delete-woo-placeholder-embed' => esc_html__( 'Delete', 'pdf-forms-for-woocommerce' ),
 					'pdf-file' => esc_html__( 'PDF file', 'pdf-forms-for-woocommerce' ),
 					'page' => esc_html__( 'Page', 'pdf-forms-for-woocommerce' ),
 					'image-region-selection-hint' => esc_html__( 'Select a region where the image needs to be embeded.', 'pdf-forms-for-woocommerce' ),
@@ -1770,8 +1770,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				{
 					foreach( $data['mappings'] as $mapping )
 					{
-						if( isset( $mapping['variables'] ) && isset( $mapping['pdf_field'] ) )
-							$mappings[] = array( 'variables' => $mapping['variables'], 'pdf_field' => $mapping['pdf_field'] );
+						if( isset( $mapping['placeholders'] ) && isset( $mapping['pdf_field'] ) )
+							$mappings[] = array( 'placeholders' => $mapping['placeholders'], 'pdf_field' => $mapping['pdf_field'] );
 						
 						// TODO: make sure pdf field exists
 					}
@@ -1787,7 +1787,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						if( ! isset( $embed['attachment_id'] ) )
 							continue;
 						
-						if( ! isset( $embed['variables'] ) )
+						if( ! isset( $embed['placeholders'] ) )
 							continue;
 						
 						// make sure attachment exists
@@ -1797,8 +1797,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						// TODO: make sure pdf page exists
 						// TODO: check insertion position and size
 						
-						if( isset( $embed['variables'] ) )
-							$embed['variables'] = strval( $embed['variables'] );
+						if( isset( $embed['placeholders'] ) )
+							$embed['placeholders'] = strval( $embed['placeholders'] );
 						
 						// TODO: don't reuse user input but create a new array with checked data
 						$embeds[] = $embed;

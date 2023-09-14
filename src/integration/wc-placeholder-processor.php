@@ -1,20 +1,18 @@
 <?php
 	
-	// TODO: change 'variable' to 'placeholder' as it is a more widely used term
-	
 	if( ! defined( 'ABSPATH' ) )
 		return;
 	
-	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Variable_Processor', false ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Placeholder_Processor', false ) )
 	{
-		class Pdf_Forms_For_WooCommerce_Variable_Processor
+		class Pdf_Forms_For_WooCommerce_Placeholder_Processor
 		{
 			private $email;
 			private $order;
 			private $order_item;
 			private $product_id;
 			private static $checkout_fields;
-			private static $variables;
+			private static $placeholders;
 			
 			/**
 			 * Sets current email
@@ -95,13 +93,13 @@
 			}
 			
 			/**
-			 * Returns possible woocommerce variables after caching them
+			 * Returns possible woocommerce placeholders after caching them
 			 */
-			public function get_variables()
+			public function get_placeholders()
 			{
-				if( ! self::$variables )
+				if( ! self::$placeholders )
 				{
-					self::$variables = array(
+					self::$placeholders = array(
 						array( 'key' => 'blogname' ),
 						array( 'key' => 'site_title' ),
 						array( 'key' => 'site_address' ),
@@ -114,7 +112,7 @@
 					
 					foreach( self::get_checkout_fields() as $section )
 						foreach( $section as $field_key => $field_args )
-							self::$variables[] = array( 'key' => $field_key, 'label' => $field_args['label'] );
+							self::$placeholders[] = array( 'key' => $field_key, 'label' => $field_args['label'] );
 					
 					// gather meta keys of items in database
 					global $wpdb;
@@ -122,27 +120,27 @@
 					// check output for errors
 					if( empty( $wpdb->last_error ) )
 						foreach( $meta_keys as $meta_key )
-							self::$variables[] = array( 'key' => 'order_item_meta:' . $meta_key );
+							self::$placeholders[] = array( 'key' => 'order_item_meta:' . $meta_key );
 				}
 				
-				return self::$variables;
+				return self::$placeholders;
 			}
 			
 			/**
-			 * Replaces variables in content with their values
+			 * Replaces placeholders in content with their values
 			 */
 			public function process( $content )
 			{
-				$content = $this->process_email_variables( $content );
-				$content = $this->process_order_variables( $content );
+				$content = $this->process_email_placeholders( $content );
+				$content = $this->process_order_placeholders( $content );
 				$content = $this->process_order_item_meta( $content );
 				return $content;
 			}
 			
 			/**
-			 * Replaces email variables in content with their values
+			 * Replaces email placeholders in content with their values
 			 */
-			private function process_email_variables( $content )
+			private function process_email_placeholders( $content )
 			{
 				if( is_a( $this->email, 'WC_Email' ) )
 					// this will process {blogname} (hardcoded in format_string),
@@ -236,9 +234,9 @@
 			}
 			
 			/**
-			 * Replaces order variables in content with their values
+			 * Replaces order placeholders in content with their values
 			 */
-			private function process_order_variables( $content )
+			private function process_order_placeholders( $content )
 			{
 				if( is_a( $this->order, 'WC_Order' ) )
 				{
@@ -251,7 +249,7 @@
 					 	$search,
 					 	function( $matches )
 					 	{
-							// TODO: fix notice: "Function is_internal_meta_key was called incorrectly. Generic add/update/get meta methods should not be used for internal meta data, including "_billing_first_name". Use getters and setters. Backtrace: edit_post, wp_update_post, wp_insert_post, do_action('save_post'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Meta_Boxes->save_meta_boxes, do_action('woocommerce_process_shop_order_meta'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Meta_Box_Order_Data::save, WC_Order->save, WC_Order->status_transition, do_action('woocommerce_order_status_on-hold_to_processing'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Emails::send_transactional_email, do_action_ref_array('woocommerce_order_status_on-hold_to_processing_notification'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Email_Customer_Processing_Order->trigger, WC_Email->get_attachments, apply_filters('woocommerce_email_attachments'), WP_Hook->apply_filters, Pdf_Forms_For_WooCommerce->attach_pdfs, Pdf_Forms_For_WooCommerce->fill_pdfs, Pdf_Forms_For_WooCommerce_Variable_Processor->process, Pdf_Forms_For_WooCommerce_Variable_Processor->process_order_variables, preg_replace_callback, Pdf_Forms_For_WooCommerce_Variable_Processor->{closure}, WC_Data->get_meta, WC_Data->is_internal_meta_key, wc_doing_it_wrong Please see Debugging in WordPress for more information. (This message was added in version 3.2.0.) in /var/www/html/wp-includes/functions.php on line 5905"
+							// TODO: fix notice: "Function is_internal_meta_key was called incorrectly. Generic add/update/get meta methods should not be used for internal meta data, including "_billing_first_name". Use getters and setters. Backtrace: edit_post, wp_update_post, wp_insert_post, do_action('save_post'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Meta_Boxes->save_meta_boxes, do_action('woocommerce_process_shop_order_meta'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Meta_Box_Order_Data::save, WC_Order->save, WC_Order->status_transition, do_action('woocommerce_order_status_on-hold_to_processing'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Emails::send_transactional_email, do_action_ref_array('woocommerce_order_status_on-hold_to_processing_notification'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Email_Customer_Processing_Order->trigger, WC_Email->get_attachments, apply_filters('woocommerce_email_attachments'), WP_Hook->apply_filters, Pdf_Forms_For_WooCommerce->attach_pdfs, Pdf_Forms_For_WooCommerce->fill_pdfs, Pdf_Forms_For_WooCommerce_Placeholder_Processor->process, Pdf_Forms_For_WooCommerce_Placeholder_Processor->process_order_placeholders, preg_replace_callback, Pdf_Forms_For_WooCommerce_Placeholder_Processor->{closure}, WC_Data->get_meta, WC_Data->is_internal_meta_key, wc_doing_it_wrong Please see Debugging in WordPress for more information. (This message was added in version 3.2.0.) in /var/www/html/wp-includes/functions.php on line 5905"
 							return @$this->order->get_meta( '_' . $matches[1], true );
 					 	},
 					 	$content

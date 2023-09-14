@@ -230,19 +230,19 @@ jQuery(document).ready(function($) {
 		pdfSelect2Files: [{id: 0, text: pdf_forms_for_woocommerce.__All_PDFs, lowerText: String(pdf_forms_for_woocommerce.__All_PDFs).toLowerCase()}],
 		pageList: [],
 		emailTemplates: [],
-		woocommerceVariables: [],
+		woocommercePlaceholders: [],
 		downloads: []
 	};
 	
-	jQuery('.pdf-forms-for-woocommerce-admin .woo-variable-list').select2({
+	jQuery('.pdf-forms-for-woocommerce-admin .woo-placeholder-list').select2({
 		ajax: {},
 		width: '100%',
-		sharedDataElement: "woocommerceVariables",
+		sharedDataElement: "woocommercePlaceholders",
 		dropdownParent: jQuery('#pdf-forms-for-woocommerce-product-settings'),
 		dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
 	}).on('select2:select', function (e) {
 		var data = e.params.data;
-		jQuery(this).find('option:selected').attr('data-variables', data['variable']);
+		jQuery(this).find('option:selected').attr('data-placeholders', data['placeholder']);
 	});
 	
 	jQuery('.pdf-forms-for-woocommerce-admin .pdf-field-list').select2({
@@ -591,10 +591,10 @@ jQuery(document).ready(function($) {
 			});
 			
 			// set unique ids
-			tag.find('.pdf-option-save-directory label').attr('for', 'pdf-option-save-directory-variables-'+attachment_id);
-			tag.find('.pdf-option-save-directory input.variables').attr('id', 'pdf-option-save-directory-variables-'+attachment_id);
-			tag.find('.pdf-option-filename label').attr('for', 'pdf-option-filename-variables-'+attachment_id);
-			tag.find('.pdf-option-filename input.variables').attr('id', 'pdf-option-filename-variables-'+attachment_id);
+			tag.find('.pdf-option-save-directory label').attr('for', 'pdf-option-save-directory-'+attachment_id);
+			tag.find('.pdf-option-save-directory input.placeholders').attr('id', 'pdf-option-save-directory-'+attachment_id);
+			tag.find('.pdf-option-filename label').attr('for', 'pdf-option-filename-'+attachment_id);
+			tag.find('.pdf-option-filename input.placeholders').attr('id', 'pdf-option-filename-'+attachment_id);
 		}
 		
 		tag.find('.pdf-options input[type=checkbox]').change(function() {
@@ -680,10 +680,10 @@ jQuery(document).ready(function($) {
 			select2SharedData.emailTemplates = preload_data.email_templates;
 		
 		// load woocommerce fields
-		if(preload_data.hasOwnProperty('woocommerce_variables'))
+		if(preload_data.hasOwnProperty('woocommerce_placeholders'))
 		{
-			select2SharedData.woocommerceVariables = preload_data.woocommerce_variables;
-			jQuery('.pdf-forms-for-woocommerce-admin .woo-variable-list').resetSelect2Field();
+			select2SharedData.woocommercePlaceholders = preload_data.woocommerce_placeholders;
+			jQuery('.pdf-forms-for-woocommerce-admin .woo-placeholder-list').resetSelect2Field();
 		}
 		
 		// load information about product downloads
@@ -931,7 +931,7 @@ jQuery(document).ready(function($) {
 	
 	var addMapping = function(data)
 	{
-		if(!data.hasOwnProperty('variables'))
+		if(!data.hasOwnProperty('placeholders'))
 			return;
 		
 		data.mapping_id = generateId();
@@ -961,10 +961,10 @@ jQuery(document).ready(function($) {
 		var tag = template.clone().removeClass('pdf-mapping-row-template').addClass('pdf-mapping-row');
 		
 		// set unique id
-		tag.find('label').attr('for', 'mapping-variable-'+data.mapping_id);
-		tag.find('textarea.variables').attr('id', 'mapping-variables-'+data.mapping_id);
+		tag.find('label').attr('for', 'mapping-placeholder-'+data.mapping_id);
+		tag.find('textarea.placeholders').attr('id', 'mapping-placeholders-'+data.mapping_id);
 		
-		tag.find('textarea.variables').val(data.variables).data('mapping_id', data.mapping_id);
+		tag.find('textarea.placeholders').val(data.placeholders).data('mapping_id', data.mapping_id);
 		tag.find('.pdf-field-name').text(pdf_field_caption);
 		
 		tag.attr('data-mapping_id', data.mapping_id);
@@ -1040,7 +1040,7 @@ jQuery(document).ready(function($) {
 	var embed_id_autoinc = 0;
 	var addEmbed = function(embed)
 	{
-		if(!embed.hasOwnProperty('variables'))
+		if(!embed.hasOwnProperty('placeholders'))
 			return;
 		
 		var attachment_id = embed.attachment_id;
@@ -1064,8 +1064,8 @@ jQuery(document).ready(function($) {
 		embeds.push(embed);
 		setEmbeds(embeds);
 		
-		if(embed.hasOwnProperty('variables'))
-			addEmbedEntry({variables: embed.variables, attachment: attachment, embed: embed});
+		if(embed.hasOwnProperty('placeholders'))
+			addEmbedEntry({placeholders: embed.placeholders, attachment: attachment, embed: embed});
 	};
 	
 	var refreshEmbeds = function()
@@ -1085,8 +1085,8 @@ jQuery(document).ready(function($) {
 					continue;
 			}
 
-			if(embed.hasOwnProperty('variables'))
-				addEmbedEntry({variables: embed.variables, attachment: attachment, embed: embed});
+			if(embed.hasOwnProperty('placeholders'))
+				addEmbedEntry({placeholders: embed.placeholders, attachment: attachment, embed: embed});
 		}
 	};
 	
@@ -1094,17 +1094,17 @@ jQuery(document).ready(function($) {
 	{
 		var page = data.embed.page;
 		
-		if(data.hasOwnProperty('variables'))
+		if(data.hasOwnProperty('placeholders'))
 		{
 			var template = jQuery('.pdf-forms-for-woocommerce-admin .image-embeds-row-template');
 			var tag = template.clone().removeClass('image-embeds-row-template').addClass('image-embeds-row');
 			
 			// set unique id
-			tag.find('label').attr('for', 'embed-variables-'+data.embed.id);
-			tag.find('textarea.variables').attr('id', 'embed-variables-'+data.embed.id);
+			tag.find('label').attr('for', 'embed-placeholders-'+data.embed.id);
+			tag.find('textarea.placeholders').attr('id', 'embed-placeholders-'+data.embed.id);
 			
-			tag.find('textarea.variables').text(data.variables);
-			tag.find('textarea.variables').data('embed_id', data.embed.id);
+			tag.find('textarea.placeholders').text(data.placeholders);
+			tag.find('textarea.placeholders').data('embed_id', data.embed.id);
 		}
 		
 		tag.attr('data-embed_id', data.embed.id);
@@ -1526,13 +1526,13 @@ jQuery(document).ready(function($) {
 		
 		let tag = jQuery('.pdf-forms-for-woocommerce-admin .pdf-fields-mapper');
 		
-		let variable_id = tag.find('.woo-variable-list').val();
-		let variable = tag.find('.woo-variable-list').find('option:selected').text();
+		let placeholder_id = tag.find('.woo-placeholder-list').val();
+		let placeholder = tag.find('.woo-placeholder-list').find('option:selected').text();
 		let pdf_field = tag.find('.pdf-field-list').val();
 		
-		if(pdf_field && variable)
+		if(pdf_field && placeholder)
 			addMapping({
-				variables: variable,
+				placeholders: placeholder,
 				pdf_field: pdf_field,
 			});
 		
@@ -1557,7 +1557,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// set up 'Embed Image' button handler
-	jQuery('.pdf-forms-for-woocommerce-admin').on('click', '.add-woo-variable-embed-button', function(event) {
+	jQuery('.pdf-forms-for-woocommerce-admin').on('click', '.add-woo-placeholder-embed-button', function(event) {
 		
 		// prevent running default button click handlers
 		event.stopPropagation();
@@ -1567,8 +1567,8 @@ jQuery(document).ready(function($) {
 		
 		let tag = jQuery('.pdf-forms-for-woocommerce-admin .image-embedding-tool');
 		
-		let variable_id = tag.find('.woo-variable-list').val();
-		let variable = tag.find('.woo-variable-list').find('option:selected').text();
+		let placeholder_id = tag.find('.woo-placeholder-list').val();
+		let placeholder = tag.find('.woo-placeholder-list').find('option:selected').text();
 		let attachment_id = tag.find('.pdf-files-list').val();
 		if(attachment_id == 0)
 			attachment_id = 'all';
@@ -1576,10 +1576,10 @@ jQuery(document).ready(function($) {
 		if(page == 0)
 			page = 'all';
 		
-		if(variable && attachment_id && page)
+		if(placeholder && attachment_id && page)
 		{
 			addEmbed({
-				variables: variable,
+				placeholders: placeholder,
 				attachment_id: attachment_id,
 				page: page
 			});
@@ -1588,16 +1588,16 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 	
-	jQuery('.pdf-forms-for-woocommerce-admin .field-mapping-tool').on("input change", 'textarea.variables', function(event) {
+	jQuery('.pdf-forms-for-woocommerce-admin .field-mapping-tool').on("input change", 'textarea.placeholders', function(event) {
 		
-		var variables = jQuery(this).val();
+		var placeholders = jQuery(this).val();
 		var mapping_id = jQuery(this).data('mapping_id');
 		
 		var mappings = getMappings();
 		jQuery.each(mappings, function(index, mapping) {
 			if(mapping.mapping_id == mapping_id)
 			{
-				mappings[index].variables = variables;
+				mappings[index].placeholders = placeholders;
 				return false; // break
 			}
 		});
@@ -1605,16 +1605,16 @@ jQuery(document).ready(function($) {
 		setMappings(mappings);
 	});
 	
-	jQuery('.pdf-forms-for-woocommerce-admin .image-embedding-tool').on("input change", "textarea.variables", function(event) {
+	jQuery('.pdf-forms-for-woocommerce-admin .image-embedding-tool').on("input change", "textarea.placeholders", function(event) {
 		
-		var variables = jQuery(this).val();
+		var placeholders = jQuery(this).val();
 		var embed_id = jQuery(this).data('embed_id');
 		
 		var embeds = getEmbeds();
 		jQuery.each(embeds, function(index, embed) {
 			if(embed.id == embed_id)
 			{
-				embeds[index].variables = variables;
+				embeds[index].placeholders = placeholders;
 				return false; // break
 			}
 		});
@@ -1623,7 +1623,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// auto-resizing textareas
-	jQuery('.pdf-forms-for-woocommerce-admin').on("input change focus", "textarea.variables", function() {
+	jQuery('.pdf-forms-for-woocommerce-admin').on("input change focus", "textarea.placeholders", function() {
 		this.style.height = 'auto';
 		this.style.height = (this.scrollHeight) + 'px';
 	});

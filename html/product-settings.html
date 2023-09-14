@@ -27,12 +27,12 @@
 							<div class="form-field woocommerce-panel-field pdf-option-flatten"><input data-option="flatten" type="checkbox"/> {flatten}</div>
 							<div class="form-field woocommerce-panel-field pdf-option-filename pdf-options-multiline">
 								<div>{filename}</div>
-								<div><input id="pdf-forms-for-woocommerce-variables" data-option="filename" type="text" class="variables"/><span>.pdf</span></div>
+								<div><input id="pdf-forms-for-woocommerce-placeholders" data-option="filename" type="text" class="placeholders"/><span>.pdf</span></div>
 								<div>{leave-blank-to-disable}</div>
 							</div>
 							<div class="form-field woocommerce-panel-field pdf-option-save-directory pdf-options-multiline">
 								<div>{save-directory}</div>
-								<div><span>wp-content/uploads/</span><input id="pdf-forms-for-woocommerce-variables" data-option="save_directory" type="text" class="variables"/></div>
+								<div><span>wp-content/uploads/</span><input id="pdf-forms-for-woocommerce-placeholders" data-option="save_directory" type="text" class="placeholders"/></div>
 								<div>{leave-blank-to-disable}</div>
 							</div>
 							<div class="form-field woocommerce-panel-field pdf-option-email-templates select-dropdown">
@@ -69,13 +69,13 @@
 			<table class="form-table pdf-fields-mapper mapping-table">
 				<tbody>
 					<tr>
-						<th class="woo-variable">{woo-variable}</th>
+						<th class="woo-placeholder">{woo-placeholder}</th>
 						<th></th>
 						<th class="pdf-field">{pdf-field}</th>
 					</tr>
 					<tr class="marked-row-background">
-						<td class="woo-variable select-dropdown">
-							<select class="woo-variable-list"></select>
+						<td class="woo-placeholder select-dropdown">
+							<select class="woo-placeholder-list"></select>
 						</td>
 						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
 						<td class="pdf-field select-dropdown"><select class="pdf-field-list"></select></td>
@@ -84,8 +84,8 @@
 						</td>
 					</tr>
 					<tr class="pdf-mapping-row-template">
-						<td class="variables">
-							<textarea spellcheck="false" class="variables"></textarea>
+						<td class="placeholders">
+							<textarea spellcheck="false" class="placeholders"></textarea>
 						</td>
 						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
 						<td class="pdf-field"><span class="pdf-field-name"></span></td>
@@ -95,7 +95,7 @@
 						</td>
 					</tr>
 					<tr class="pdf-mapping-row-valuemapping-template">
-						<td class="woo-variable"><input type="text" class="woo-value"/></td>
+						<td class="woo-placeholder"><input type="text" class="woo-value"/></td>
 						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right"></span></td>
 						<td class="pdf-field"><input type="text" class="pdf-value"/></td>
 						<td class="buttons">
@@ -130,20 +130,20 @@
 			<table class="form-table image-embeds mapping-table">
 				<tbody>
 					<tr>
-						<th class="woo-variable">{woo-variable}</th>
+						<th class="woo-placeholder">{woo-placeholder}</th>
 						<th></th>
 						<th class="pdf-file">{pdf-file}</th>
 						<th>{page}</th>
 						<th></th>
 					</tr>
 					<tr>
-						<td class="woo-variable select-dropdown">
-							<select class="woo-variable-list"></select>
+						<td class="woo-placeholder select-dropdown">
+							<select class="woo-placeholder-list"></select>
 						</td>
 						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
 						<td class="pdf-file select-dropdown"><select class="pdf-files-list" name="embed-pdf-list"></select></td>
 						<td class="pdf-page select-dropdown"><select class="page-list" name="embed-page"></select></td>
-						<td class="buttons"><a class="button button-primary add-woo-variable-embed-button" href="#">{add-woo-variable-embed}</a></td>
+						<td class="buttons"><a class="button button-primary add-woo-placeholder-embed-button" href="#">{add-woo-placeholder-embed}</a></td>
 					</tr>
 					<tr class="image-embeds-row-template">
 						<td colspan="5">
@@ -151,13 +151,13 @@
 						</td>
 					</tr>
 					<tr class="image-embeds-row-template">
-						<td class="variables">
-							<textarea spellcheck="false" class="variables"></textarea>
+						<td class="placeholders">
+							<textarea spellcheck="false" class="placeholders"></textarea>
 						</td>
 						<td class="mapping-arrow"><span class="dashicons dashicons-arrow-right-alt"></span></td>
 						<td class="pdf-file pdf-file-caption"></td>
 						<td class="page-caption"></td>
-						<td class="buttons"><a class="button button-small delete-embed-button" href="#">{delete-woo-variable-embed}</a></td>
+						<td class="buttons"><a class="button button-small delete-embed-button" href="#">{delete-woo-placeholder-embed}</a></td>
 					</tr>
 					<tr class="image-embeds-row-template page-selector-row">
 						<td colspan="5">
