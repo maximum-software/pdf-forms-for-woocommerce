@@ -1492,6 +1492,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								$order_id = $order->get_id();
 								$order_item_id = $order_item->get_id();
 								$order_storage = self::get_order_storage( $order_id );
+								$order_storage->set_subpath( trailingslashit( $order_storage->get_subpath() ) . $order_item_id );
 								$dstfilename = $order_storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
 								
 								// record file data in order meta
