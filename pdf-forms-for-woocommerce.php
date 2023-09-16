@@ -866,7 +866,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									
 									if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
 									{
-										// what happens if the attachment is not being attached to any emails? we need to fill the PDF
+										// if the PDF hasn't been filled yet then we need to fill it
 										$placeholder_processor = $this->get_placeholder_processor();
 										$placeholder_processor->set_order( $order );
 										$placeholder_processor->set_order_item( $order_item );
@@ -884,9 +884,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
 									{
 										$file['name'] = $downloadable_file['filename'];
-										$file['file'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+										$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+										$file['file'] = $full_url;
 										// TODO: use 'secure' download URL
-										$file['download_url'] = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+										$file['download_url'] = $full_url;
 									}
 								}
 							}
