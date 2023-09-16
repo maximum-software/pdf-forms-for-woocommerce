@@ -1662,13 +1662,15 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			// get email templates
 			$email_classes = WC()->mailer()->get_emails();
+			$non_order_templates = array( 'customer_new_account', 'customer_reset_password' );
 			foreach( $email_classes as $email_class )
-				$email_templates[] = array(
-					'id' => $email_class->id,
-					'alias' => $email_class->id,
-					'text' => $email_class->title,
-					'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $email_class->title ),
-				);
+				if( ! in_array( $email_class->id, $non_order_templates ) )
+					$email_templates[] = array(
+						'id' => $email_class->id,
+						'alias' => $email_class->id,
+						'text' => $email_class->title,
+						'lowerText' => Pdf_Forms_For_WooCommerce_Wrapper::mb_strtolower( $email_class->title ),
+					);
 			
 			// prepare woocommerce placeholders for select2
 			foreach( $this->get_placeholder_processor()->get_placeholders() as $placeholder )
