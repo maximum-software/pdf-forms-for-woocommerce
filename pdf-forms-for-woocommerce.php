@@ -76,6 +76,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
 			
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
+			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
 			
 			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 1, 2 );
 			
@@ -895,6 +896,144 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 			
 			return $files;
+		}
+		
+		/*
+		 * Hook used on account downloads page to replace downloads URLs
+		 */
+		public function woocommerce_customer_available_downloads( $downloads, $customer_id )
+		{
+			// we don't have access to order_item_id, so, we need to match downloads to the order items and replace the download URLs when needed
+			
+			// TODO: optimize this code
+			
+			// group downloads by order id and product id
+			$order_product_downloads = array();
+			foreach( $downloads as $download_index => $download )
+			{
+				$order_id = $download['order_id'];
+				$product_id = $download['product_id'];
+				
+				$order_product_downloads[$order_id][$product_id][] = $download_index;
+			}
+			
+			// match order item id to product download
+			$downloads_items = array();
+			$downloads_product_settings = array();
+			$downloads_attachment = array();
+			$downloads_orders = array();
+			// handle each order separately
+			foreach( $order_product_downloads as $order_id => $order_products )
+			{
+				// load order items for this order
+				$order = wc_get_order( $order_id );
+				if( is_a( $order, 'WC_Order' ) )
+				{
+					$items = $order->get_items();
+					
+					// handle each product separately
+					foreach( $order_products as $product_id => $product_downloads )
+					{
+						// load current product's settings
+						$product_data = self::get_meta( $product_id, 'data' );
+						if( isset( $product_data ) )
+						{
+							$settings = self::decode_form_settings( $product_data );
+							
+							if( is_array( $settings )
+							&& isset( $settings['attachments'] )
+							&& is_array( $attachments = $settings['attachments'] ) )
+							{
+								// handle each attachment separately
+								foreach( $attachments as $attachment )
+								{
+									$attachment_id = $attachment['attachment_id'];
+									
+									if( isset( $attachment['options'] )
+									&& is_array( $options = $attachment['options'] )
+									&& isset( $options['download_id'] ) )
+									{
+										$attachment_download_id = $options['download_id'];
+										
+										foreach( $product_downloads as $download_index )
+										{
+											// if download id matches then that means that this download is for this attachment
+											$download = $downloads[$download_index];
+											if( $download['download_id'] == $attachment_download_id )
+											{
+												// now we need to find the order item id for this download
+												foreach( $items as $iid => $item )
+												{
+													if( $item->get_product_id() == $product_id ) // if product matches
+													{
+														// save the mapping
+														$downloads_items[$download_index] = $item;
+														
+														// cache information for later use
+														$downloads_product_settings[$download_index] = $settings;
+														$downloads_attachment[$download_index] = $attachment;
+														$downloads_orders[$download_index] = $order;
+														
+														// remove item from the list so that we don't match it again to another download
+														unset($items[$iid]);
+														
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// replace download urls with our own
+			foreach( $downloads as $download_index => &$download )
+			{
+				if( isset( $downloads_items[$download_index] ) )
+				{
+					$settings = $downloads_product_settings[$download_index];
+					$attachment = $downloads_attachment[$download_index];
+					$attachment_id = $attachment['attachment_id'];
+					$order = $downloads_orders[$download_index];
+					$order_id = $download['order_id'];
+					$order_item = $downloads_items[$download_index];
+					$order_item_id = $order_item->get_id();
+					
+					$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+					
+					if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
+					{
+						// if the PDF hasn't been filled yet then we need to fill it
+						$placeholder_processor = $this->get_placeholder_processor();
+						$placeholder_processor->set_order( $order );
+						$placeholder_processor->set_order_item( $order_item );
+						$placeholder_processor->set_product_id( $product_id );
+						
+						// fill PDFs so that they are also saved to the order directory
+						$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
+						
+						// clean up temporary files
+						$this->remove_tmp_dir();
+						
+						$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+					}
+					
+					if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
+					{
+						$download['file']['name'] = $downloadable_file['filename'];
+						$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+						$download['file']['file'] = $full_url;
+						// TODO: use 'secure' download URL
+						$download['download_url'] = $full_url;
+					}
+				}
+			}
+			
+			return $downloads;
 		}
 		
 		/*
