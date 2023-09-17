@@ -2099,7 +2099,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			// delete page snapshots
 			$args = array(
 				'post_parent' => $attachment_id,
-				'meta_key' => 'pdf-forms-for-woocommerce-page',
+				'meta_key' => self::META_KEY . '-page',
 				'post_type' => 'attachment',
 				'post_status' => 'any',
 				'posts_per_page' => -1,
@@ -2223,8 +2223,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		{
 			$args = array(
 				'post_parent' => $attachment_id,
-				'meta_key' => 'pdf-forms-for-woocommerce-page',
-				'meta_value' => $page,
+				'meta_key' => self::META_KEY . '-page',
+				'meta_value' => strval( $page ),
 				'post_type' => 'attachment',
 				'post_status' => 'any',
 				'posts_per_page' => 1,
@@ -2262,7 +2262,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			$new_attachment_id = wp_insert_attachment( $attachment, $filepath, $attachment_id );
 			
-			self::set_metadata( $new_attachment_id, 'page', $page );
+			update_post_meta( $new_attachment_id, self::META_KEY . '-page', strval( $page ) );
 			
 			return $new_attachment_id;
 		}
