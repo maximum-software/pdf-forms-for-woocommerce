@@ -257,7 +257,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			return new Pdf_Forms_For_WooCommerce_Placeholder_Processor();
 		}
 		
-		/*
+		/**
 		 * Function for retrieving metadata
 		 */
 		public static function get_metadata( $post_id, $key = null )
@@ -277,7 +277,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				return null;
 		}
 		
-		/*
+		/**
 		 * Function for setting metadata
 		 * If $key is null, the whole metadata element is removed
 		 * If $value is null, the metadata subelement with the given key is removed
@@ -322,6 +322,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			return $value;
 		}
 		
+		/**
+		 * Function for removing metadata
+		 */
 		public static function unset_metadata( $post_id, $key = null )
 		{
 			return self::set_metadata( $post_id, $key, null );
