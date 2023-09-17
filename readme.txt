@@ -12,21 +12,20 @@ Contributors: maximumsoftware
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Automatically fill PDF forms with WooCommerce orders. Attach filled PDFs to orders and order email notifications.
+Automatically fill PDF forms with WooCommerce orders and attach generated PDFs to email notifications and order downloads.
 
 == Description ==
 
-This plugin allows WooCommerce store owners to add PDF attachment/download features to their WooCommerce store.
-An existing PDF can be set up to be filled with customer information when an order is placed or processed.
-The filled PDF is updated as the order status updates.
-You can have your customers receive order email notifications with PDF attachments with customer order data.
-You can allow your customers to download the filled PDF on their order page.
-You can also set up PDF files with image embedding, supplied by the WooCommerce variables.
+This plugin allows WooCommerce store owners to add automatic PDF form filling features for email notification attachments and order downloads to their WooCommerce store.
+An existing PDF can be set up to be filled with customer and order information when an order is placed or processed.
+Images can also be downloaded from a dynamic URL and embedded into the PDF.
+You can then have your customers receive order email notifications with PDF attachments containing customer order data.
+You can also allow your customers to download the filled PDF on their order page via the downloadable files feature of WooCommerce.
 The filled PDF files can be saved in a custom uploads subdirectory on your web server.
 
 What makes this plugin special is its approach to preparing PDF files. It is not generating PDF documents from scratch.
 It modifies the original PDF document that was prepared using third party software and supplied to the plugin.
-This allows users the freedom to design exactly what they need or use their pre-existing documents.
+This allows users the freedom to design exactly what they need and use their pre-existing documents.
 
 Possible uses:
  * Automated creation of tickets for events

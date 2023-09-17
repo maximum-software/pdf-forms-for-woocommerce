@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PDF Forms Filler for WooCommerce
  * Plugin URI: https://pdfformsfiller.org/
- * Description: Automatically fill PDF forms with WooCommerce orders. Attach filled PDFs to orders and order email notifications.
+ * Description: Automatically fill PDF forms with WooCommerce orders and attach generated PDFs to email notifications and order downloads.
  * Version: 1.0.0
  * Requires at least: 5.4
  * Requires PHP: 5.5
