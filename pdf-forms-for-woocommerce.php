@@ -102,7 +102,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			register_meta( 'post', self::META_KEY, array(
 				'show_in_rest' => false,
 				'single' => true,
-				'type' => 'array',
+				'type' => 'string',
 				'auth_callback' => '__return_false',
 			) );
 		}
@@ -301,10 +301,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public static function get_metadata( $post_id, $key = null )
 		{
 			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
+			if( ! empty( $data ) )
+				$data = json_decode( $data, true );
 			if( ! is_array( $data ) )
 				return null;
 			
-			if( $key === null)
+			if( $key === null )
 				return $data;
 			
 			if( isset( $data[$key] ) )
@@ -322,6 +324,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		{
 			// TODO: fix race condition
 			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
+			if( ! empty( $data ) )
+				$data = json_decode( $data, true );
 			if( ! is_array( $data ) )
 				$data = array();
 			
@@ -330,7 +334,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			else
 			{
 				if( $value === null )
-					unset( $data[$key] );
+				{
+					if( isset( $data[$key] ) )
+						unset( $data[$key] );
+				}
 				else
 					$data[$key] = $value;
 			}
@@ -339,6 +346,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				delete_post_meta( $post_id, self::META_KEY );
 			else
 			{
+				$data = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
+				
 				// wp bug workaround
 				// https://developer.wordpress.org/reference/functions/update_post_meta/#workaround
 				$data = wp_slash( $data );
