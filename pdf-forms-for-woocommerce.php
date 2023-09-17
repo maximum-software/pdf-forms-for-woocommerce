@@ -308,6 +308,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				delete_post_meta( $post_id, self::META_KEY );
 			else
 			{
+				$data['version'] = self::VERSION; // keep track of schema version
+				
 				$data = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
 				
 				// wp bug workaround
