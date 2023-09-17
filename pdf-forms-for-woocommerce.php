@@ -257,44 +257,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			return new Pdf_Forms_For_WooCommerce_Placeholder_Processor();
 		}
 		
-		/**
-		 * Function for working with metadata
-		 */
-		public static function get_meta( $post_id, $key )
-		{
-			$value = get_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key, $single=true );
-			if( $value === '' )
-				return null;
-			return $value;
-		}
-		
-		/**
-		 * Function for working with metadata
-		 */
-		public static function set_meta( $post_id, $key, $value )
-		{
-			$oldval = get_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key, true );
-			if( $oldval !== '' && $value === null)
-				delete_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key );
-			else
-			{
-				// wp bug workaround
-				// https://developer.wordpress.org/reference/functions/update_post_meta/#workaround
-				$fixed_value = wp_slash( $value );
-				
-				update_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key, $fixed_value, $oldval );
-			}
-			return $value;
-		}
-		
-		/**
-		 * Function for working with metadata
-		 */
-		public static function unset_meta( $post_id, $key )
-		{
-			delete_post_meta( $post_id, "pdf-forms-for-woocommerce-" . $key );
-		}
-		
 		/*
 		 * Function for retrieving metadata
 		 */
@@ -2114,7 +2076,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public static function get_attachment_md5sum( $attachment_id )
 		{
-			$md5sum = self::get_meta( $attachment_id, 'md5sum' );
+			$md5sum = self::get_metadata( $attachment_id, 'md5sum' );
 			if( ! $md5sum )
 				return self::update_attachment_md5sum( $attachment_id );
 			else
@@ -2127,7 +2089,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public static function update_attachment_md5sum( $attachment_id )
 		{
 			// clear info cache
-			self::unset_meta( $attachment_id, 'info' );
+			self::unset_metadata( $attachment_id, 'info' );
 			
 			// delete page snapshots
 			$args = array(
@@ -2167,7 +2129,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( $md5sum === false )
 				throw new Exception( __( "Could not read attached file", 'pdf-forms-for-woocommerce' ) );
 			
-			return self::set_meta( $attachment_id, 'md5sum', $md5sum );
+			return self::set_metadata( $attachment_id, 'md5sum', $md5sum );
 		}
 		
 		/**
@@ -2176,16 +2138,19 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public function get_info( $attachment_id )
 		{
 			// cache
-			if( ( $info = self::get_meta( $attachment_id, 'info' ) )
-			&& ( $old_md5sum = self::get_meta( $attachment_id, 'md5sum' ) ) )
+			$data = self::get_metadata( $attachment_id );
+			if( isset( $data['info'] ) && isset( $data['md5sum'] ) )
 			{
+				$info = $data['info'];
+				$old_md5sum = $data['md5sum'];
+				
 				// use cache only if file is locally accessible
 				$filepath = get_attached_file( $attachment_id );
 				if( $filepath !== false && is_readable( $filepath ) !== false )
 				{
 					$new_md5sum = md5_file( $filepath );
 					if( $new_md5sum !== false && $new_md5sum === $old_md5sum )
-						return json_decode( $info, true );
+						return $info;
 					else
 						self::update_attachment_md5sum( $attachment_id );
 				}
@@ -2209,7 +2174,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$info['page'] = $pages;
 			
 			// set fields cache
-			self::set_meta( $attachment_id, 'info', Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $info ) );
+			self::set_metadata( $attachment_id, 'info', $info );
 			
 			return $info;
 		}
@@ -2291,7 +2256,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			$new_attachment_id = wp_insert_attachment( $attachment, $filepath, $attachment_id );
 			
-			self::set_meta( $new_attachment_id, 'page', $page );
+			self::set_metadata( $new_attachment_id, 'page', $page );
 			
 			return $new_attachment_id;
 		}

@@ -491,11 +491,11 @@
 			 */
 			private function get_file_id( $attachment_id )
 			{
-				$file_id = Pdf_Forms_For_WooCommerce::get_meta( $attachment_id, 'file_id' );
+				$file_id = Pdf_Forms_For_WooCommerce::get_metadata( $attachment_id, 'pdf.ninja-file_id' );
 				if( ! $file_id )
 				{
 					$file_id = substr( $attachment_id . "-" . get_site_url(), 0, 40 );
-					Pdf_Forms_For_WooCommerce::set_meta( $attachment_id, 'file_id', $file_id );
+					Pdf_Forms_For_WooCommerce::set_metadata( $attachment_id, 'pdf.ninja-file_id', $file_id );
 				}
 				return substr( $file_id, 0, 40 );
 			}
@@ -505,7 +505,7 @@
 			 */
 			private function is_new_file( $attachment_id )
 			{
-				return Pdf_Forms_For_WooCommerce::get_meta( $attachment_id, 'file_id' ) == null;
+				return Pdf_Forms_For_WooCommerce::get_metadata( $attachment_id, 'pdf.ninja-file_id' ) == null;
 			}
 			
 			/**
