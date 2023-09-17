@@ -604,25 +604,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Used for encoding WooCommerce form settings data
-		 */
-		public static function encode_form_settings( $data )
-		{
-			return Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
-		}
-		
-		/**
-		 * Used for decoding WooCommerce form settings data
-		 */
-		public static function decode_form_settings( $data )
-		{
-			$form_settings = array();
-			if( ! empty( $data ) && is_array( $json_decoded = json_decode( $data, true ) ) )
-				$form_settings = $json_decoded;
-			return $form_settings;
-		}
-		
-		/**
 		 * Runs when order status is changed
 		 */
 		public function process_order_status_change( $order_id, $old_status, $new_status, $order )
@@ -662,30 +643,27 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						
 						$placeholder_processor->set_product_id( $product_id );
 						
-						$product_data = self::get_meta( $product_id, 'data' );
-						if( isset( $product_data ) )
+						$settings = self::get_metadata( $product_id, 'product-settings' );
+						if( ! is_array( $settings ) )
+							$settings = array();
+						
+						if( isset( $settings['attachments'] )
+						&& is_array( $attachments = $settings['attachments'] ) )
 						{
-							$settings = self::decode_form_settings( $product_data );
-							
-							if( is_array( $settings )
-							&& isset( $settings['attachments'] )
-							&& is_array( $attachments = $settings['attachments'] ) )
+							foreach( $attachments as $attachment )
 							{
-								foreach( $attachments as $attachment )
+								if( isset( $attachment['options'] )
+								&& is_array( $options = $attachment['options'] )
+								&& isset( $options['email_templates'] )
+								&& is_array( $email_templates = $options['email_templates'] )
+								&& in_array( $email_id, $email_templates ) )
 								{
-									if( isset( $attachment['options'] )
-									&& is_array( $options = $attachment['options'] )
-									&& isset( $options['email_templates'] )
-									&& is_array( $email_templates = $options['email_templates'] )
-									&& in_array( $email_id, $email_templates ) )
-									{
-										// TODO
-										//$qty = $item->get_quantity();
-										//for( $i = 0; $i < $qty; $i++ )
-										
-										$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $placeholder_processor ) );
-										break;
-									}
+									// TODO
+									//$qty = $item->get_quantity();
+									//for( $i = 0; $i < $qty; $i++ )
+									
+									$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $placeholder_processor ) );
+									break;
 								}
 							}
 						}
@@ -853,51 +831,48 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				foreach( $files as $download_id => &$file )
 				{
-					$product_data = self::get_meta( $product_id, 'data' );
-					if( isset( $product_data ) )
+					$settings = self::get_metadata( $product_id, 'product-settings' );
+					if( ! is_array( $settings ) )
+						$settings = array();
+					
+					if( isset( $settings['attachments'] )
+					&& is_array( $attachments = $settings['attachments'] ) )
 					{
-						$settings = self::decode_form_settings( $product_data );
-						
-						if( is_array( $settings )
-						&& isset( $settings['attachments'] )
-						&& is_array( $attachments = $settings['attachments'] ) )
+						foreach( $attachments as $attachment )
 						{
-							foreach( $attachments as $attachment )
+							$attachment_id = $attachment['attachment_id'];
+							
+							if( isset( $attachment['options'] )
+							&& is_array( $options = $attachment['options'] )
+							&& isset( $options['download_id'] )
+							&& $options['download_id'] == $download_id )
 							{
-								$attachment_id = $attachment['attachment_id'];
+								$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 								
-								if( isset( $attachment['options'] )
-								&& is_array( $options = $attachment['options'] )
-								&& isset( $options['download_id'] )
-								&& $options['download_id'] == $download_id )
+								if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
 								{
+									// if the PDF hasn't been filled yet then we need to fill it
+									$placeholder_processor = $this->get_placeholder_processor();
+									$placeholder_processor->set_order( $order );
+									$placeholder_processor->set_order_item( $order_item );
+									$placeholder_processor->set_product_id( $product_id );
+									
+									// fill PDFs so that they are also saved to the order directory
+									$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
+									
+									// clean up temporary files
+									$this->remove_tmp_dir();
+									
 									$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
-									
-									if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
-									{
-										// if the PDF hasn't been filled yet then we need to fill it
-										$placeholder_processor = $this->get_placeholder_processor();
-										$placeholder_processor->set_order( $order );
-										$placeholder_processor->set_order_item( $order_item );
-										$placeholder_processor->set_product_id( $product_id );
-										
-										// fill PDFs so that they are also saved to the order directory
-										$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
-										
-										// clean up temporary files
-										$this->remove_tmp_dir();
-										
-										$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
-									}
-									
-									if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
-									{
-										$file['name'] = $downloadable_file['filename'];
-										$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
-										$file['file'] = $full_url;
-										// TODO: use 'secure' download URL
-										$file['download_url'] = $full_url;
-									}
+								}
+								
+								if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
+								{
+									$file['name'] = $downloadable_file['filename'];
+									$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+									$file['file'] = $full_url;
+									// TODO: use 'secure' download URL
+									$file['download_url'] = $full_url;
 								}
 							}
 						}
@@ -945,50 +920,47 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					foreach( $order_products as $product_id => $product_downloads )
 					{
 						// load current product's settings
-						$product_data = self::get_meta( $product_id, 'data' );
-						if( isset( $product_data ) )
-						{
-							$settings = self::decode_form_settings( $product_data );
+						$settings = self::get_metadata( $product_id, 'product-settings' );
+						if( ! is_array( $settings ) )
+							$settings = array();
 							
-							if( is_array( $settings )
-							&& isset( $settings['attachments'] )
-							&& is_array( $attachments = $settings['attachments'] ) )
+						if( isset( $settings['attachments'] )
+						&& is_array( $attachments = $settings['attachments'] ) )
+						{
+							// handle each attachment separately
+							foreach( $attachments as $attachment )
 							{
-								// handle each attachment separately
-								foreach( $attachments as $attachment )
+								$attachment_id = $attachment['attachment_id'];
+								
+								if( isset( $attachment['options'] )
+								&& is_array( $options = $attachment['options'] )
+								&& isset( $options['download_id'] ) )
 								{
-									$attachment_id = $attachment['attachment_id'];
+									$attachment_download_id = $options['download_id'];
 									
-									if( isset( $attachment['options'] )
-									&& is_array( $options = $attachment['options'] )
-									&& isset( $options['download_id'] ) )
+									foreach( $product_downloads as $download_index )
 									{
-										$attachment_download_id = $options['download_id'];
-										
-										foreach( $product_downloads as $download_index )
+										// if download id matches then that means that this download is for this attachment
+										$download = $downloads[$download_index];
+										if( $download['download_id'] == $attachment_download_id )
 										{
-											// if download id matches then that means that this download is for this attachment
-											$download = $downloads[$download_index];
-											if( $download['download_id'] == $attachment_download_id )
+											// now we need to find the order item id for this download
+											foreach( $items as $iid => $item )
 											{
-												// now we need to find the order item id for this download
-												foreach( $items as $iid => $item )
+												if( $item->get_product_id() == $product_id ) // if product matches
 												{
-													if( $item->get_product_id() == $product_id ) // if product matches
-													{
-														// save the mapping
-														$downloads_items[$download_index] = $item;
-														
-														// cache information for later use
-														$downloads_product_settings[$download_index] = $settings;
-														$downloads_attachment[$download_index] = $attachment;
-														$downloads_orders[$download_index] = $order;
-														
-														// remove item from the list so that we don't match it again to another download
-														unset($items[$iid]);
-														
-														break;
-													}
+													// save the mapping
+													$downloads_items[$download_index] = $item;
+													
+													// cache information for later use
+													$downloads_product_settings[$download_index] = $settings;
+													$downloads_attachment[$download_index] = $attachment;
+													$downloads_orders[$download_index] = $order;
+													
+													// remove item from the list so that we don't match it again to another download
+													unset($items[$iid]);
+													
+													break;
 												}
 											}
 										}
@@ -1678,31 +1650,29 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$service = $this->get_service();
 			$messages .= $service->form_notices();
 			
-			// get attachments
-			$data = self::get_meta( $product_id, 'data' );
-			$form_settings = self::decode_form_settings( $data );
+			$settings = self::get_metadata( $product_id, 'product-settings' );
+			if( ! is_array( $settings ) )
+				$settings = array();
 			
-			if( is_array( $form_settings ) )
+			// get attachments
+			if( isset( $settings['attachments'] ) && is_array( $settings['attachments'] ) )
+			foreach( $settings['attachments'] as $attachment )
 			{
-				if( isset( $form_settings['attachments'] ) && is_array( $form_settings['attachments'] ) )
-				foreach( $form_settings['attachments'] as $attachment )
-				{
-					$attachment_id = $attachment['attachment_id'];
-					$info = $this->get_info( $attachment_id );
-					$info['fields'] = $this->query_pdf_fields( $attachment_id );
-					
-					$filename = wp_basename( strval( get_attached_file( $attachment_id ) ) );
-					if( empty( $filename ) )
-						$filename = wp_get_attachment_url( $attachment_id );
-					if( empty( $filename ) )
-						$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
-					
-					$attachments[] = array(
-						'attachment_id' => $attachment_id,
-						'filename' => $filename,
-						'info' => $info,
-					);
-				}
+				$attachment_id = $attachment['attachment_id'];
+				$info = $this->get_info( $attachment_id );
+				$info['fields'] = $this->query_pdf_fields( $attachment_id );
+				
+				$filename = wp_basename( strval( get_attached_file( $attachment_id ) ) );
+				if( empty( $filename ) )
+					$filename = wp_get_attachment_url( $attachment_id );
+				if( empty( $filename ) )
+					$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
+				
+				$attachments[] = array(
+					'attachment_id' => $attachment_id,
+					'filename' => $filename,
+					'info' => $info,
+				);
 			}
 			
 			// get email templates
@@ -1733,7 +1703,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			woocommerce_wp_hidden_input( array(
 				'id'    => 'pdf-forms-for-woocommerce-data',
 				'class' => 'pdf-forms-for-woocommerce-data',
-				'value' => $data,
+				'value' => Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $settings ),
 			) );
 			$woocommerce_wp_data_input = ob_get_clean();
 			
@@ -2010,7 +1980,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					$data['value_mappings'] = $value_mappings;
 				}
 				
-				self::set_meta( $product_id, 'data', self::encode_form_settings( $data ) );
+				self::set_metadata( $product_id, 'product-settings', $data );
 			}
 			catch( Exception $e )
 			{
