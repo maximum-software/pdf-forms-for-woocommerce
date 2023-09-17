@@ -2287,10 +2287,13 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				return $old_attachment_id;
 			}
 			
-			if( ! ( ( $wp_upload_dir = wp_upload_dir() ) && false === $wp_upload_dir['error'] ) )
+			$wp_upload_dir = wp_upload_dir();
+			if( isset( $wp_upload_dir['error'] ) && false !== $wp_upload_dir['error'] )
 				throw new Exception( $wp_upload_dir['error'] );
+			if( ! isset( $wp_upload_dir['path'] ) || ! isset( $wp_upload_dir['url'] ) )
+				throw new Exception( __( "Failed to determine upload path", 'pdf-forms-for-woocommerce' ) );
 			
-			$filename = wp_unique_filename( $wp_upload_dir['path'], self::get_attachment_filename( $attachment_id ) . '.page' . intval( $page ) . '.jpg' );
+			$filename = wp_unique_filename( $wp_upload_dir['path'], self::get_attachment_filename( $attachment_id ) . '.page' . strval( intval( $page ) ) . '.jpg' );
 			$filepath = trailingslashit( $wp_upload_dir['path'] ) . $filename;
 			
 			$service = $this->get_service();
