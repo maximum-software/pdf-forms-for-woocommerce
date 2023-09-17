@@ -1417,15 +1417,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					}
 					$attachment_affected = $filling_data || count( $embeds_data ) > 0 || $options['flatten'];
 					
-					$filepath = get_attached_file( $attachment_id );
+					$destfilename = strval( $attachment['options']['filename'] );
+					if( $destfilename !== "" )
+						$destfilename = $placeholder_processor->process( $destfilename );
+					if( empty( $destfilename ) )
+						$destfilename = self::get_attachment_filename( $attachment_id );
 					
-					$filename = strval( $attachment['options']['filename'] );
-					if ( $filename !== "" )
-						$destfilename = $placeholder_processor->process( $filename );
-					else
-						$destfilename = $filepath;
-					
-					$destfilename = wp_basename( empty( $destfilename ) ? $filepath : $destfilename, '.pdf' );
 					$destfile = $this->create_tmp_filepath( $destfilename . '.pdf' );
 					
 					$filled = false;
@@ -1436,7 +1433,18 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							$filled = $service->api_fill_embed( $destfile, $attachment_id, $data, $embeds_data, $options );
 					
 					if( ! $filled )
-						copy( $filepath, $destfile );
+					{
+						$filepath = get_attached_file( $attachment_id );
+						if( empty( $filepath ) )
+						{
+							$url = wp_get_attachment_url( $attachment_id );
+							if( empty( $fileurl ) )
+								throw new Exception( __( "Attachment file is not accessible", 'pdf-forms-for-woocommerce' ) );
+							self::download_file( $url, $filepath );
+						}
+						else
+							copy( $filepath, $destfile );
+					}
 					$files[] = array( 'attachment_id' => $attachment_id, 'file' => $destfile, 'filename' => $destfilename . '.pdf', 'options' => $attachment['options'] );
 				}
 				
@@ -1625,6 +1633,27 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
+		 * Generates a sensible PDF attachment file name without the extension
+		 */
+		public static function get_attachment_filename( $attachment_id )
+		{
+			$filename = get_attached_file( $attachment_id );
+			
+			if( empty( $filename ) )
+			{
+				$url = wp_get_attachment_url( $attachment_id );
+				$parsed = parse_url( $url, PHP_URL_PATH );
+				if( $parsed !== false )
+					$filename = basename( $parsed, '.php' );
+			}
+			
+			if( empty( $filename ) )
+				$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
+			
+			return wp_basename( $filename, '.pdf' );
+		}
+		
+		/**
 		 * Prints 'PDF Forms' tab HTML contents
 		 */
 		public function print_product_data_tab_contents()
@@ -1653,9 +1682,15 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					$info = $this->get_info( $attachment_id );
 					$info['fields'] = $this->query_pdf_fields( $attachment_id );
 					
+					$filename = wp_basename( strval( get_attached_file( $attachment_id ) ) );
+					if( empty( $filename ) )
+						$filename = wp_get_attachment_url( $attachment_id );
+					if( empty( $filename ) )
+						$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
+					
 					$attachments[] = array(
 						'attachment_id' => $attachment_id,
-						'filename' => wp_basename( get_attached_file( $attachment_id ) ),
+						'filename' => $filename,
 						'info' => $info,
 					);
 				}
@@ -1865,8 +1900,13 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									// don't create a new download if one already exists
 									if( $download_id == '' && $product)
 									{
+										if( ! empty( $attachment['options']['filename'] ) )
+											$name = strval( $attachment['options']['filename'] );
+										else
+											$name = self::get_attachment_filename( $attachment_id );
+										
 										$downloads[] = array(
-											'name' => __( "Filled PDF", 'pdf-forms-for-woocommerce' ),
+											'name' => $name,
 											'file' => $attachment_url,
 										);
 										$product->set_downloads( $downloads );
@@ -2250,14 +2290,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ! ( ( $wp_upload_dir = wp_upload_dir() ) && false === $wp_upload_dir['error'] ) )
 				throw new Exception( $wp_upload_dir['error'] );
 			
-			$attachment_path = get_attached_file( $attachment_id );
-			
-			if( $attachment_path === false )
-				$attachment_path = wp_get_attachment_url( $attachment_id );
-			if( $attachment_path === false )
-				$attachment_path = "unknown";
-			
-			$filename = wp_unique_filename( $wp_upload_dir['path'], wp_basename( $attachment_path ).'.page'.intval($page).'.jpg' );
+			$filename = wp_unique_filename( $wp_upload_dir['path'], self::get_attachment_filename( $attachment_id ) . '.page' . intval( $page ) . '.jpg' );
 			$filepath = trailingslashit( $wp_upload_dir['path'] ) . $filename;
 			
 			$service = $this->get_service();
