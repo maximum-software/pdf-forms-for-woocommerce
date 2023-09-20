@@ -367,7 +367,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		const DEFAULT_PDF_OPTIONS = array(
 			'skip_empty' => false,
 			'flatten' => false,
-			'email_templates' => array( "customer_completed_order" ),
+			'email_templates' => array( 'customer_processing_order', 'customer_completed_order' ),
 			'filename' => "",
 			'save_directory'=> "",
 			'download_id' => "",
