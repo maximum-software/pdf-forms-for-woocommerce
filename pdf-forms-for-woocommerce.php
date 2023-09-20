@@ -34,6 +34,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		private $registered_services = false;
 		private $tmp_storage = null;
 		private $filled_pdfs = array();
+		private $new_orders = array();
 		
 		private function __construct()
 		{
@@ -72,7 +73,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'init', array( $this, 'register_meta' ) );
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
 			
+			add_action( 'woocommerce_new_order', array( $this, 'woocommerce_new_order' ), 10, 2 );
 			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
+			add_filter( 'woocommerce_after_order_object_save', array( $this, 'woocommerce_after_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_storage' ), 99, 0 ); // since WC 5.6.0
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
@@ -542,6 +545,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
+		 * Keeps track of new orders
+		 */
+		public function woocommerce_new_order( $order_id, $order )
+		{
+			$this->new_orders[] = $order_id;
+		}
+		
+		/**
 		 * Remove outdated order files
 		 */
 		public function woocommerce_before_order_object_save( $order, $data_store )
@@ -570,6 +581,38 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
+		 * Saves product settings in order metadata
+		 */
+		public function woocommerce_after_order_object_save( $order, $data_store )
+		{
+			if( ! is_a( $order, 'WC_Order' ) )
+				return;
+			
+			$order_id = $order->get_id();
+			
+			// don't do anything if this order is not new
+			if( ! in_array( $order_id, $this->new_orders ) )
+				return;
+			
+			unset( $this->new_orders[$order_id] );
+			
+			$product_settings = array();
+			
+			$items = $order->get_items();
+			foreach( $items as $item )
+			{
+				$product_id = $item->get_product_id();
+				$settings = self::get_metadata( $product_id, 'product-settings' );
+				if( ! is_array( $settings ) || empty( $settings ) )
+					continue;
+				$product_settings[$product_id] = $settings;
+			}
+			
+			if( ! empty( $product_settings ) )
+				self::set_metadata( $order_id, 'product-settings', $product_settings );
+		}
+		
+		/**
 		 * Fills PDFs and attaches them to email notifications
 		 */
 		public function attach_pdfs( $email_attachments, $email_id, $order, $email )
@@ -577,13 +620,13 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( $email_id !== null && is_a( $order, 'WC_Order' ) && is_a( $email, 'WC_Email' ) )
 			{
 				$order_id = $order->get_id();
-				try
+				$product_settings = self::get_metadata( $order_id, 'product-settings' );
+				if( is_array( $product_settings ) && ! empty( $product_settings ) )
 				{
 					$placeholder_processor = $this->get_placeholder_processor();
 					$placeholder_processor->set_email( $email );
 					$placeholder_processor->set_order( $order );
 					
-					// compile a list of product settings
 					$items = $order->get_items();
 					foreach( $items as $item )
 					{
@@ -594,47 +637,37 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						
 						$placeholder_processor->set_product_id( $product_id );
 						
-						$settings = self::get_metadata( $product_id, 'product-settings' );
-						if( ! is_array( $settings ) )
-							$settings = array();
+						if( ! isset( $product_settings[$product_id] ) )
+							continue;
 						
-						if( isset( $settings['attachments'] )
-						&& is_array( $attachments = $settings['attachments'] ) )
+						$settings = $product_settings[$product_id];
+						
+						if( ! is_array( $settings )
+						|| ! isset( $settings['attachments'] )
+						|| ! is_array( $attachments = $settings['attachments'] ) )
+							continue;
+						
+						foreach( $attachments as $attachment )
 						{
-							foreach( $attachments as $attachment )
+							if( isset( $attachment['options'] )
+							&& is_array( $options = $attachment['options'] )
+							&& isset( $options['email_templates'] )
+							&& is_array( $email_templates = $options['email_templates'] )
+							&& in_array( $email_id, $email_templates ) )
 							{
-								if( isset( $attachment['options'] )
-								&& is_array( $options = $attachment['options'] )
-								&& isset( $options['email_templates'] )
-								&& is_array( $email_templates = $options['email_templates'] )
-								&& in_array( $email_id, $email_templates ) )
+								if( isset( $this->filled_pdfs[$order_id] ) && isset( $this->filled_pdfs[$order_id][$order_item_id] ) )
+									$email_attachments = array_merge( $email_attachments, $this->filled_pdfs[$order_id][$order_item_id] );
+								else
 								{
-									if( isset( $this->filled_pdfs[$order_id] ) && isset( $this->filled_pdfs[$order_id][$order_item_id] ) )
-										$email_attachments = array_merge( $email_attachments, $this->filled_pdfs[$order_id][$order_item_id] );
-									else
-									{
-										$files = $this->fill_pdfs( $settings, $placeholder_processor );
-										$email_attachments = array_merge( $email_attachments, $files );
-										$this->filled_pdfs[$order_id][$order_item_id] = $files;
-									}
-									
-									break;
+									$files = $this->fill_pdfs( $settings, $placeholder_processor );
+									$email_attachments = array_merge( $email_attachments, $files );
+									$this->filled_pdfs[$order_id][$order_item_id] = $files;
 								}
+								
+								break;
 							}
 						}
 					}
-				}
-				catch( Exception $e )
-				{
-					$error_message = self::replace_tags(
-						__( "Error generating PDF: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' ),
-						array( 'error-message' => $e->getMessage(), 'error-file' => wp_basename( $e->getFile() ), 'error-line' => $e->getLine() )
-					);
-					
-					// log error in woocommerce error logging facility
-					wc_get_logger()->error( $error_message, array( 'source' => 'pdf-forms-for-woocommerce' ) );
-					
-					// TODO: notify store owner of error
 				}
 			}
 			
@@ -783,15 +816,16 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$order_id = $order->get_id();
 				$order_item_id = $order_item->get_id();
 				$product_id = $order_item->get_product_id();
+				$product_settings = self::get_metadata( $order_id, 'product-settings' );
 				
-				foreach( $files as $download_id => &$file )
+				if( is_array( $product_settings )
+				&& isset( $product_settings[$product_id] )
+				&& is_array( $settings = $product_settings[$product_id] )
+				&& isset( $settings['attachments'] )
+				&& is_array( $attachments = $settings['attachments'] ) )
 				{
-					$settings = self::get_metadata( $product_id, 'product-settings' );
-					if( ! is_array( $settings ) )
-						$settings = array();
-					
-					if( isset( $settings['attachments'] )
-					&& is_array( $attachments = $settings['attachments'] ) )
+					// TODO: optimize
+					foreach( $files as $download_id => &$file )
 					{
 						foreach( $attachments as $attachment )
 						{
@@ -866,54 +900,61 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$order = wc_get_order( $order_id );
 				if( is_a( $order, 'WC_Order' ) )
 				{
+					$product_settings = self::get_metadata( $order_id, 'product-settings' );
+					if( ! is_array( $product_settings ) )
+						$product_settings = array();
+					
 					$items = $order->get_items();
 					
 					// handle each product separately
 					foreach( $order_products as $product_id => $product_downloads )
 					{
 						// load current product's settings
-						$settings = self::get_metadata( $product_id, 'product-settings' );
-						if( ! is_array( $settings ) )
-							$settings = array();
-							
-						if( isset( $settings['attachments'] )
-						&& is_array( $attachments = $settings['attachments'] ) )
+						if( ! isset( $product_settings[$product_id] ) )
+							continue;
+						
+						$settings = $product_settings[$product_id];
+						
+						if( ! is_array( $settings )
+						|| empty( $settings )
+						|| ! isset( $settings['attachments'] )
+						|| ! is_array( $attachments = $settings['attachments'] ) )
+							continue;
+						
+						// handle each attachment separately
+						foreach( $attachments as $attachment )
 						{
-							// handle each attachment separately
-							foreach( $attachments as $attachment )
+							$attachment_id = $attachment['attachment_id'];
+							
+							if( isset( $attachment['options'] )
+							&& is_array( $options = $attachment['options'] )
+							&& isset( $options['download_id'] ) )
 							{
-								$attachment_id = $attachment['attachment_id'];
+								$attachment_download_id = $options['download_id'];
 								
-								if( isset( $attachment['options'] )
-								&& is_array( $options = $attachment['options'] )
-								&& isset( $options['download_id'] ) )
+								foreach( $product_downloads as $download_index )
 								{
-									$attachment_download_id = $options['download_id'];
-									
-									foreach( $product_downloads as $download_index )
+									// if download id matches then that means that this download is for this attachment
+									$download = $downloads[$download_index];
+									if( $download['download_id'] == $attachment_download_id )
 									{
-										// if download id matches then that means that this download is for this attachment
-										$download = $downloads[$download_index];
-										if( $download['download_id'] == $attachment_download_id )
+										// now we need to find the order item id for this download
+										foreach( $items as $iid => $item )
 										{
-											// now we need to find the order item id for this download
-											foreach( $items as $iid => $item )
+											if( $item->get_product_id() == $product_id ) // if product matches
 											{
-												if( $item->get_product_id() == $product_id ) // if product matches
-												{
-													// save the mapping
-													$downloads_items[$download_index] = $item;
-													
-													// cache information for later use
-													$downloads_product_settings[$download_index] = $settings;
-													$downloads_attachment[$download_index] = $attachment;
-													$downloads_orders[$download_index] = $order;
-													
-													// remove item from the list so that we don't match it again to another download
-													unset($items[$iid]);
-													
-													break;
-												}
+												// save the mapping
+												$downloads_items[$download_index] = $item;
+												
+												// cache information for later use
+												$downloads_product_settings[$download_index] = $settings;
+												$downloads_attachment[$download_index] = $attachment;
+												$downloads_orders[$download_index] = $order;
+												
+												// remove item from the list so that we don't match it again to another download
+												unset($items[$iid]);
+												
+												break;
 											}
 										}
 									}
