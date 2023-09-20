@@ -854,7 +854,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								
 								if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
 								{
-									$file['name'] = $downloadable_file['filename'];
 									$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 									$file['file'] = $full_url;
 									// TODO: use 'secure' download URL
@@ -996,7 +995,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					
 					if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
 					{
-						$download['file']['name'] = $downloadable_file['filename'];
 						$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
 						$download['file']['file'] = $full_url;
 						// TODO: use 'secure' download URL
