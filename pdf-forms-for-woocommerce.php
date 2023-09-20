@@ -32,7 +32,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		private $pdf_ninja_service = null;
 		private $service = null;
 		private $registered_services = false;
-		private $tmp_dir = null;
+		private $tmp_storage = null;
+		private $filled_pdfs = array();
 		
 		private function __construct()
 		{
@@ -71,12 +72,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'init', array( $this, 'register_meta' ) );
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
 			
-			add_filter( 'woocommerce_order_status_changed', array( $this, 'process_order_status_change' ), 10, 4 );
+			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
-			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_dir' ), 99, 0 ); // since WC 5.6.0
-			
+			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_storage' ), 99, 0 ); // since WC 5.6.0
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
+			add_action( 'shutdown', array( $this, 'remove_tmp_storage' ), 99, 0 ); // clean up tmp dir on exit
 			
 			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 1, 2 );
 			
@@ -479,68 +480,38 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Get temporary directory path
+		 * Provides temporary file storage
 		 */
-		public static function get_tmp_path()
+		public function get_tmp_storage()
 		{
-			// TODO: maybe switch to using storage class
-			
-			$upload_dir = wp_upload_dir();
-			$tmp_path = trailingslashit( empty( $upload_dir['error'] && ! empty( $upload_dir['basedir'] ) ) ? $upload_dir['basedir'] : get_temp_dir() );
-			
-			$dir = trailingslashit( $tmp_path . 'pdf-forms-for-woocommerce' ) . 'tmp';
-			
-			if( ! is_dir( $dir ) )
+			if( ! $this->tmp_storage )
 			{
-				wp_mkdir_p( $dir );
-				$index_file = path_join( $dir , 'index.php' );
-				if( ! file_exists( $index_file ) )
-					file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+				$this->tmp_storage = self::get_storage();
+				$this->tmp_storage->set_subpath( 'pdf-forms-for-woocommerce/tmp/' . sanitize_file_name( wp_hash( wp_rand() . microtime() ) ) );
 			}
 			
-			return $dir;
+			return $this->tmp_storage;
 		}
 		
 		/**
-		 * Creates a temporary directory
+		 * Removes temporary file storage
 		 */
-		public function create_tmp_dir()
+		public function remove_tmp_storage()
 		{
-			if( ! $this->tmp_dir )
-			{
-				$dir = trailingslashit( self::get_tmp_path() ) . wp_hash( wp_rand() . microtime() );
-				wp_mkdir_p( $dir );
-				$this->tmp_dir = trailingslashit( $dir );
-			}
-			
-			return $this->tmp_dir;
-		}
-		
-		/**
-		 * Removes a temporary directory
-		 */
-		public function remove_tmp_dir()
-		{
-			if( ! $this->tmp_dir )
+			if( ! $this->tmp_storage )
 				return;
 			
-			// remove files in the directory
-			$tmp_dir_slash = trailingslashit( $this->tmp_dir );
-			$files = array_merge( glob( $tmp_dir_slash . '*' ), glob( $tmp_dir_slash . '.*' ) );
-			while( $file = array_shift( $files ) )
-				if( is_file( $file ) )
-					@unlink( $file );
-			
-			@rmdir( $this->tmp_dir );
-			$this->tmp_dir = null;
+			$this->tmp_storage->delete_subpath_recursively();
+			$this->tmp_storage = null;
 		}
 		
 		/**
 		 * Creates a temporary file path (but not the file itself)
 		 */
-		private function create_tmp_filepath( $filename )
+		private function create_tmp_filepath( $subpath, $filename )
 		{
-			$uploads_dir = $this->create_tmp_dir();
+			$uploads_dir = trailingslashit( $this->get_tmp_storage()->get_full_path() ) . $subpath;
+			wp_mkdir_p( $uploads_dir );
 			$filename = sanitize_file_name( $filename );
 			$filename = wp_unique_filename( $uploads_dir, $filename );
 			return trailingslashit( $uploads_dir ) . $filename;
@@ -571,39 +542,52 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Runs when order status is changed
+		 * Remove outdated order files
 		 */
-		public function process_order_status_change( $order_id, $old_status, $new_status, $order )
+		public function woocommerce_before_order_object_save( $order, $data_store )
 		{
+			// certain events cause downloadable files to become stale, such as when order status changes
+			// we need to delete the stale PDF files and recreate them
+			// however, we probalby don't want to keep redoing it over and over
+			// so, we should delete the old PDF files and recreate them later when needed
+			
 			if( is_a( $order, 'WC_Order' ) )
 			{
-				// the problem with downloadable product files is that when the order status changes, the PDF forms have to be re-filled because the data may have changed
-				// but we don't want to redo it every time status changes, only as needed
-				// so, we should delete the old PDF files and recreate them only when needed
-				
-				if( $new_status != 'new' )
-					// remove order downloadable files
-					self::unset_downloadable_files( $order->get_id() );
+				// check if this order is in the database
+				$order_id = $order->get_id();
+				if( $order_id )
+				{
+					$new_status = $order->get_status();
+					$old_order = wc_get_order( $order_id );
+					$old_status = $old_order->get_status();
+					if( $old_status != $new_status )
+					{
+						// remove stale downloadable files
+						self::unset_downloadable_files( $order_id );
+					}
+				}
 			}
 		}
 		
 		/**
 		 * Fills PDFs and attaches them to email notifications
 		 */
-		public function attach_pdfs( $email_attachments, $email_id, $object, $email )
+		public function attach_pdfs( $email_attachments, $email_id, $order, $email )
 		{
-			if( $email_id !== null && is_a( $object, 'WC_Order' ) && is_a( $email, 'WC_Email' ) )
+			if( $email_id !== null && is_a( $order, 'WC_Order' ) && is_a( $email, 'WC_Email' ) )
 			{
+				$order_id = $order->get_id();
 				try
 				{
 					$placeholder_processor = $this->get_placeholder_processor();
 					$placeholder_processor->set_email( $email );
-					$placeholder_processor->set_order( $object );
+					$placeholder_processor->set_order( $order );
 					
 					// compile a list of product settings
-					$items = $object->get_items();
+					$items = $order->get_items();
 					foreach( $items as $item )
 					{
+						$order_item_id = $item->get_id();
 						$placeholder_processor->set_order_item( $item );
 						
 						$product_id = $item->get_product_id();
@@ -625,11 +609,15 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								&& is_array( $email_templates = $options['email_templates'] )
 								&& in_array( $email_id, $email_templates ) )
 								{
-									// TODO
-									//$qty = $item->get_quantity();
-									//for( $i = 0; $i < $qty; $i++ )
+									if( isset( $this->filled_pdfs[$order_id] ) && isset( $this->filled_pdfs[$order_id][$order_item_id] ) )
+										$email_attachments = array_merge( $email_attachments, $this->filled_pdfs[$order_id][$order_item_id] );
+									else
+									{
+										$files = $this->fill_pdfs( $settings, $placeholder_processor );
+										$email_attachments = array_merge( $email_attachments, $files );
+										$this->filled_pdfs[$order_id][$order_item_id] = $files;
+									}
 									
-									$email_attachments = array_merge( $email_attachments, $this->fill_pdfs( $settings, $placeholder_processor ) );
 									break;
 								}
 							}
@@ -667,7 +655,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			else
 			{
 				$storage_directory = $storage->get_site_root_relative_storage_path();
-				$order_directory = 'pdf-forms-for-woocommerce/order-files/' . $order_id . '-' . wp_hash( wp_rand() . microtime() );
+				$order_directory = 'pdf-forms-for-woocommerce/order-files/' . sanitize_file_name( $order_id . '-' . wp_hash( wp_rand() . microtime() ) );
 				$storage->set_subpath( $order_directory );
 				self::set_metadata( $order_id, 'storage-dir', $storage_directory );
 				self::set_metadata( $order_id, 'order-dir', $order_directory );
@@ -816,7 +804,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							{
 								$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 								
-								if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
+								if( ! is_array( $downloadable_file ) || ! isset( $downloadable_file['file'] ) )
 								{
 									// if the PDF hasn't been filled yet then we need to fill it
 									$placeholder_processor = $this->get_placeholder_processor();
@@ -825,15 +813,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									$placeholder_processor->set_product_id( $product_id );
 									
 									// fill PDFs so that they are also saved to the order directory
-									$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
-									
-									// clean up temporary files
-									$this->remove_tmp_dir();
+									$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 									
 									$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 								}
 								
-								if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
+								if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
 								{
 									$file['name'] = $downloadable_file['filename'];
 									$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
@@ -954,7 +939,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					
 					$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 					
-					if( ! is_array( $downloadable_file) || ! isset( $downloadable_file['file'] ) )
+					if( ! is_array( $downloadable_file ) || ! isset( $downloadable_file['file'] ) )
 					{
 						// if the PDF hasn't been filled yet then we need to fill it
 						$placeholder_processor = $this->get_placeholder_processor();
@@ -963,15 +948,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						$placeholder_processor->set_product_id( $product_id );
 						
 						// fill PDFs so that they are also saved to the order directory
-						$temporary_pdfs = $this->fill_pdfs( $settings, $placeholder_processor );
-						
-						// clean up temporary files
-						$this->remove_tmp_dir();
+						$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 						
 						$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 					}
 					
-					if( is_array( $downloadable_file) && isset( $downloadable_file['file'] ) )
+					if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
 					{
 						$download['file']['name'] = $downloadable_file['filename'];
 						$full_url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
@@ -1025,9 +1007,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		private function fill_pdfs( $settings, $placeholder_processor )
 		{
-			// TODO: figure out why this function is called too many times
 			try
 			{
+				$fill_id = wp_hash( wp_rand() . microtime() );
+				
 				$output_files = array();
 				
 				$attachments = array();
@@ -1066,14 +1049,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						if( filter_var( $url, FILTER_VALIDATE_URL ) !== FALSE )
 						if( substr( $url, 0, 5 ) === 'http:' || substr( $url, 0, 6 ) === 'https:' )
 						{
-							$filepath = $this->create_tmp_filepath( 'img_download_'.count($embed_files).'.tmp' );
+							$filepath = $this->create_tmp_filepath( $fill_id, 'img_download_'.count($embed_files).'.tmp' );
 							self::download_file( $url, $filepath, $url_mimetype ); // can throw an exception
 							$filename = $url;
 						}
 						
 						if( substr( $url, 0, 5 ) === 'data:' )
 						{
-							$filepath = $this->create_tmp_filepath( 'img_data_'.count($embed_files).'.tmp' );
+							$filepath = $this->create_tmp_filepath( $fill_id, 'img_data_'.count($embed_files).'.tmp' );
 							$filename = $url;
 							
 							$parsed = self::parse_data_uri( $url );
@@ -1371,7 +1354,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					if( empty( $destfilename ) )
 						$destfilename = self::get_attachment_filename( $attachment_id );
 					
-					$destfile = $this->create_tmp_filepath( $destfilename . '.pdf' );
+					$destfile = $this->create_tmp_filepath( $fill_id, $destfilename . '.pdf' );
 					
 					$filled = false;
 					
@@ -1448,7 +1431,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								$order_id = $order->get_id();
 								$order_item_id = $order_item->get_id();
 								$order_storage = self::get_order_storage( $order_id );
-								$order_storage->set_subpath( trailingslashit( $order_storage->get_subpath() ) . $order_item_id );
+								$order_storage->set_subpath( trailingslashit( $order_storage->get_subpath() ) . sanitize_file_name( $order_item_id ) );
 								$dstfilename = $order_storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
 								
 								// record file data in order meta
@@ -1468,9 +1451,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 			catch( Exception $e )
 			{
-				// clean up
-				$this->remove_tmp_dir();
-				
 				$error_message = self::replace_tags(
 					__( "Error generating PDF: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' ),
 					array( 'error-message' => $e->getMessage(), 'error-file' => wp_basename( $e->getFile() ), 'error-line' => $e->getLine() )
