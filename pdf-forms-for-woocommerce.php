@@ -1402,7 +1402,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					if( $destfilename !== "" )
 						$destfilename = $placeholder_processor->process( $destfilename );
 					if( empty( $destfilename ) )
-						$destfilename = self::get_attachment_filename( $attachment_id );
+						$destfilename = sanitize_file_name( get_the_title( $attachment_id ) );
 					
 					$destfile = $this->create_tmp_filepath( $fill_id, $destfilename . '.pdf' );
 					
@@ -1611,27 +1611,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Generates a sensible PDF attachment file name without the extension
-		 */
-		public static function get_attachment_filename( $attachment_id )
-		{
-			$filename = get_attached_file( $attachment_id );
-			
-			if( empty( $filename ) )
-			{
-				$url = wp_get_attachment_url( $attachment_id );
-				$parsed = parse_url( $url, PHP_URL_PATH );
-				if( $parsed !== false )
-					$filename = basename( $parsed, '.php' );
-			}
-			
-			if( empty( $filename ) )
-				$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
-			
-			return wp_basename( $filename, '.pdf' );
-		}
-		
-		/**
 		 * Prints 'PDF Forms' tab HTML contents
 		 */
 		public function print_product_data_tab_contents()
@@ -1659,15 +1638,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$info = $this->get_info( $attachment_id );
 				$info['fields'] = $this->query_pdf_fields( $attachment_id );
 				
-				$filename = wp_basename( strval( get_attached_file( $attachment_id ) ) );
-				if( empty( $filename ) )
-					$filename = wp_get_attachment_url( $attachment_id );
-				if( empty( $filename ) )
-					$filename = __( "Unknown", 'pdf-forms-for-woocommerce' );
-				
 				$attachments[] = array(
 					'attachment_id' => $attachment_id,
-					'filename' => $filename,
+					'filename' => get_the_title( $attachment_id ),
 					'info' => $info,
 				);
 			}
@@ -1879,7 +1852,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 										if( ! empty( $attachment['options']['filename'] ) )
 											$name = strval( $attachment['options']['filename'] );
 										else
-											$name = self::get_attachment_filename( $attachment_id );
+											$name = get_the_title( $attachment_id );
 										
 										$downloads[] = array(
 											'name' => $name,
@@ -2273,7 +2246,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ! isset( $wp_upload_dir['path'] ) || ! isset( $wp_upload_dir['url'] ) )
 				throw new Exception( __( "Failed to determine upload path", 'pdf-forms-for-woocommerce' ) );
 			
-			$filename = wp_unique_filename( $wp_upload_dir['path'], self::get_attachment_filename( $attachment_id ) . '.page' . strval( intval( $page ) ) . '.jpg' );
+			$filename = wp_unique_filename( $wp_upload_dir['path'], sanitize_file_name( get_the_title( $attachment_id ) ) . '.page' . strval( intval( $page ) ) . '.jpg' );
 			$filepath = trailingslashit( $wp_upload_dir['path'] ) . $filename;
 			
 			$service = $this->get_service();
