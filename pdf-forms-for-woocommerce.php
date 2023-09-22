@@ -594,6 +594,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ! in_array( $order_id, $this->new_orders ) )
 				return;
 			
+			// TODO: save copies of source PDF files in pdf-forms-for-woocommerce/pdf-cache directory in case they are deleted from media library and use the cached copy for this order
+			
 			unset( $this->new_orders[$order_id] );
 			
 			$product_settings = array();
@@ -744,10 +746,16 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( $order_item_id === null )
 					$downloadable_files = array();
 				else
+				{
+					// TODO: delete old files
 					unset( $downloadable_files[$order_item_id] );
+				}
 			}
 			else if( $order_item_id !== null )
+			{
+				// TODO: delete old files
 				$downloadable_files[$order_item_id] = $order_item_files;
+			}
 			
 			self::set_metadata( $order_id, 'downloadable-files', $downloadable_files );
 		}
@@ -786,6 +794,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				foreach( $downloadable_file_set as $downloadable_file )
 					if( isset( $downloadable_file['file'] ) )
 						@unlink( trailingslashit( ABSPATH ) . $downloadable_file['file'] );
+			
+			// TODO: delete order directories if they are empty
 			
 			self::set_downloadable_files( $order_id, $order_item_id, null );
 		}
