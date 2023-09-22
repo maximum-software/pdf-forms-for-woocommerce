@@ -1417,10 +1417,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						$filepath = get_attached_file( $attachment_id );
 						if( empty( $filepath ) )
 						{
-							$url = wp_get_attachment_url( $attachment_id );
+							$fileurl = wp_get_attachment_url( $attachment_id );
 							if( empty( $fileurl ) )
 								throw new Exception( __( "Attachment file is not accessible", 'pdf-forms-for-woocommerce' ) );
-							self::download_file( $url, $filepath );
+							self::download_file( $fileurl, $destfile );
 						}
 						else
 							copy( $filepath, $destfile );
