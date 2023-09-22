@@ -491,6 +491,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			{
 				$this->tmp_storage = self::get_storage();
 				$this->tmp_storage->set_subpath( 'pdf-forms-for-woocommerce/tmp/' . sanitize_file_name( wp_hash( wp_rand() . microtime() ) ) );
+				$this->tmp_storage->initialize_path();
 			}
 			
 			return $this->tmp_storage;

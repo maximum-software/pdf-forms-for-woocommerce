@@ -117,7 +117,7 @@
 			/**
 			 * Recurively creates path directories and prevents directory listing
 			 */
-			private function initialize_path()
+			public function initialize_path()
 			{
 				$path = $this->get_storage_path();
 				$subpath = $this->get_subpath();
