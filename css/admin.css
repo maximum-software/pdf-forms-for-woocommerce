@@ -41,6 +41,10 @@
 	word-break: break-all;
 }
 
+.pdf-forms-for-woocommerce-admin .pdf-option-email-templates .select2 {
+	margin-bottom: 10px;
+}
+
 .pdf-forms-for-woocommerce-admin div.pdf-options
 {
 	padding: 10px;
@@ -141,6 +145,10 @@
 	text-align: center;
 	background-color: #fff;
 	border: 1px solid #aaa;
+}
+
+.pdf-forms-for-woocommerce-admin .select2-container {
+	float: none !important;
 }
 
 .pdf-forms-for-woocommerce-admin .select-dropdown
