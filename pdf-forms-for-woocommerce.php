@@ -70,9 +70,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_query_page_image', array( $this, 'wp_ajax_query_page_image' ) );
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_generate_pdf_ninja_key', array( $this, 'wp_ajax_generate_pdf_ninja_key') );
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_clear_messages', array( $this, 'wp_ajax_clear_messages') );
+			add_action( 'wp_ajax_pdf_forms_for_woocommerce_reset_order_settings', array( $this, 'wp_ajax_reset_order_settings') );
+			add_action( 'wp_ajax_pdf_forms_for_woocommerce_reset_order_pdfs', array( $this, 'wp_ajax_reset_order_pdfs') );
 			
 			add_action( 'init', array( $this, 'register_meta' ) );
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
+			add_action( 'add_meta_boxes', array( $this, 'register_order_metabox' ) );
 			
 			add_action( 'woocommerce_new_order', array( $this, 'woocommerce_new_order' ), 10, 2 );
 			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
@@ -110,6 +113,21 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				'type' => 'string',
 				'auth_callback' => '__return_false',
 			) );
+		}
+		
+		/**
+		 * Adds a metabox to edit order page
+		 */
+		public function register_order_metabox()
+		{
+			add_meta_box(
+				'pdf-forms-for-woocommerce-metabox', // ID
+				__( 'PDF Forms Filler', 'pdf-forms-for-woocommerce' ), // title
+				array( $this, 'display_order_metabox' ), // callback
+				'shop_order', // screen
+				'side', // context
+				'default' // priority
+			);
 		}
 		
 		/**
@@ -592,6 +610,137 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
+		 * Outputs order metabox
+		 */
+		public function display_order_metabox()
+		{
+			print(
+				self::render(
+					'order-metabox',
+					array(
+						'reset-settings-instructions' => __( "Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need to be applied to an old order.", 'pdf-forms-for-woocommerce' ),
+						'reset-settings' => __( "Reset Settings", 'pdf-forms-for-woocommerce' ),
+						'reset-pdfs-instructions' => __( "PDFs are refilled when orders status changes. You may want to sometimes manually trigger PDFs to be refilled after changing some aspect of your order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
+						'reset-pdfs' => __( "Reset PDFs", 'pdf-forms-for-woocommerce' ),
+					)
+				)
+			);
+		}
+		
+		/**
+		 * Used for resetting order settings in wp-admin edit order interface
+		 */
+		public function wp_ajax_reset_order_settings()
+		{
+			try
+			{
+				if( ! check_ajax_referer( 'pdf-forms-for-woocommerce-ajax-nonce', 'nonce', false ) )
+					throw new Exception( __( "Nonce mismatch", 'pdf-forms-for-woocommerce' ) );
+				
+				if( ! current_user_can( 'manage_woocommerce' ) )
+					throw new Exception( __( "Permission denied", 'pdf-forms-for-woocommerce' ) );
+				
+				$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : null;
+				if( ! $order_id )
+					throw new Exception( __( "Invalid order ID", 'pdf-forms-for-woocommerce' ) );
+				
+				$order = wc_get_order( $order_id );
+				if( ! is_a( $order, 'WC_Order' ) )
+					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
+				
+				self::reset_order_settings( $order );
+			}
+			catch ( Exception $e )
+			{
+				return wp_send_json( array (
+					'success' => false,
+					'error_message' => $e->getMessage()
+				) );
+			}
+			
+			wp_send_json_success();
+		}
+		
+		/**
+		 * Used for resetting order pdfs in wp-admin edit order interface
+		 */
+		public function wp_ajax_reset_order_pdfs()
+		{
+			try
+			{
+				if( ! check_ajax_referer( 'pdf-forms-for-woocommerce-ajax-nonce', 'nonce', false ) )
+					throw new Exception( __( "Nonce mismatch", 'pdf-forms-for-woocommerce' ) );
+				
+				if( ! current_user_can( 'manage_woocommerce' ) )
+					throw new Exception( __( "Permission denied", 'pdf-forms-for-woocommerce' ) );
+				
+				$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : null;
+				if( ! $order_id )
+					throw new Exception( __( "Invalid order ID", 'pdf-forms-for-woocommerce' ) );
+				
+				$order = wc_get_order( $order_id );
+				if( ! is_a( $order, 'WC_Order' ) )
+					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
+				
+				// remove downloadable files
+				self::unset_downloadable_files( $order_id );
+				
+				// refilling is necessary only if PDFs are being saved in wp-uploads
+				$product_settings = self::get_metadata( $order_id, 'product-settings' );
+				if( is_array( $product_settings ) && ! empty( $product_settings ) )
+				{
+					$placeholder_processor = $this->get_placeholder_processor();
+					$placeholder_processor->set_order( $order );
+					
+					$items = $order->get_items();
+					foreach( $items as $item )
+					{
+						$order_item_id = $item->get_id();
+						$placeholder_processor->set_order_item( $item );
+						
+						$product_id = $item->get_product_id();
+						
+						$placeholder_processor->set_product_id( $product_id );
+						
+						if( ! isset( $product_settings[$product_id] ) )
+							continue;
+						
+						$settings = $product_settings[$product_id];
+						
+						if( ! is_array( $settings )
+						|| ! isset( $settings['attachments'] )
+						|| ! is_array( $attachments = $settings['attachments'] ) )
+							continue;
+						
+						foreach( $attachments as $attachment )
+						{
+							if( isset( $attachment['options'] )
+							&& is_array( $options = $attachment['options'] )
+							&& isset( $options['save_directory'] )
+							&& $options['save_directory'] !== "" )
+							{
+								$files = $this->fill_pdfs( $settings, $placeholder_processor );
+								break;
+							}
+						}
+						
+						// clear temporary files
+						self::remove_tmp_storage();
+					}
+				}
+			}
+			catch ( Exception $e )
+			{
+				return wp_send_json( array (
+					'success' => false,
+					'error_message' => $e->getMessage()
+				) );
+			}
+			
+			wp_send_json_success();
+		}
+		
+		/**
 		 * Keeps track of new orders
 		 */
 		public function woocommerce_new_order( $order_id, $order )
@@ -627,23 +776,16 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 		}
 		
-		/**
-		 * Saves product settings in order metadata
+		/*
+		 * Resets product settings for an order
 		 */
-		public function woocommerce_after_order_object_save( $order, $data_store )
+		private static function reset_order_settings( $order )
 		{
-			if( ! is_a( $order, 'WC_Order' ) )
-				return;
-			
 			$order_id = $order->get_id();
 			
-			// don't do anything if this order is not new
-			if( ! in_array( $order_id, $this->new_orders ) )
-				return;
+			self::unset_metadata( $order_id, 'product-settings' );
 			
 			// TODO: save copies of source PDF files in pdf-forms-for-woocommerce/pdf-cache directory in case they are deleted from media library and use the cached copy for this order
-			
-			unset( $this->new_orders[$order_id] );
 			
 			$product_settings = array();
 			
@@ -659,6 +801,25 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			if( ! empty( $product_settings ) )
 				self::set_metadata( $order_id, 'product-settings', $product_settings );
+		}
+		
+		/**
+		 * Saves product settings in order metadata
+		 */
+		public function woocommerce_after_order_object_save( $order, $data_store )
+		{
+			if( ! is_a( $order, 'WC_Order' ) )
+				return;
+			
+			$order_id = $order->get_id();
+			
+			// don't do anything if this order is not new
+			if( ! in_array( $order_id, $this->new_orders ) )
+				return;
+			
+			unset( $this->new_orders[$order_id] );
+			
+			self::reset_order_settings( $order );
 		}
 		
 		/**
@@ -2094,8 +2255,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			wp_register_script( 'pdf_forms_filler_spinner_script', plugins_url( 'js/spinner.js', __FILE__ ), array('jquery'), '1.0.0' );
 			wp_register_style( 'pdf_forms_filler_spinner_style', plugins_url( 'css/spinner.css', __FILE__ ), array(), '1.0.0' );
 			
+			$post_type = get_post_type();
+			
 			// if we are on the product edit page then load the admin scripts
-			if( ( 'post.php' == $hook || 'post-new.php' == $hook ) && 'product' == get_post_type() )
+			if( ( 'post.php' == $hook || 'post-new.php' == $hook ) && 'product' == $post_type )
 			{
 				wp_register_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), '4.0.13' );
 				wp_register_script( 'select2', plugin_dir_url(  __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), '4.0.13' );
@@ -2134,6 +2297,22 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				wp_enqueue_script( 'pdf_forms_filler_spinner_script' );
 				wp_enqueue_style( 'pdf_forms_filler_spinner_style' );
+			}
+			
+			// if we are on the order edit page then load the order page admin scripts
+			if( ( 'post.php' == $hook ) && 'shop_order' == $post_type )
+			{
+				wp_register_script( 'pdf_forms_for_woocommerce_admin_order_script', plugins_url( 'js/admin-order.js', __FILE__ ), array( 'jquery' ), self::VERSION );
+				
+				wp_localize_script( 'pdf_forms_for_woocommerce_admin_order_script', 'pdf_forms_for_woocommerce', array(
+					'ajax_url' => admin_url( 'admin-ajax.php' ),
+					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
+					'order_id' => get_the_ID(),
+					'__Confirm_Reset_Settings' => __( 'Are you sure you want to reset settings for this order?', 'pdf-forms-for-woocommerce' ),
+					'__Confirm_Reset_PDFs' => __( 'Are you sure you want to reset PDFs for this order?', 'pdf-forms-for-woocommerce' ),
+				) );
+				
+				wp_enqueue_script( 'pdf_forms_for_woocommerce_admin_order_script' );
 			}
 			
 			if( $service = $this->get_service() )
