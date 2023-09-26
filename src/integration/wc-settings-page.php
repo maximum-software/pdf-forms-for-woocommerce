@@ -13,7 +13,7 @@
 			public function __construct()
 			{
 				$this->id = 'pdf-forms-for-woocommerce-settings';
-				$this->label = __( 'PDF Forms', 'pdf-forms-for-woocommerce' );
+				$this->label = __( 'PDF Forms Filler', 'pdf-forms-for-woocommerce' );
 				
 				parent::__construct();
 				
