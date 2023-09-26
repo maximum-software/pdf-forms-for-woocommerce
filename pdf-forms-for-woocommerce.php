@@ -1065,6 +1065,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									$placeholder_processor->set_product_id( $product_id );
 									
 									// fill PDFs so that they are also saved to the order directory
+									// save a list of filled pdfs so that we don't need to fill them again when attaching them to emails
 									$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 									
 									$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
