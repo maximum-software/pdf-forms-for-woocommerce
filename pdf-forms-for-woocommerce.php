@@ -916,6 +916,11 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									// TODO: use 'secure' download URL
 									$file['download_url'] = $full_url;
 								}
+								else
+								{
+									// if the PDF is not available for some reason, remove the download
+									unset( $files[$download_id] );
+								}
 							}
 						}
 					}
@@ -1056,6 +1061,11 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						$download['file']['file'] = $full_url;
 						// TODO: use 'secure' download URL
 						$download['download_url'] = $full_url;
+					}
+					else
+					{
+						// if the PDF is not available for some reason, remove the download
+						unset( $downloads[$download_index] );
 					}
 				}
 			}
