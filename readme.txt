@@ -42,9 +42,9 @@ Requirements:
  * WooCommerce 5.6.0 or newer
  * Chrome 60, Firefox 56 (or equivalent) or newer
 
-Known problems:
-* [Imagify](https://wordpress.org/plugins/imagify/) (strips forms from PDF files)
-* [ShortPixel Image Optimizer](https://wordpress.org/plugins/shortpixel-image-optimiser/) (strips forms from PDF files)
+Known incompatible plugins:
+ * [Imagify](https://wordpress.org/plugins/imagify/) (strips forms from PDF files)
+ * [ShortPixel Image Optimizer](https://wordpress.org/plugins/shortpixel-image-optimiser/) (strips forms from PDF files)
 
 Special thanks to the following sponsors of this plugin:
  * [BrowserStack](https://www.browserstack.com/)
@@ -55,4 +55,40 @@ Special thanks to the following sponsors of this plugin:
 2. Upload this plugin's folder to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen directly.
 3. Activate the plugin through the 'Plugins' screen in WordPress.
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
+
+== Frequently Asked Questions ==
+
+= Does this plugin allow my website users to edit PDF files? =
+
+No. This plugin adds UI features to the [WooCommerce](https://wordpress.org/plugins/woocommerce/) interface in the WordPress Admin Panel only.
+
+= Does this plugin require special software installation on the web server? =
+
+No. The plugin uses core WordPress and WooCommerce features only. No special software or PHP extensions are needed. Working with PDF files is done through [Pdf.Ninja API](https://pdf.ninja). It is recommended to have a working SSL/TLS certificate validation with cURL.
+
+= How are WooCommerce placeholders mapped to PDF form fields? =
+
+The field mapper tool allows you to map fields individually. Combinations of placeholders with custom text can be mapped to a PDF field. Mappings can be associated with a specific PDF attachment or all PDF attachments. Field value mappings can also be created, allowing filled PDF fields to be filled with content that differs from the source values.
+
+= My fields are not getting filled, what is wrong? =
+
+Make sure the mapping exists in the list of mappings and the field names match.
+
+If you attached an updated PDF file and your mappings were for the old attachment ID then those mappings will be deleted and you will need to recreate them.
+
+Sometimes PDF form fields have validation scripts which prevent value with an incorrect format to be filled in. Date PDF fields must be filled with correctly formatted date strings.
+
+= How do I update the attached PDF file without attaching a new version and losing attachment ID related mappings and embeds? =
+
+Try using the [Enable Media Replace plugin](https://wordpress.org/plugins/enable-media-replace/) to replace the PDF file in-place in the Media Library.
+
+= My checkboxes and/or radio buttons are not getting filled, what is wrong? =
+
+Make sure your PDF checkbox/radio field's exported value matches the value that is mapped to it. Usually, it is "On" or "Yes". If you have a different value in the WooCommerce placeholder, you will need to create a value mapping so that your placeholder value gets changed to your PDF checkbox export value.
+
+Some PDF viewers don't render checkboxes correctly in some PDF files. You may be able to solve this issue by recreating the PDF in a different PDF editor. If you are using Pdf.Ninja API v1, switching to v2 may resolve your issue.
+
+= How do I remove the watermark in the filled PDF files? =
+
+Please see the [Pdf.Ninja API website](https://pdf.ninja).
 
