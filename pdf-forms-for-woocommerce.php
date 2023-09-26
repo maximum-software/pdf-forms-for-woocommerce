@@ -69,6 +69,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_get_attachment_data', array( $this, 'wp_ajax_get_attachment_data' ) );
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_query_page_image', array( $this, 'wp_ajax_query_page_image' ) );
 			add_action( 'wp_ajax_pdf_forms_for_woocommerce_generate_pdf_ninja_key', array( $this, 'wp_ajax_generate_pdf_ninja_key') );
+			add_action( 'wp_ajax_pdf_forms_for_woocommerce_clear_messages', array( $this, 'wp_ajax_clear_messages') );
 			
 			add_action( 'init', array( $this, 'register_meta' ) );
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
@@ -168,13 +169,32 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							),
 					) );
 			
-			// TODO: add notices about last backend errors using wc_add_notice( $e->getMessage(), 'error');
-			
 			if( $service = $this->get_service() )
 			{
 				$service->admin_notices();
 				if( $service != $this->pdf_ninja_service )
 					$this->pdf_ninja_service->admin_notices();
+			}
+			
+			if( current_user_can( 'manage_woocommerce' ) )
+			{
+				// display previously logged admin messages
+				$messages = self::get_admin_messages();
+				if( count( $messages ) > 0 )
+				{
+					$messages = array_map( function( $message ) { return "<span class='".esc_attr($message['type'])."'>".esc_html($message['message'])."</span>"; }, $messages );
+					$messageHtml = self::render(
+						'admin-messages',
+						array(
+							'messages' => implode( '<br/>', $messages),
+							'clear-all-messages' => esc_html__( "Clear All Messages", 'pdf-forms-for-woocommerce' )
+							)
+						);
+					echo Pdf_Forms_For_WooCommerce::render_warning_notice( 'admin-messages-'.date('Ymd'), array(
+						'label'   => esc_html__( "PDF Forms Filler for WooCommerce Messages", 'pdf-forms-for-woocommerce' ),
+						'message' => $messageHtml,
+					) );
+				}
 			}
 		}
 		
@@ -355,6 +375,32 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				$service = $this->get_service();
 				$service->set_key( $key = $service->generate_key( $email ) );
+			}
+			catch ( Exception $e )
+			{
+				return wp_send_json( array (
+					'success' => false,
+					'error_message' => $e->getMessage()
+				) );
+			}
+		
+			wp_send_json_success();
+		}
+		
+		/**
+		 * Used for clearing notice messages in wp-admin interface
+		 */
+		public function wp_ajax_clear_messages()
+		{
+			try
+			{
+				if( ! check_ajax_referer( 'pdf-forms-for-woocommerce-ajax-nonce', 'nonce', false ) )
+					throw new Exception( __( "Nonce mismatch", 'pdf-forms-for-woocommerce' ) );
+				
+				if( ! current_user_can( 'manage_woocommerce' ) )
+					throw new Exception( __( "Permission denied", 'pdf-forms-for-woocommerce' ) );
+				
+				self::clear_admin_messages();
 			}
 			catch ( Exception $e )
 			{
@@ -1053,6 +1099,38 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
+		 * Saves messages to be shown to admin / store owner later
+		 */
+		private static function log_admin_message( $type, $message )
+		{
+			$errors = get_option( 'pdf-forms-for-woocommerce-errors', array() );
+			
+			// remove old messages to prevent the option from growing too large
+			if( count( $errors ) > 999 )
+				$errors = array_slice( $errors, -999 );
+			
+			$errors[] = array( 'type' => $type, 'message' => $message );
+			
+			update_option( 'pdf-forms-for-woocommerce-errors', $errors );
+		}
+		
+		/**
+		 * Retrieves admin messages
+		 */
+		private static function get_admin_messages()
+		{
+			return get_option( 'pdf-forms-for-woocommerce-errors', array() );
+		}
+		
+		/**
+		 * Clear admin messages
+		 */
+		private static function clear_admin_messages()
+		{
+			update_option( 'pdf-forms-for-woocommerce-errors', array() );
+		}
+		
+		/**
 		 * Fills PDFs
 		 */
 		private function fill_pdfs( $settings, $placeholder_processor )
@@ -1501,15 +1579,32 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 			catch( Exception $e )
 			{
+				$product_id = $placeholder_processor->get_product_id();
+				$order = $placeholder_processor->get_order();
+				$order_id = is_a( $order, 'WC_Order' ) ? $order->get_id() : null;
+				if( $product_id && $order_id)
+					$caption = __( "[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' );
+				else if( $order_id )
+					$caption = __( "[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' );
+				else
+					$caption = __( "[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' );
 				$error_message = self::replace_tags(
-					__( "Error generating PDF: {error-message} at {error-file}:{error-line}", 'pdf-forms-for-woocommerce' ),
-					array( 'error-message' => $e->getMessage(), 'error-file' => wp_basename( $e->getFile() ), 'error-line' => $e->getLine() )
+					$caption,
+					array(
+						'timestamp' => date( 'Y-m-d H:i:s' ),
+						'product' => $product_id,
+						'order' => $order_id,
+						'error-message' => $e->getMessage(),
+						'error-file' => wp_basename( $e->getFile() ),
+						'error-line' => $e->getLine()
+					)
 				);
 				
 				// log error in woocommerce error logging facility
 				wc_get_logger()->error( $error_message, array( 'source' => 'pdf-forms-for-woocommerce' ) );
 				
-				// TODO: notify store owner of error
+				// notify store owner of error
+				self::log_admin_message( 'error', $error_message );
 				
 				return array();
 			}
@@ -1973,7 +2068,15 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public function admin_enqueue_scripts( $hook )
 		{
 			wp_register_script( 'pdf_forms_for_woocommerce_notices_script', plugins_url( 'js/notices.js', __FILE__ ), array( 'jquery' ), self::VERSION );
+			wp_register_style( 'pdf_forms_for_woocommerce_notices_style', plugin_dir_url( __FILE__ ) . 'css/notices.css', array( ), self::VERSION );
+			
+			wp_localize_script( 'pdf_forms_for_woocommerce_notices_script', 'pdf_forms_for_woocommerce', array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
+			) );
+			
 			wp_enqueue_script( 'pdf_forms_for_woocommerce_notices_script' );
+			wp_enqueue_style( 'pdf_forms_for_woocommerce_notices_style' );
 			
 			if( ! class_exists( 'WooCommerce' ) || ! defined( 'WC_VERSION' ) )
 				return;

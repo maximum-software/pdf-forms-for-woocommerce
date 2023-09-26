@@ -244,14 +244,12 @@
 	width: 10%;
 }
 
-.pdf-forms-for-woocommerce-admin .messages .error,
-.pdf-forms-for-woocommerce-notice.notice-error
+.pdf-forms-for-woocommerce-admin .messages .error
 {
 	color: red;
 }
 
-.pdf-forms-for-woocommerce-admin .messages .warning,
-.pdf-forms-for-woocommerce-notice.notice-warning
+.pdf-forms-for-woocommerce-admin .messages .warning
 {
 	color: #f0ad4e;
 }
