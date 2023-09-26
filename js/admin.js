@@ -1624,8 +1624,11 @@ jQuery(document).ready(function($) {
 	
 	// auto-resizing textareas
 	jQuery('.pdf-forms-for-woocommerce-admin').on("input change focus", "textarea.placeholders", function() {
-		this.style.height = 'auto';
-		this.style.height = (this.scrollHeight) + 'px';
+		if(this.scrollHeight > this.clientHeight)
+		{
+			this.style.height = 'auto';
+			this.style.height = (this.scrollHeight) + 'px';
+		}
 	});
 	
 	preloadData();
