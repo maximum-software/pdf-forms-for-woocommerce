@@ -2328,10 +2328,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				wp_register_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), '4.0.13' );
 				wp_register_script( 'select2', plugin_dir_url(  __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), '4.0.13' );
 				
-				wp_register_script( 'pdf_forms_for_woocommerce_admin_script', plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'jquery', 'jcrop', 'select2' ), self::VERSION );
-				wp_register_style( 'pdf_forms_for_woocommerce_admin_style', plugin_dir_url( __FILE__ ) . 'css/admin.css', array( 'jcrop', 'select2' ), self::VERSION );
+				wp_register_script( 'pdf_forms_for_woocommerce_admin_product_script', plugin_dir_url( __FILE__ ) . 'js/admin-product.js', array( 'jquery', 'jcrop', 'select2' ), self::VERSION );
+				wp_register_style( 'pdf_forms_for_woocommerce_admin_product_style', plugin_dir_url( __FILE__ ) . 'css/admin-product.css', array( 'jcrop', 'select2' ), self::VERSION );
 				
-				wp_localize_script( 'pdf_forms_for_woocommerce_admin_script', 'pdf_forms_for_woocommerce', array(
+				wp_localize_script( 'pdf_forms_for_woocommerce_admin_product_script', 'pdf_forms_for_woocommerce', array(
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
 					'__No_Form_ID' => __( "Failed to determine form ID", 'pdf-forms-for-woocommerce' ),
@@ -2357,8 +2357,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				wp_enqueue_media();
 				
-				wp_enqueue_script( 'pdf_forms_for_woocommerce_admin_script' );
-				wp_enqueue_style( 'pdf_forms_for_woocommerce_admin_style' );
+				wp_enqueue_script( 'pdf_forms_for_woocommerce_admin_product_script' );
+				wp_enqueue_style( 'pdf_forms_for_woocommerce_admin_product_style' );
 				
 				wp_enqueue_script( 'pdf_forms_filler_spinner_script' );
 				wp_enqueue_style( 'pdf_forms_filler_spinner_style' );
