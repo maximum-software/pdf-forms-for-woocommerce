@@ -120,6 +120,70 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function register_order_metabox()
 		{
+			$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : null;
+			
+			// check post id
+			if( ! $post_id )
+				return;
+			
+			// display meta box only on the order edit page
+			$post_type = get_post_type( $post_id );
+			if( $post_type !== 'shop_order' )
+				return;
+			
+			// check order
+			$order = wc_get_order( $post_id );
+			if( ! is_a( $order, 'WC_Order' ) )
+				return;
+			
+			// don't display meta box if the order doesn't have attachments and its item products don't have attachments
+			$order_has_attachments = false;
+			$order_item_product_has_attachments = false;
+			
+			// check order metadata for attachments
+			$settings = self::get_metadata( $post_id );
+			if( is_array( $settings )
+			&& isset( $settings['product-settings'] )
+			&& is_array( $product_settings = $settings['product-settings'] ) )
+			{
+				foreach( $product_settings as $settings )
+				{
+					if( is_array( $settings )
+					&& isset( $settings['attachments'] )
+					&& is_array( $attachments = $settings['attachments'] )
+					&& ! empty( $attachments ) )
+					{
+						$order_has_attachments = true;
+						break;
+					}
+				}
+			}
+			
+			if( ! $order_has_attachments )
+			{
+				// check order items for attachments
+				$items = $order->get_items();
+				foreach( $items as $item )
+				{
+					$product = $item->get_product();
+					if( is_a( $product, 'WC_Product' ) )
+					{
+						$settings = self::get_metadata( $product->get_id(), 'product-settings' );
+						if( is_array( $settings )
+						&& isset( $settings['attachments'] )
+						&& is_array( $attachments = $settings['attachments'] )
+						&& ! empty( $attachments ) )
+						{
+							$order_item_product_has_attachments = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			if( ! $order_has_attachments && ! $order_item_product_has_attachments )
+				return;
+			
 			add_meta_box(
 				'pdf-forms-for-woocommerce-metabox', // ID
 				__( 'PDF Forms Filler', 'pdf-forms-for-woocommerce' ), // title
