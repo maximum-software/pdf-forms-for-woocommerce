@@ -41,6 +41,18 @@ Known incompatible plugins:
 3. Activate the plugin through the 'Plugins' screen in WordPress.
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
 
+## Screenshots
+
+![PDF Forms section on product edit page](assets/screenshot-1.png?raw=true)
+
+![An example event ticket product configuration with field mappings and an image embed](assets/screenshot-2.png?raw=true)
+
+![An example filled event ticket PDF with embedded QR code image and a barcode font field](assets/screenshot-3.png?raw=true)
+
+![An example order details page with a downloadable warranty certificate PDF](assets/screenshot-4.png?raw=true)
+
+![An example order notification message with a warranty certificate PDF attachment and a downloadable file link](assets/screenshot-5.png?raw=true)
+
 ## Special Thanks
 
 Special thanks to the following sponsors of this plugin,

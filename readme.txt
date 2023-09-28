@@ -92,3 +92,10 @@ Some PDF viewers don't render checkboxes correctly in some PDF files. You may be
 
 Please see the [Pdf.Ninja API website](https://pdf.ninja).
 
+== Screenshots ==
+
+1. PDF Forms section on product edit page
+2. An example event ticket product configuration with field mappings and an image embed
+3. An example filled event ticket PDF with embedded QR code image and a barcode font field
+4. An example order details page with a downloadable warranty certificate PDF
+5. An example order notification message with a warranty certificate PDF attachment and a downloadable file link
