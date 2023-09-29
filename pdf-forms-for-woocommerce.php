@@ -1679,7 +1679,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							continue;
 					}
 					
-					$save_directory = strval( $attachment['options']['save_directory'] );
+					// skip file if it is not used anywhere
+					$attaching_to_notification = count( $attachment['options']['email_templates'] ) > 0;
+					$saving_in_directory = strval( $attachment['options']['save_directory'] ) !== "";
+					$creating_download = ! empty( $attachment['options']['download_id'] );
+					if( ! $attaching_to_notification
+					&& ! $saving_in_directory
+					&& ! $creating_download )
+						continue;
 					
 					$options = array();
 					
