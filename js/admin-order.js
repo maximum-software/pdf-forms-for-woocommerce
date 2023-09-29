@@ -34,6 +34,9 @@ jQuery(document).ready(function($) {
 			},
 			
 			error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); return; },
+			
+			beforeSend: function() { PdfFormsFillerSpinner.show(); },
+			complete: function() { PdfFormsFillerSpinner.hide(); }
 		});
 		
 		return false;
@@ -73,6 +76,9 @@ jQuery(document).ready(function($) {
 			},
 			
 			error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); return; },
+			
+			beforeSend: function() { PdfFormsFillerSpinner.show(); },
+			complete: function() { PdfFormsFillerSpinner.hide(); }
 		});
 		
 		return false;
