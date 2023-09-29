@@ -15,7 +15,7 @@
 			
 			public function admin_notices() { }
 			
-			public function form_notices() { }
+			public function settings_notices() { }
 			
 			public function api_get_fields( $attachment_id )
 			{

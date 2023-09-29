@@ -1955,7 +1955,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$woocommerce_placeholders = array();
 			
 			$service = $this->get_service();
-			$messages .= $service->form_notices();
+			$messages .= $service->settings_notices();
 			
 			$settings = self::get_metadata( $product_id, 'product-settings' );
 			if( ! is_array( $settings ) )

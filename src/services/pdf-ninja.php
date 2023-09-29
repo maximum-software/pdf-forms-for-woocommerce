@@ -822,9 +822,9 @@
 			}
 			
 			/**
-			 * Returns form settings screen notices that need to be displayed
+			 * Returns settings screen notices that need to be displayed
 			 */
-			public function form_notices()
+			public function settings_notices()
 			{
 				$notices = '';
 				try
