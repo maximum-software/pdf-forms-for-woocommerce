@@ -205,6 +205,11 @@
 				if( $option !== false && is_array( $option ) && isset( $option['wpcf7_pdf_forms_pdfninja_key'] ) )
 					return $option['wpcf7_pdf_forms_pdfninja_key'];
 				
+				// from PDF Forms Filler for WPForms
+				$option = get_option( 'wpforms_settings' );
+				if( $option !== false && is_array( $option ) && isset( $option['pdf-ninja-api_key'] ) )
+					return $option['pdf-ninja-api_key'];
+				
 				return null;
 			}
 			
