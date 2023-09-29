@@ -1746,11 +1746,23 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( count( $files ) > 0 )
 				{
 					$storage = self::get_storage();
+					
+					$order_id = null;
+					$order = $placeholder_processor->get_order();
+					if( is_a( $order, 'WC_Order' ) )
+						$order_id = $order->get_id();
+					$order_item_id = null;
+					$order_item = $placeholder_processor->get_order_item();
+					if( is_a( $order_item, 'WC_Order_Item' ) )
+						$order_item_id = $order_item->get_id();
+					$saved_files = self::get_metadata( $order_id, 'saved-files' );
+					if( ! is_array( $saved_files ) )
+						$saved_files = array();
+					
 					foreach( $files as $id => $filedata )
 					{
 						$output_files[] = $filedata['file'];
 						
-						// TODO: the file is saved to the storage multiple times because we are calling fill_pdfs() for each email notification and download pdf generation, this potentially creates a huge number of files needlessly, we probably want to overwrite the file
 						$save_directory = strval( $filedata['options']['save_directory'] );
 						if( $save_directory !== "" )
 						{
@@ -1782,18 +1794,37 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							$save_directory = preg_replace( '|/+|', '/', $save_directory ); // remove double slashes
 							
 							$storage->set_subpath( $save_directory );
-							$storage->save( $filedata['file'], $filedata['filename'] );
+							
+							// determine if we need to overwrite an existing file or create a new one
+							$overwrite = true; // by default, overwrite existing files to prevent a huge number of files from accumulating from the same order item / attachment
+							$filename = $filedata['filename'];
+							if( $order_id )
+							{
+								$filename_id = $order_item_id . '-' . $filedata['attachment_id'];
+								if( isset( $saved_files[$filename_id] ) )
+								{
+									$overwrite = true;
+									$filename = $saved_files[$filename_id];
+								}
+								else
+									$overwrite = false; // don't overwrite if it is truly a new file, instead come up with a new filename and save it in the order metadata
+							}
+							
+							$filename = $storage->save( $filedata['file'], $filename, $overwrite );
+							
+							if( $order_id && ! $overwrite )
+							{
+								// store filename in order metadata
+								$saved_files[$filename_id] = $filename;
+								self::set_metadata( $order_id, 'saved-files', $saved_files);
+							}
 						}
 						
 						$save_order_file = $filedata['options']['download_id'];
 						if ( ! empty( $save_order_file ) )
 						{
-							$order = $placeholder_processor->get_order();
-							$order_item = $placeholder_processor->get_order_item();
-							if( $order && $order_item )
+							if( $order_id && $order_item_id )
 							{
-								$order_id = $order->get_id();
-								$order_item_id = $order_item->get_id();
 								$order_storage = self::get_order_storage( $order_id );
 								$order_storage->set_subpath( trailingslashit( $order_storage->get_subpath() ) . sanitize_file_name( $order_item_id ) );
 								$dstfilename = $order_storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
