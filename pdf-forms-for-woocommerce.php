@@ -2011,8 +2011,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			foreach( $settings['attachments'] as $attachment )
 			{
 				$attachment_id = $attachment['attachment_id'];
-				$info = $this->get_info( $attachment_id );
-				$info['fields'] = $this->query_pdf_fields( $attachment_id );
+				try
+				{
+					$info = $this->get_info( $attachment_id );
+					$info['fields'] = $this->query_pdf_fields( $attachment_id );
+				}
+				catch( Exception $e ) { $info = null; }
 				
 				$attachments[] = array(
 					'attachment_id' => $attachment_id,
