@@ -84,7 +84,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_storage' ), 99, 0 ); // since WC 5.6.0
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
-			add_action( 'shutdown', array( $this, 'remove_tmp_storage' ), 99, 0 ); // clean up tmp dir on exit
 			
 			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 1, 2 );
 			
@@ -619,8 +618,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		{
 			if( ! $this->tmp_storage )
 			{
-				$this->tmp_storage = self::get_storage();
-				$this->tmp_storage->set_subpath( 'pdf-forms-for-woocommerce/tmp/' . sanitize_file_name( wp_hash( wp_rand() . microtime() ) ) );
+				// set up shutdown handler to clean up tmp dir on exit
+				add_action( 'shutdown', array( $this, 'remove_tmp_storage' ), 99, 0 );
+				
+				$tmp_storage = self::get_storage();
+				$tmp_storage->set_subpath( 'pdf-forms-for-woocommerce/tmp/' . sanitize_file_name( wp_hash( wp_rand() . microtime() ) ) );
+				$this->tmp_storage = $tmp_storage;
 				$this->tmp_storage->initialize_path();
 			}
 			
@@ -637,6 +640,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			$this->tmp_storage->delete_subpath_recursively();
 			$this->tmp_storage = null;
+			
+			remove_action( 'shutdown', array( $this, 'remove_tmp_storage' ), 99 );
 		}
 		
 		/**
