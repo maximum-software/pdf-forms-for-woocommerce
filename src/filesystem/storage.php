@@ -61,6 +61,7 @@
 			 */
 			public function set_storage_path( $path )
 			{
+				// TODO: do security checks
 				$this->storage_path = wp_normalize_path( $path );
 				return $this;
 			}
@@ -70,7 +71,8 @@
 			 */
 			public function set_site_root_relative_storage_path( $path )
 			{
-				return $this->set_storage_path( path_join( ABSPATH, $path ) );
+				// TODO: do security checks
+				return $this->set_storage_path( trailingslashit( ABSPATH ) . $path );
 			}
 			
 			/**
@@ -78,6 +80,7 @@
 			 */
 			public function set_subpath( $subpath )
 			{
+				// TODO: do security checks
 				$subpath = wp_normalize_path( $subpath );
 				$this->subpath = ltrim( $subpath, "/\\." );
 			}
@@ -95,7 +98,7 @@
 			 */
 			public function get_full_path()
 			{
-				return path_join( $this->get_storage_path(), $this->get_subpath() );
+				return trailingslashit( $this->get_storage_path() ) . $this->get_subpath();
 			}
 			
 			/**
@@ -111,7 +114,7 @@
 			 */
 			public function get_full_url()
 			{
-				return path_join( $this->get_storage_url(), $this->get_subpath() );
+				return  trailingslashit( $this->get_storage_url() ) . $this->get_subpath();
 			}
 			
 			/**
@@ -124,16 +127,19 @@
 				$subpath = trim( $subpath, "/\\" );
 				if( $subpath != '' )
 				{
-					foreach( explode( '/', $subpath ) as $dir )
+					foreach( explode( DIRECTORY_SEPARATOR, $subpath ) as $dir )
 					{
-						$path = path_join( $path, $dir );
+						$path = trailingslashit( $path ) . $dir;
+						
+						if( is_file( $path ) )
+							throw new Exception( __( "Can't create directory because a file with the same name already exists", 'pdf-forms-for-woocommerce' ) );
 						
 						if( ! is_dir( $path ) )
 						{
 							wp_mkdir_p( $path );
 							
 							// prevent directory listing in each directory in subpath
-							$index_file = path_join( $path, 'index.php' );
+							$index_file =  trailingslashit( $path ) . 'index.php';
 							if( ! file_exists( $index_file ) )
 								file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
 						}
@@ -179,14 +185,14 @@
 				$files_with_info = array();
 				foreach( $files as $file )
 				{
-					$filepath = path_join( $full_path, $file );
+					$filepath = trailingslashit( $full_path ) . $file;
 					if( is_dir( $filepath ) )
 						continue;
 					
 					$info = array(
 						'filename' => $file,
 						'filepath' => $filepath,
-						'url' => path_join( $full_url, $file ),
+						'url' => trailingslashit( $full_url ) . $file,
 					);
 					
 					$files_with_info[] = $info;
@@ -211,7 +217,7 @@
 				
 				foreach( $files as $file )
 				{
-					$filepath = path_join( $dir, $file );
+					$filepath = trailingslashit( $dir ) . $file;
 					if( is_dir( $filepath ) && ! is_link( $filepath ) )
 						$this->delete_directory_recursively( $filepath );
 					else
