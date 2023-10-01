@@ -1,0 +1,575 @@
+# Copyright (C) 2023 Maximum.Software
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: PDF Forms Filler for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
+"woocommerce\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Plugin Name of the plugin
+msgid "PDF Forms Filler for WooCommerce"
+msgstr "حشو نماذج PDF لـ WooCommerce"
+
+#. Plugin URI of the plugin
+msgid "https://pdfformsfiller.org/"
+msgstr "https://pdfformsfiller.org/"
+
+#. Description of the plugin
+msgid ""
+"Automatically fill PDF forms with WooCommerce orders and attach generated "
+"PDFs to email notifications and order downloads."
+msgstr ""
+"املأ النماذج بصيغة PDF تلقائيًا بأوامر WooCommerce وأرفق النماذج بصيغة PDF "
+"المُنشأة بإشعارات البريد الإلكتروني وتنزيلات الطلبات."
+
+#. Author of the plugin
+msgid "Maximum.Software"
+msgstr "Maximum.Software"
+
+#. Author URI of the plugin
+msgid "https://maximum.software/"
+msgstr "https://maximum.software/"
+
+#: pdf-forms-for-woocommerce.php:190 src/integration/wc-settings-page.php:16
+msgid "PDF Forms Filler"
+msgstr "ملء النماذج بصيغة PDF"
+
+#: pdf-forms-for-woocommerce.php:221
+msgid "Support"
+msgstr "الدعم"
+
+#: pdf-forms-for-woocommerce.php:234 src/services/pdf-ninja.php:817
+msgid "PDF Forms Filler for WooCommerce Error"
+msgstr "خطأ في ملء النماذج بصيغة PDF لـ WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:235
+msgid "The required plugin 'WooCommerce' version is not installed!"
+msgstr "لم يتم تثبيت الإصدار المطلوب من الإضافة 'WooCommerce'!"
+
+#: pdf-forms-for-woocommerce.php:243
+msgid "PDF Forms Filler for WooCommerce Warning"
+msgstr "تحذير ملء النماذج بصيغة PDF لـ WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:246
+msgid ""
+"The currently installed version of 'WooCommerce' plugin ({current-woocommerce-"
+"version}) may not be supported by the current version of 'PDF Forms Filler "
+"for WooCommerce' plugin ({current-plugin-version}), please switch to "
+"'WooCommerce' plugin version {supported-woocommerce-version} or below to "
+"ensure that 'PDF Forms Filler for WooCommerce' plugin would work correctly."
+msgstr ""
+"قد لا يتم دعم الإصدار الحالي المثبت من الإضافة 'WooCommerce' ({current-"
+"woocommerce-version}) بواسطة الإصدار الحالي من الإضافة 'ملء النماذج بصيغة PDF "
+"لـ WooCommerce' ({current-plugin-version})، يرجى الانتقال إلى إصدار الإضافة "
+"'WooCommerce' {supported-woocommerce-version} أو أقل للتأكد من أن الإضافة "
+"'ملء النماذج بصيغة PDF لـ WooCommerce' ستعمل بشكل صحيح."
+
+#: pdf-forms-for-woocommerce.php:248
+msgid "Unknown version"
+msgstr "إصدار غير معروف"
+
+#: pdf-forms-for-woocommerce.php:273
+msgid "Clear All Messages"
+msgstr "مسح جميع الرسائل"
+
+#: pdf-forms-for-woocommerce.php:277
+msgid "PDF Forms Filler for WooCommerce Messages"
+msgstr "رسائل ملء النماذج بصيغة PDF لـ WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:448 pdf-forms-for-woocommerce.php:481
+#: pdf-forms-for-woocommerce.php:709 pdf-forms-for-woocommerce.php:743
+#: pdf-forms-for-woocommerce.php:2447 pdf-forms-for-woocommerce.php:2686
+msgid "Nonce mismatch"
+msgstr "عدم تطابق النونس"
+
+#: pdf-forms-for-woocommerce.php:451 pdf-forms-for-woocommerce.php:484
+#: pdf-forms-for-woocommerce.php:712 pdf-forms-for-woocommerce.php:746
+#: pdf-forms-for-woocommerce.php:2455 pdf-forms-for-woocommerce.php:2695
+msgid "Permission denied"
+msgstr "تم رفض الإذن"
+
+#: pdf-forms-for-woocommerce.php:457
+msgid "Invalid email"
+msgstr "بريد إلكتروني غير صالح"
+
+#: pdf-forms-for-woocommerce.php:593
+msgid "Failed to download file: {error-message}"
+msgstr "فشل في تنزيل الملف: {error-message}"
+
+#: pdf-forms-for-woocommerce.php:605 src/services/pdf-ninja.php:667
+#: src/services/pdf-ninja.php:781
+msgid "Failed to open file for writing"
+msgstr "فشل في فتح الملف للكتابة"
+
+#: pdf-forms-for-woocommerce.php:611 src/services/pdf-ninja.php:673
+#: src/services/pdf-ninja.php:787
+msgid "Failed to create file"
+msgstr "فشل في إنشاء الملف"
+
+#: pdf-forms-for-woocommerce.php:692
+msgid ""
+"Product settings are stored in orders when they are created. Resetting "
+"settings is necessary when new product settings need to be applied to an old "
+"order."
+msgstr ""
+"يتم تخزين إعدادات المنتج في الطلبات عند إنشائها. إعادة تعيين الإعدادات ضرورية "
+"عندما تحتاج إلى تطبيق إعدادات المنتج الجديدة على طلب قديم."
+
+#: pdf-forms-for-woocommerce.php:693
+msgid "Reset Settings"
+msgstr "إعادة تعيين الإعدادات"
+
+#: pdf-forms-for-woocommerce.php:694
+msgid ""
+"PDFs are refilled when orders status changes. Sometimes you may want to "
+"manually trigger PDFs to be refilled after changing some aspect of the order, "
+"such as the billing address."
+msgstr ""
+"يتم إعادة ملء ملفات PDF عند تغير حالة الطلبات. قد ترغب أحيانًا في تشغيل ملفات "
+"PDF يدويًا لإعادة ملئها بعد تغيير جزء معين من الطلب، مثل عنوان الفواتير."
+
+#: pdf-forms-for-woocommerce.php:695
+msgid "Reset PDFs"
+msgstr "إعادة تعيين ملفات PDF"
+
+#: pdf-forms-for-woocommerce.php:716 pdf-forms-for-woocommerce.php:750
+msgid "Invalid order ID"
+msgstr "معرف الطلب غير صالح"
+
+#: pdf-forms-for-woocommerce.php:720 pdf-forms-for-woocommerce.php:754
+msgid "Invalid order"
+msgstr "طلب غير صالح"
+
+#: pdf-forms-for-woocommerce.php:1470 pdf-forms-for-woocommerce.php:2462
+msgid "File type {mime-type} of {file} is unsupported for {purpose}"
+msgstr "نوع الملف {mime-type} لـ {file} غير مدعوم لـ {purpose}"
+
+#: pdf-forms-for-woocommerce.php:1471
+msgid "image embedding"
+msgstr "تضمين الصورة"
+
+#: pdf-forms-for-woocommerce.php:1751 pdf-forms-for-woocommerce.php:2526
+msgid "Attachment file is not accessible"
+msgstr "ملف المرفق غير قابل للوصول"
+
+#: pdf-forms-for-woocommerce.php:1867
+msgid ""
+"[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
+"message} at {error-file}:{error-line}"
+msgstr ""
+"[{timestamp}] (الطلب:{order}، المنتج:{product}) خطأ في ملء ملفات PDF: {error-"
+"message} في {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:1869
+msgid ""
+"[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
+"message} at {error-file}:{error-line}"
+msgstr ""
+"[{timestamp}] (الطلب:{order}) خطأ في ملء ملفات PDF للطلب {order}: {error-"
+"message} في {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:1871
+msgid ""
+"[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-line}"
+msgstr ""
+"[{timestamp}] خطأ في ملء ملفات PDF: {error-message} في {error-file}:{error-"
+"line}"
+
+#: pdf-forms-for-woocommerce.php:1981
+msgid "PDF Forms"
+msgstr "نماذج PDF"
+
+#: pdf-forms-for-woocommerce.php:2062
+msgid "None"
+msgstr "لا شيء"
+
+#: pdf-forms-for-woocommerce.php:2063
+msgid "Create a new downloadable file"
+msgstr "إنشاء ملف قابل للتحميل جديد"
+
+#: pdf-forms-for-woocommerce.php:2090
+msgid ""
+"You can use this section to attach a PDF file to your product and link "
+"WooCommerce placeholders to fields in the PDF file. You can also embed images "
+"from a URL into the PDF file. Changes here are applied when the product is "
+"saved."
+msgstr ""
+"يمكنك استخدام هذا القسم لإرفاق ملف PDF بمنتجك وربط عناصر النائبة في "
+"WooCommerce بالحقول الموجودة في ملف PDF. يمكنك أيضًا تضمين الصور من عنوان URL "
+"في ملف PDF. يتم تطبيق التغييرات هنا عند حفظ المنتج."
+
+#: pdf-forms-for-woocommerce.php:2091
+msgid "Attach a PDF File"
+msgstr "إرفاق ملف PDF"
+
+#: pdf-forms-for-woocommerce.php:2092 pdf-forms-for-woocommerce.php:2112
+msgid "Delete"
+msgstr "حذف"
+
+#: pdf-forms-for-woocommerce.php:2093
+msgid "Map Value"
+msgstr "قيمة الخريطة"
+
+#: pdf-forms-for-woocommerce.php:2094
+msgid "Options"
+msgstr "خيارات"
+
+#: pdf-forms-for-woocommerce.php:2095
+msgid "Skip when empty"
+msgstr "تخطى عندما يكون فارغًا"
+
+#: pdf-forms-for-woocommerce.php:2096
+msgid "Attach the filled PDF file to the following emails:"
+msgstr "أرفق ملف PDF المملوء بالبريد الإلكتروني التالي:"
+
+#: pdf-forms-for-woocommerce.php:2097
+msgid "Flatten"
+msgstr "تسطيح"
+
+#: pdf-forms-for-woocommerce.php:2098
+msgid "New filled PDF file name (placeholders allowed):"
+msgstr "اسم الملف الجديد لـ PDF المملوء (يُسمح بالعناصر النائبة):"
+
+#: pdf-forms-for-woocommerce.php:2099
+msgid "Path for saving filled PDF file (placeholders allowed):"
+msgstr "مسار حفظ ملف PDF المملوء (يُسمح بالعناصر النائبة):"
+
+#: pdf-forms-for-woocommerce.php:2100
+msgid ""
+"Provide a download link to the filled PDF file via the product's downloadable "
+"file:"
+msgstr "قدم رابط تنزيل لملف PDF المملوء عبر ملف المنتج القابل للتنزيل:"
+
+#: pdf-forms-for-woocommerce.php:2101
+msgid "(leave blank to disable this option)"
+msgstr "(اتركه فارغًا لتعطيل هذا الخيار)"
+
+#: pdf-forms-for-woocommerce.php:2102
+msgid "Field Mapper Tool"
+msgstr "أداة تخطيط الحقل"
+
+#: pdf-forms-for-woocommerce.php:2103
+msgid ""
+"This tool can be used to link WooCommerce placeholders to fields in the "
+"attached PDF files. When an order email notification is sent or downloadable "
+"file is requested, text with placeholder data will be inserted into the "
+"corresponding fields in the PDF file and the filled PDF will be made "
+"available."
+msgstr ""
+"يمكن استخدام هذه الأداة لربط العناصر النائبة في WooCommerce بالحقول في ملفات "
+"PDF المرفقة. عند إرسال إشعار بريدي للطلب أو طلب ملف قابل للتنزيل، سيتم إدراج "
+"النص مع بيانات العنصر النائب في الحقول المقابلة في ملف PDF وسيتم توفير PDF "
+"المملوء."
+
+#: pdf-forms-for-woocommerce.php:2104
+msgid "PDF field"
+msgstr "حقل PDF"
+
+#: pdf-forms-for-woocommerce.php:2105
+msgid "WooCommerce placeholders"
+msgstr "العناصر النائبة في WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:2106
+msgid "Add Mapping"
+msgstr "أضف تخطيط"
+
+#: pdf-forms-for-woocommerce.php:2107
+msgid "Delete All"
+msgstr "حذف الكل"
+
+#: pdf-forms-for-woocommerce.php:2108
+msgid "New Field:"
+msgstr "حقل جديد:"
+
+#: pdf-forms-for-woocommerce.php:2109
+msgid "Image Embedding Tool"
+msgstr "أداة تضمين الصور"
+
+#: pdf-forms-for-woocommerce.php:2110
+msgid ""
+"This tool allows embedding of images into PDF files. Images are taken from "
+"the provided URLs that may contain placeholders. You can select a PDF file "
+"page and draw a bounding box for image insertion. Alternatively, you can "
+"insert your image in the center of every page."
+msgstr ""
+"تتيح هذه الأداة تضمين الصور في ملفات PDF. يتم أخذ الصور من عناوين URL المقدمة "
+"التي قد تحتوي على العناصر النائبة. يمكنك اختيار صفحة ملف PDF ورسم مربع حدودي "
+"لإدراج الصورة. بديلًا، يمكنك إدراج صورتك في وسط كل صفحة."
+
+#: pdf-forms-for-woocommerce.php:2111
+msgid "Embed Image"
+msgstr "تضمين الصورة"
+
+#: pdf-forms-for-woocommerce.php:2113
+msgid "PDF file"
+msgstr "ملف PDF"
+
+#: pdf-forms-for-woocommerce.php:2114
+msgid "Page"
+msgstr "صفحة"
+
+#: pdf-forms-for-woocommerce.php:2115
+msgid "Select a region where the image needs to be embeded."
+msgstr "حدد منطقة حيث يحتاج إلى تضمين الصورة."
+
+#: pdf-forms-for-woocommerce.php:2116
+msgid "Top"
+msgstr "أعلى"
+
+#: pdf-forms-for-woocommerce.php:2117
+msgid "Left"
+msgstr "يسار"
+
+#: pdf-forms-for-woocommerce.php:2118
+msgid "Width"
+msgstr "العرض"
+
+#: pdf-forms-for-woocommerce.php:2119
+msgid "Height"
+msgstr "الارتفاع"
+
+#: pdf-forms-for-woocommerce.php:2120
+msgid "pts"
+msgstr "نقاط"
+
+#: pdf-forms-for-woocommerce.php:2122
+msgid ""
+"Have a question/comment/problem? Feel free to use {a-href-forum}the support "
+"forum{/a}."
+msgstr ""
+"هل لديك سؤال/تعليق/مشكلة؟ لا تتردد في استخدام {a-href-forum}منتدى الدعم{/a}."
+
+#: pdf-forms-for-woocommerce.php:2128 pdf-forms-for-woocommerce.php:2394
+msgid "Show Help"
+msgstr "إظهار المساعدة"
+
+#: pdf-forms-for-woocommerce.php:2129 pdf-forms-for-woocommerce.php:2395
+msgid "Hide Help"
+msgstr "إخفاء المساعدة"
+
+#: pdf-forms-for-woocommerce.php:2147
+msgid "Failed to decode data"
+msgstr "فشل في فك تشفير البيانات"
+
+#: pdf-forms-for-woocommerce.php:2338
+msgid "Error saving PDF form data: {error-message} at {error-file}:{error-line}"
+msgstr ""
+"خطأ في حفظ بيانات نموذج PDF: {error-message} في {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:2386
+msgid "Failed to determine post ID"
+msgstr "فشل في تحديد معرف المشاركة"
+
+#: pdf-forms-for-woocommerce.php:2387
+msgid "Failed to load PDF form data"
+msgstr "فشل في تحميل بيانات نموذج PDF"
+
+#: pdf-forms-for-woocommerce.php:2388 src/services/pdf-ninja.php:130
+#: src/services/pdf-ninja.php:865
+msgid "Unknown error"
+msgstr "خطأ غير معروف"
+
+#: pdf-forms-for-woocommerce.php:2389
+msgid ""
+"Are you sure you want to delete this file?  This will delete field mappings "
+"and image embeds associated with this file."
+msgstr ""
+"هل أنت متأكد من أنك تريد حذف هذا الملف؟ سيتم حذف ربط الحقول وتضمين الصور "
+"المرتبطة بهذا الملف."
+
+#: pdf-forms-for-woocommerce.php:2390
+msgid "Are you sure you want to delete this mapping?"
+msgstr "هل أنت متأكد من أنك تريد حذف هذا الربط؟"
+
+#: pdf-forms-for-woocommerce.php:2391
+msgid "Are you sure you want to delete all mappings?"
+msgstr "هل أنت متأكد من أنك تريد حذف جميع التعيينات؟"
+
+#: pdf-forms-for-woocommerce.php:2392
+msgid "Are you sure you want to attach a PDF file without any form fields?"
+msgstr "هل أنت متأكد من أنك تريد إرفاق ملف PDF بدون أي حقول نموذج؟"
+
+#: pdf-forms-for-woocommerce.php:2393
+msgid "Are you sure you want to delete this embeded image?"
+msgstr "هل أنت متأكد من أنك تريد حذف هذه الصورة المضمنة؟"
+
+#: pdf-forms-for-woocommerce.php:2396
+msgid "Select a PDF file"
+msgstr "اختر ملف PDF"
+
+#: pdf-forms-for-woocommerce.php:2397
+msgid "Select"
+msgstr "اختر"
+
+#: pdf-forms-for-woocommerce.php:2398
+msgid "All PDFs"
+msgstr "جميع ملفات PDF"
+
+#: pdf-forms-for-woocommerce.php:2399
+msgid "All"
+msgstr "الكل"
+
+#: pdf-forms-for-woocommerce.php:2400
+msgid "--- EMPTY ---"
+msgstr "--- فارغ ---"
+
+#: pdf-forms-for-woocommerce.php:2421
+msgid "Are you sure you want to reset settings for this order?"
+msgstr "هل أنت متأكد من أنك تريد إعادة تعيين الإعدادات لهذا الطلب؟"
+
+#: pdf-forms-for-woocommerce.php:2422
+msgid "Are you sure you want to reset PDFs for this order?"
+msgstr "هل أنت متأكد من أنك تريد إعادة تعيين ملفات PDF لهذا الطلب؟"
+
+#: pdf-forms-for-woocommerce.php:2452
+msgid "Invalid attachment ID"
+msgstr "معرف المرفق غير صالح"
+
+#: pdf-forms-for-woocommerce.php:2463
+msgid "PDF form filling"
+msgstr "ملء نموذج PDF"
+
+#: pdf-forms-for-woocommerce.php:2543
+msgid "Could not read attached file"
+msgstr "تعذر قراءة الملف المرفق"
+
+#: pdf-forms-for-woocommerce.php:2574
+msgid "No service"
+msgstr "لا يوجد خدمة"
+
+#: pdf-forms-for-woocommerce.php:2652
+msgid "Failed to determine upload path"
+msgstr "فشل في تحديد مسار التحميل"
+
+#: pdf-forms-for-woocommerce.php:2692
+msgid "Invalid page number"
+msgstr "رقم الصفحة غير صالح"
+
+#: pdf-forms-for-woocommerce.php:2701
+msgid "Failed to retrieve page snapshot"
+msgstr "فشل في استرجاع لقطة الصفحة"
+
+#: src/filesystem/storage.php:135
+msgid "Can't create directory because a file with the same name already exists"
+msgstr "لا يمكن إنشاء دليل لأن ملفًا بنفس الاسم موجود بالفعل"
+
+#: src/services/pdf-ninja.php:38 src/services/pdf-ninja.php:42
+msgid "Pdf.Ninja API"
+msgstr "واجهة برمجة تطبيقات Pdf.Ninja"
+
+#: src/services/pdf-ninja.php:44
+msgid "The following form allows you to edit your API settings."
+msgstr "النموذج التالي يتيح لك تعديل إعدادات واجهة برمجة التطبيقات الخاصة بك."
+
+#: src/services/pdf-ninja.php:48
+msgid "API Key"
+msgstr "مفتاح واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:52 src/services/pdf-ninja.php:118
+msgid "copy key"
+msgstr "نسخ المفتاح"
+
+#: src/services/pdf-ninja.php:60 src/services/pdf-ninja.php:65
+msgid "Get new API key"
+msgstr "الحصول على مفتاح واجهة برمجة تطبيقات جديد"
+
+#: src/services/pdf-ninja.php:67
+msgid "Get New Key"
+msgstr "الحصول على مفتاح جديد"
+
+#: src/services/pdf-ninja.php:73
+msgid "API URL"
+msgstr "رابط واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:75
+msgid "Enter your API URL"
+msgstr "أدخل رابط واجهة برمجة التطبيقات الخاص بك"
+
+#: src/services/pdf-ninja.php:81
+msgid "API version"
+msgstr "نسخة واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:83
+msgid "Select API version"
+msgstr "اختر نسخة واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:93
+msgid "Data Security"
+msgstr "أمان البيانات"
+
+#: src/services/pdf-ninja.php:95
+msgid "Ignore SSL errors"
+msgstr "تجاهل أخطاء SSL"
+
+#: src/services/pdf-ninja.php:119
+msgid "copied!"
+msgstr "تم النسخ!"
+
+#: src/services/pdf-ninja.php:171
+msgid "Failed to get the Pdf.Ninja API key on last attempt."
+msgstr ""
+"فشل في الحصول على مفتاح واجهة برمجة التطبيقات Pdf.Ninja في المحاولة الأخيرة."
+
+#: src/services/pdf-ninja.php:241
+msgid "Failed to determine the administrator's email address."
+msgstr "فشل في تحديد عنوان البريد الإلكتروني للمسؤول."
+
+#: src/services/pdf-ninja.php:345
+msgid "Failed to connect to {url}"
+msgstr "فشل في الاتصال بـ {url}"
+
+#: src/services/pdf-ninja.php:359
+msgid "Failed to decode API server response"
+msgstr "فشل في فك تشفير رد خادم واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:362 src/services/pdf-ninja.php:489
+#: src/services/pdf-ninja.php:617 src/services/pdf-ninja.php:630
+#: src/services/pdf-ninja.php:662 src/services/pdf-ninja.php:776
+msgid "Pdf.Ninja API server did not send an expected response"
+msgstr "لم يرسل خادم واجهة برمجة التطبيقات Pdf.Ninja الرد المتوقع"
+
+#: src/services/pdf-ninja.php:373
+msgid "Failed to download a file from the API server"
+msgstr "فشل في تنزيل ملف من خادم واجهة برمجة التطبيقات"
+
+#: src/services/pdf-ninja.php:533
+msgid "Unknown attachment URL"
+msgstr "رابط المرفق غير معروف"
+
+#: src/services/pdf-ninja.php:562
+msgid "File is not accessible in the local file system"
+msgstr "الملف غير قابل للوصول في نظام الملفات المحلي"
+
+#: src/services/pdf-ninja.php:717 src/services/pdf-ninja.php:721
+msgid "Failed to encode JSON data"
+msgstr "فشل في ترميز بيانات JSON"
+
+#: src/services/pdf-ninja.php:820
+msgid ""
+"Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-service-"
+"page}Please retry manually{/a}."
+msgstr ""
+"فشل في الحصول على مفتاح API Pdf.Ninja في المحاولة الأخيرة. {a-href-edit-"
+"service-page}الرجاء إعادة المحاولة يدويًا{/a}."
+
+#: src/services/pdf-ninja.php:841
+msgid "Warning"
+msgstr "تحذير"
+
+#: src/services/pdf-ninja.php:842
+msgid ""
+"Your WooCommerce settings indicate that you are using an insecure connection "
+"to the Pdf.Ninja API server."
+msgstr ""
+"تشير إعدادات WooCommerce الخاصة بك إلى أنك تستخدم اتصالًا غير آمن بخادم API "
+"Pdf.Ninja."
+
+#: src/services/service.php:22 src/services/service.php:27
+#: src/services/service.php:32 src/services/service.php:37
+#: src/services/service.php:42
+msgid "Missing feature"
+msgstr "ميزة مفقودة"

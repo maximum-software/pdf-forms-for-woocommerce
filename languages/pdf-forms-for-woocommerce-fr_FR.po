@@ -1,0 +1,601 @@
+# Copyright (C) 2023 Maximum.Software
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: PDF Forms Filler for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
+"woocommerce\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Plugin Name of the plugin
+msgid "PDF Forms Filler for WooCommerce"
+msgstr "Remplisseur de formulaires PDF pour WooCommerce"
+
+#. Plugin URI of the plugin
+msgid "https://pdfformsfiller.org/"
+msgstr "https://pdfformsfiller.org/"
+
+#. Description of the plugin
+msgid ""
+"Automatically fill PDF forms with WooCommerce orders and attach generated "
+"PDFs to email notifications and order downloads."
+msgstr ""
+"Remplissez automatiquement les formulaires PDF avec les commandes "
+"WooCommerce et joignez les PDF générés aux notifications par e-mail et aux "
+"téléchargements de commandes."
+
+#. Author of the plugin
+msgid "Maximum.Software"
+msgstr "Maximum.Software"
+
+#. Author URI of the plugin
+msgid "https://maximum.software/"
+msgstr "https://maximum.software/"
+
+#: pdf-forms-for-woocommerce.php:190 src/integration/wc-settings-page.php:16
+msgid "PDF Forms Filler"
+msgstr "Remplisseur de formulaires PDF"
+
+#: pdf-forms-for-woocommerce.php:221
+msgid "Support"
+msgstr "Assistance"
+
+#: pdf-forms-for-woocommerce.php:234 src/services/pdf-ninja.php:817
+msgid "PDF Forms Filler for WooCommerce Error"
+msgstr "Erreur du Remplisseur de formulaires PDF pour WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:235
+msgid "The required plugin 'WooCommerce' version is not installed!"
+msgstr "La version requise du plugin 'WooCommerce' n'est pas installée !"
+
+#: pdf-forms-for-woocommerce.php:243
+msgid "PDF Forms Filler for WooCommerce Warning"
+msgstr "Avertissement du Remplisseur de formulaires PDF pour WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:246
+msgid ""
+"The currently installed version of 'WooCommerce' plugin ({current-"
+"woocommerce-version}) may not be supported by the current version of 'PDF "
+"Forms Filler for WooCommerce' plugin ({current-plugin-version}), please "
+"switch to 'WooCommerce' plugin version {supported-woocommerce-version} or "
+"below to ensure that 'PDF Forms Filler for WooCommerce' plugin would work "
+"correctly."
+msgstr ""
+"La version actuellement installée du plugin 'WooCommerce' ({current-"
+"woocommerce-version}) peut ne pas être prise en charge par la version "
+"actuelle du plugin 'Remplisseur de formulaires PDF pour "
+"WooCommerce' ({current-plugin-version}). Veuillez passer à la version "
+"{supported-woocommerce-version} du plugin 'WooCommerce' ou à une version "
+"inférieure pour garantir le bon fonctionnement du plugin 'Remplisseur de "
+"formulaires PDF pour WooCommerce'."
+
+#: pdf-forms-for-woocommerce.php:248
+msgid "Unknown version"
+msgstr "Version inconnue"
+
+#: pdf-forms-for-woocommerce.php:273
+msgid "Clear All Messages"
+msgstr "Effacer tous les messages"
+
+#: pdf-forms-for-woocommerce.php:277
+msgid "PDF Forms Filler for WooCommerce Messages"
+msgstr "Messages du Remplisseur de formulaires PDF pour WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:448 pdf-forms-for-woocommerce.php:481
+#: pdf-forms-for-woocommerce.php:709 pdf-forms-for-woocommerce.php:743
+#: pdf-forms-for-woocommerce.php:2447 pdf-forms-for-woocommerce.php:2686
+msgid "Nonce mismatch"
+msgstr "Non concordance du nonce"
+
+#: pdf-forms-for-woocommerce.php:451 pdf-forms-for-woocommerce.php:484
+#: pdf-forms-for-woocommerce.php:712 pdf-forms-for-woocommerce.php:746
+#: pdf-forms-for-woocommerce.php:2455 pdf-forms-for-woocommerce.php:2695
+msgid "Permission denied"
+msgstr "Permission refusée"
+
+#: pdf-forms-for-woocommerce.php:457
+msgid "Invalid email"
+msgstr "E-mail invalide"
+
+#: pdf-forms-for-woocommerce.php:593
+msgid "Failed to download file: {error-message}"
+msgstr "Échec du téléchargement du fichier : {error-message}"
+
+#: pdf-forms-for-woocommerce.php:605 src/services/pdf-ninja.php:667
+#: src/services/pdf-ninja.php:781
+msgid "Failed to open file for writing"
+msgstr "Échec de l'ouverture du fichier pour l'écriture"
+
+#: pdf-forms-for-woocommerce.php:611 src/services/pdf-ninja.php:673
+#: src/services/pdf-ninja.php:787
+msgid "Failed to create file"
+msgstr "Échec de la création du fichier"
+
+#: pdf-forms-for-woocommerce.php:692
+msgid ""
+"Product settings are stored in orders when they are created. Resetting "
+"settings is necessary when new product settings need to be applied to an old "
+"order."
+msgstr ""
+"Les paramètres du produit sont stockés dans les commandes lorsqu'elles sont "
+"créées. La réinitialisation des paramètres est nécessaire lorsque de "
+"nouveaux paramètres de produit doivent être appliqués à une ancienne "
+"commande."
+
+#: pdf-forms-for-woocommerce.php:693
+msgid "Reset Settings"
+msgstr "Réinitialiser les paramètres"
+
+#: pdf-forms-for-woocommerce.php:694
+msgid ""
+"PDFs are refilled when orders status changes. Sometimes you may want to "
+"manually trigger PDFs to be refilled after changing some aspect of the "
+"order, such as the billing address."
+msgstr ""
+"Les PDF sont remplis à nouveau lorsque le statut des commandes change. "
+"Parfois, vous pouvez vouloir déclencher manuellement le remplissage des PDF "
+"après avoir modifié un aspect de la commande, tel que l'adresse de "
+"facturation."
+
+#: pdf-forms-for-woocommerce.php:695
+msgid "Reset PDFs"
+msgstr "Réinitialiser les PDF"
+
+#: pdf-forms-for-woocommerce.php:716 pdf-forms-for-woocommerce.php:750
+msgid "Invalid order ID"
+msgstr "ID de commande invalide"
+
+#: pdf-forms-for-woocommerce.php:720 pdf-forms-for-woocommerce.php:754
+msgid "Invalid order"
+msgstr "Commande invalide"
+
+#: pdf-forms-for-woocommerce.php:1470 pdf-forms-for-woocommerce.php:2462
+msgid "File type {mime-type} of {file} is unsupported for {purpose}"
+msgstr ""
+"Le type de fichier {mime-type} de {file} n'est pas pris en charge pour "
+"{purpose}"
+
+#: pdf-forms-for-woocommerce.php:1471
+msgid "image embedding"
+msgstr "intégration d'image"
+
+#: pdf-forms-for-woocommerce.php:1751 pdf-forms-for-woocommerce.php:2526
+msgid "Attachment file is not accessible"
+msgstr "Le fichier joint n'est pas accessible"
+
+#: pdf-forms-for-woocommerce.php:1867
+msgid ""
+"[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
+"message} at {error-file}:{error-line}"
+msgstr ""
+"[{timestamp}] (commande:{order}, produit:{product}) Erreur lors du "
+"remplissage des PDF : {error-message} dans {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:1869
+msgid ""
+"[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
+"message} at {error-file}:{error-line}"
+msgstr ""
+"[{timestamp}] (commande:{order}) Erreur lors du remplissage des PDF pour la "
+"commande {order} : {error-message} dans {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:1871
+msgid ""
+"[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-"
+"line}"
+msgstr ""
+"[{timestamp}] Erreur lors du remplissage des PDF : {error-message} dans "
+"{error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:1981
+msgid "PDF Forms"
+msgstr "Formulaires PDF"
+
+#: pdf-forms-for-woocommerce.php:2062
+msgid "None"
+msgstr "Aucun"
+
+#: pdf-forms-for-woocommerce.php:2063
+msgid "Create a new downloadable file"
+msgstr "Créer un nouveau fichier téléchargeable"
+
+#: pdf-forms-for-woocommerce.php:2090
+msgid ""
+"You can use this section to attach a PDF file to your product and link "
+"WooCommerce placeholders to fields in the PDF file. You can also embed "
+"images from a URL into the PDF file. Changes here are applied when the "
+"product is saved."
+msgstr ""
+"Vous pouvez utiliser cette section pour joindre un fichier PDF à votre "
+"produit et lier les espaces réservés WooCommerce aux champs du fichier PDF. "
+"Vous pouvez également intégrer des images à partir d'une URL dans le fichier "
+"PDF. Les modifications ici sont appliquées lorsque le produit est enregistré."
+
+#: pdf-forms-for-woocommerce.php:2091
+msgid "Attach a PDF File"
+msgstr "Joindre un fichier PDF"
+
+#: pdf-forms-for-woocommerce.php:2092 pdf-forms-for-woocommerce.php:2112
+msgid "Delete"
+msgstr "Supprimer"
+
+#: pdf-forms-for-woocommerce.php:2093
+msgid "Map Value"
+msgstr "Valeur de la carte"
+
+#: pdf-forms-for-woocommerce.php:2094
+msgid "Options"
+msgstr "Options"
+
+#: pdf-forms-for-woocommerce.php:2095
+msgid "Skip when empty"
+msgstr "Passer lorsque c'est vide"
+
+#: pdf-forms-for-woocommerce.php:2096
+msgid "Attach the filled PDF file to the following emails:"
+msgstr "Joindre le fichier PDF rempli aux e-mails suivants:"
+
+#: pdf-forms-for-woocommerce.php:2097
+msgid "Flatten"
+msgstr "Aplatir"
+
+#: pdf-forms-for-woocommerce.php:2098
+msgid "New filled PDF file name (placeholders allowed):"
+msgstr "Nom du nouveau fichier PDF rempli (espaces réservés autorisés) :"
+
+#: pdf-forms-for-woocommerce.php:2099
+msgid "Path for saving filled PDF file (placeholders allowed):"
+msgstr ""
+"Chemin pour enregistrer le fichier PDF rempli (espaces réservés autorisés) :"
+
+#: pdf-forms-for-woocommerce.php:2100
+msgid ""
+"Provide a download link to the filled PDF file via the product's "
+"downloadable file:"
+msgstr ""
+"Fournir un lien de téléchargement vers le fichier PDF rempli via le fichier "
+"téléchargeable du produit :"
+
+#: pdf-forms-for-woocommerce.php:2101
+msgid "(leave blank to disable this option)"
+msgstr "(laissez vide pour désactiver cette option)"
+
+#: pdf-forms-for-woocommerce.php:2102
+msgid "Field Mapper Tool"
+msgstr "Outil de Mappage de Champs"
+
+#: pdf-forms-for-woocommerce.php:2103
+msgid ""
+"This tool can be used to link WooCommerce placeholders to fields in the "
+"attached PDF files. When an order email notification is sent or downloadable "
+"file is requested, text with placeholder data will be inserted into the "
+"corresponding fields in the PDF file and the filled PDF will be made "
+"available."
+msgstr ""
+"Cet outil peut être utilisé pour lier les espaces réservés WooCommerce aux "
+"champs des fichiers PDF joints. Lorsqu'une notification par e-mail de "
+"commande est envoyée ou qu'un fichier téléchargeable est demandé, le texte "
+"avec les données des espaces réservés sera inséré dans les champs "
+"correspondants du fichier PDF et le PDF rempli sera mis à disposition."
+
+#: pdf-forms-for-woocommerce.php:2104
+msgid "PDF field"
+msgstr "Champ PDF"
+
+#: pdf-forms-for-woocommerce.php:2105
+msgid "WooCommerce placeholders"
+msgstr "Espaces réservés WooCommerce"
+
+#: pdf-forms-for-woocommerce.php:2106
+msgid "Add Mapping"
+msgstr "Ajouter un Mappage"
+
+#: pdf-forms-for-woocommerce.php:2107
+msgid "Delete All"
+msgstr "Tout Supprimer"
+
+#: pdf-forms-for-woocommerce.php:2108
+msgid "New Field:"
+msgstr "Nouveau Champ :"
+
+#: pdf-forms-for-woocommerce.php:2109
+msgid "Image Embedding Tool"
+msgstr "Outil d'Intégration d'Image"
+
+#: pdf-forms-for-woocommerce.php:2110
+msgid ""
+"This tool allows embedding of images into PDF files. Images are taken from "
+"the provided URLs that may contain placeholders. You can select a PDF file "
+"page and draw a bounding box for image insertion. Alternatively, you can "
+"insert your image in the center of every page."
+msgstr ""
+"Cet outil permet d'intégrer des images dans des fichiers PDF. Les images "
+"proviennent des URL fournies qui peuvent contenir des espaces réservés. Vous "
+"pouvez sélectionner une page de fichier PDF et dessiner une zone de "
+"délimitation pour l'insertion de l'image. Alternativement, vous pouvez "
+"insérer votre image au centre de chaque page."
+
+#: pdf-forms-for-woocommerce.php:2111
+msgid "Embed Image"
+msgstr "Intégrer une Image"
+
+#: pdf-forms-for-woocommerce.php:2113
+msgid "PDF file"
+msgstr "Fichier PDF"
+
+#: pdf-forms-for-woocommerce.php:2114
+msgid "Page"
+msgstr "Page"
+
+#: pdf-forms-for-woocommerce.php:2115
+msgid "Select a region where the image needs to be embeded."
+msgstr "Sélectionnez une région où l'image doit être intégrée."
+
+#: pdf-forms-for-woocommerce.php:2116
+msgid "Top"
+msgstr "Haut"
+
+#: pdf-forms-for-woocommerce.php:2117
+msgid "Left"
+msgstr "Gauche"
+
+#: pdf-forms-for-woocommerce.php:2118
+msgid "Width"
+msgstr "Largeur"
+
+#: pdf-forms-for-woocommerce.php:2119
+msgid "Height"
+msgstr "Hauteur"
+
+#: pdf-forms-for-woocommerce.php:2120
+msgid "pts"
+msgstr "pts"
+
+#: pdf-forms-for-woocommerce.php:2122
+msgid ""
+"Have a question/comment/problem? Feel free to use {a-href-forum}the support "
+"forum{/a}."
+msgstr ""
+"Vous avez une question/commentaire/problème ? N'hésitez pas à utiliser {a-"
+"href-forum}le forum de support{/a}."
+
+#: pdf-forms-for-woocommerce.php:2128 pdf-forms-for-woocommerce.php:2394
+msgid "Show Help"
+msgstr "Afficher l'Aide"
+
+#: pdf-forms-for-woocommerce.php:2129 pdf-forms-for-woocommerce.php:2395
+msgid "Hide Help"
+msgstr "Masquer l'aide"
+
+#: pdf-forms-for-woocommerce.php:2147
+msgid "Failed to decode data"
+msgstr "Échec du décodage des données"
+
+#: pdf-forms-for-woocommerce.php:2338
+msgid ""
+"Error saving PDF form data: {error-message} at {error-file}:{error-line}"
+msgstr ""
+"Erreur lors de l'enregistrement des données du formulaire PDF : {error-"
+"message} à {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:2386
+msgid "Failed to determine post ID"
+msgstr "Échec de la détermination de l'ID du post"
+
+#: pdf-forms-for-woocommerce.php:2387
+msgid "Failed to load PDF form data"
+msgstr "Échec du chargement des données du formulaire PDF"
+
+#: pdf-forms-for-woocommerce.php:2388 src/services/pdf-ninja.php:130
+#: src/services/pdf-ninja.php:865
+msgid "Unknown error"
+msgstr "Erreur inconnue"
+
+#: pdf-forms-for-woocommerce.php:2389
+msgid ""
+"Are you sure you want to delete this file?  This will delete field mappings "
+"and image embeds associated with this file."
+msgstr ""
+"Êtes-vous sûr de vouloir supprimer ce fichier ? Cela supprimera les mappages "
+"de champs et les images intégrées associées à ce fichier."
+
+#: pdf-forms-for-woocommerce.php:2390
+msgid "Are you sure you want to delete this mapping?"
+msgstr "Êtes-vous sûr de vouloir supprimer ce mappage ?"
+
+#: pdf-forms-for-woocommerce.php:2391
+msgid "Are you sure you want to delete all mappings?"
+msgstr "Êtes-vous sûr de vouloir supprimer tous les mappages ?"
+
+#: pdf-forms-for-woocommerce.php:2392
+msgid "Are you sure you want to attach a PDF file without any form fields?"
+msgstr ""
+"Êtes-vous sûr de vouloir joindre un fichier PDF sans aucun champ de "
+"formulaire ?"
+
+#: pdf-forms-for-woocommerce.php:2393
+msgid "Are you sure you want to delete this embeded image?"
+msgstr "Êtes-vous sûr de vouloir supprimer cette image intégrée ?"
+
+#: pdf-forms-for-woocommerce.php:2396
+msgid "Select a PDF file"
+msgstr "Sélectionner un fichier PDF"
+
+#: pdf-forms-for-woocommerce.php:2397
+msgid "Select"
+msgstr "Sélectionner"
+
+#: pdf-forms-for-woocommerce.php:2398
+msgid "All PDFs"
+msgstr "Tous les PDF"
+
+#: pdf-forms-for-woocommerce.php:2399
+msgid "All"
+msgstr "Tout"
+
+#: pdf-forms-for-woocommerce.php:2400
+msgid "--- EMPTY ---"
+msgstr "--- VIDE ---"
+
+#: pdf-forms-for-woocommerce.php:2421
+msgid "Are you sure you want to reset settings for this order?"
+msgstr ""
+"Êtes-vous sûr de vouloir réinitialiser les paramètres pour cette commande ?"
+
+#: pdf-forms-for-woocommerce.php:2422
+msgid "Are you sure you want to reset PDFs for this order?"
+msgstr "Êtes-vous sûr de vouloir réinitialiser les PDF pour cette commande ?"
+
+#: pdf-forms-for-woocommerce.php:2452
+msgid "Invalid attachment ID"
+msgstr "ID de pièce jointe invalide"
+
+#: pdf-forms-for-woocommerce.php:2463
+msgid "PDF form filling"
+msgstr "Remplissage du formulaire PDF"
+
+#: pdf-forms-for-woocommerce.php:2543
+msgid "Could not read attached file"
+msgstr "Impossible de lire le fichier joint"
+
+#: pdf-forms-for-woocommerce.php:2574
+msgid "No service"
+msgstr "Aucun service"
+
+#: pdf-forms-for-woocommerce.php:2652
+msgid "Failed to determine upload path"
+msgstr "Échec de la détermination du chemin de téléchargement"
+
+#: pdf-forms-for-woocommerce.php:2692
+msgid "Invalid page number"
+msgstr "Numéro de page invalide"
+
+#: pdf-forms-for-woocommerce.php:2701
+msgid "Failed to retrieve page snapshot"
+msgstr "Échec de la récupération de l'instantané de la page"
+
+#: src/filesystem/storage.php:135
+msgid "Can't create directory because a file with the same name already exists"
+msgstr ""
+"Impossible de créer le répertoire car un fichier portant le même nom existe "
+"déjà"
+
+#: src/services/pdf-ninja.php:38 src/services/pdf-ninja.php:42
+msgid "Pdf.Ninja API"
+msgstr "API Pdf.Ninja"
+
+#: src/services/pdf-ninja.php:44
+msgid "The following form allows you to edit your API settings."
+msgstr "Le formulaire suivant vous permet de modifier vos paramètres d'API."
+
+#: src/services/pdf-ninja.php:48
+msgid "API Key"
+msgstr "Clé API"
+
+#: src/services/pdf-ninja.php:52 src/services/pdf-ninja.php:118
+msgid "copy key"
+msgstr "copier la clé"
+
+#: src/services/pdf-ninja.php:60 src/services/pdf-ninja.php:65
+msgid "Get new API key"
+msgstr "Obtenir une nouvelle clé API"
+
+#: src/services/pdf-ninja.php:67
+msgid "Get New Key"
+msgstr "Obtenir une nouvelle clé"
+
+#: src/services/pdf-ninja.php:73
+msgid "API URL"
+msgstr "URL de l'API"
+
+#: src/services/pdf-ninja.php:75
+msgid "Enter your API URL"
+msgstr "Entrez votre URL d'API"
+
+#: src/services/pdf-ninja.php:81
+msgid "API version"
+msgstr "Version de l'API"
+
+#: src/services/pdf-ninja.php:83
+msgid "Select API version"
+msgstr "Sélectionnez la version de l'API"
+
+#: src/services/pdf-ninja.php:93
+msgid "Data Security"
+msgstr "Sécurité des données"
+
+#: src/services/pdf-ninja.php:95
+msgid "Ignore SSL errors"
+msgstr "Ignorer les erreurs SSL"
+
+#: src/services/pdf-ninja.php:119
+msgid "copied!"
+msgstr "copié!"
+
+#: src/services/pdf-ninja.php:171
+msgid "Failed to get the Pdf.Ninja API key on last attempt."
+msgstr ""
+"Échec de l'obtention de la clé API Pdf.Ninja lors de la dernière tentative."
+
+#: src/services/pdf-ninja.php:241
+msgid "Failed to determine the administrator's email address."
+msgstr "Échec de la détermination de l'adresse e-mail de l'administrateur."
+
+#: src/services/pdf-ninja.php:345
+msgid "Failed to connect to {url}"
+msgstr "Échec de la connexion à {url}"
+
+#: src/services/pdf-ninja.php:359
+msgid "Failed to decode API server response"
+msgstr "Échec du décodage de la réponse du serveur API"
+
+#: src/services/pdf-ninja.php:362 src/services/pdf-ninja.php:489
+#: src/services/pdf-ninja.php:617 src/services/pdf-ninja.php:630
+#: src/services/pdf-ninja.php:662 src/services/pdf-ninja.php:776
+msgid "Pdf.Ninja API server did not send an expected response"
+msgstr "Le serveur API Pdf.Ninja n'a pas envoyé de réponse attendue"
+
+#: src/services/pdf-ninja.php:373
+msgid "Failed to download a file from the API server"
+msgstr "Échec du téléchargement d'un fichier depuis le serveur API"
+
+#: src/services/pdf-ninja.php:533
+msgid "Unknown attachment URL"
+msgstr "URL de pièce jointe inconnue"
+
+#: src/services/pdf-ninja.php:562
+msgid "File is not accessible in the local file system"
+msgstr "Le fichier n'est pas accessible dans le système de fichiers local"
+
+#: src/services/pdf-ninja.php:717 src/services/pdf-ninja.php:721
+msgid "Failed to encode JSON data"
+msgstr "Échec de l'encodage des données JSON"
+
+#: src/services/pdf-ninja.php:820
+msgid ""
+"Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-"
+"service-page}Please retry manually{/a}."
+msgstr ""
+"Échec de l'obtention de la clé API Pdf.Ninja lors de la dernière tentative. "
+"{a-href-edit-service-page}Veuillez réessayer manuellement{/a}."
+
+#: src/services/pdf-ninja.php:841
+msgid "Warning"
+msgstr "Avertissement"
+
+#: src/services/pdf-ninja.php:842
+msgid ""
+"Your WooCommerce settings indicate that you are using an insecure connection "
+"to the Pdf.Ninja API server."
+msgstr ""
+"Vos paramètres WooCommerce indiquent que vous utilisez une connexion non "
+"sécurisée au serveur API Pdf.Ninja."
+
+#: src/services/service.php:22 src/services/service.php:27
+#: src/services/service.php:32 src/services/service.php:37
+#: src/services/service.php:42
+msgid "Missing feature"
+msgstr "Fonctionnalité manquante"
