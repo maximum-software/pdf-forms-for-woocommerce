@@ -56,6 +56,14 @@ Special thanks to the following sponsors of this plugin:
 3. Activate the plugin through the 'Plugins' screen in WordPress.
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
 
+== Changelog ==
+
+= 1.0.0 =
+
+* Release date: October 1, 2023
+
+* Initial release
+
 == Frequently Asked Questions ==
 
 = Does this plugin allow my website users to edit PDF files? =
