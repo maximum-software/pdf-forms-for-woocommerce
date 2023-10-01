@@ -691,7 +691,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					array(
 						'reset-settings-instructions' => __( "Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need to be applied to an old order.", 'pdf-forms-for-woocommerce' ),
 						'reset-settings' => __( "Reset Settings", 'pdf-forms-for-woocommerce' ),
-						'reset-pdfs-instructions' => __( "PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing some aspect of your order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
+						'reset-pdfs-instructions' => __( "PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing some aspect of the order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
 						'reset-pdfs' => __( "Reset PDFs", 'pdf-forms-for-woocommerce' ),
 					)
 				)
@@ -2383,7 +2383,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				wp_localize_script( 'pdf_forms_for_woocommerce_admin_product_script', 'pdf_forms_for_woocommerce', array(
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
-					'__No_Form_ID' => __( "Failed to determine form ID", 'pdf-forms-for-woocommerce' ),
+					'__No_Post_ID' => __( "Failed to determine post ID", 'pdf-forms-for-woocommerce' ),
 					'__No_Preload_Data' => __( 'Failed to load PDF form data', 'pdf-forms-for-woocommerce' ),
 					'__Unknown_error' => __( 'Unknown error', 'pdf-forms-for-woocommerce' ),
 					'__Confirm_Delete_Attachment' => __( 'Are you sure you want to delete this file?  This will delete field mappings and image embeds associated with this file.', 'pdf-forms-for-woocommerce' ),
@@ -2395,12 +2395,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					'__Hide_Help' => __( 'Hide Help', 'pdf-forms-for-woocommerce' ),
 					'__PDF_Frame_Title' => __( 'Select a PDF file', 'pdf-forms-for-woocommerce'),
 					'__PDF_Frame_Button' => __( 'Select', 'pdf-forms-for-woocommerce'),
-					'__Custom_String' => __( "Custom text string...", 'pdf-forms-for-woocommerce' ),
 					'__All_PDFs' => __( 'All PDFs', 'pdf-forms-for-woocommerce' ),
 					'__All_Pages' => __( 'All', 'pdf-forms-for-woocommerce' ),
-					'__PDF_Field_Type_Unsupported' => __( 'PDF field type has no equivalent in WooCommerce', 'pdf-forms-for-woocommerce' ),
-					'__Default_Notification' => __( 'Default Notification', 'pdf-forms-for-woocommerce' ),
-					'__Default_Confirmation' => __( 'Default Confirmation', 'pdf-forms-for-woocommerce' ),
 					'__Null_Value_Mapping' => __( '--- EMPTY ---', 'pdf-forms-for-woocommerce' ),
 				) );
 				
