@@ -307,9 +307,15 @@ jQuery(document).ready(function($) {
 		return str;
 	}
 	
+	var utf8atob = function(str)
+	{
+		// see https://developer.mozilla.org/en-US/docs/Glossary/Base64#the_unicode_problem
+		return (new TextDecoder()).decode(Uint8Array.from(atob(str), c => c.charCodeAt(0)));
+	};
+	
 	var base64urldecode = function(data)
 	{
-		return window.atob(strtr(data, {'.': '+', '_': '/'}).padEnd(data.length % 4, '='));
+		return utf8atob(strtr(data, {'.': '+', '_': '/'}).padEnd(data.length % 4, '='));
 	}
 	
 	var getPdfFieldData = function(id)
