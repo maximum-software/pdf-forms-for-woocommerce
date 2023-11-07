@@ -1727,9 +1727,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					$attachment_affected = $filling_data || count( $embeds_data ) > 0 || $options['flatten'];
 					
 					$destfilename = strval( $attachment['options']['filename'] );
-					if( $destfilename !== "" )
-						$destfilename = $placeholder_processor->process( $destfilename );
-					if( empty( $destfilename ) )
+					if( $destfilename != "" )
+						$destfilename = strval( $placeholder_processor->process( $destfilename ) );
+					if( $destfilename == "" )
 						$destfilename = sanitize_file_name( get_the_title( $attachment_id ) );
 					
 					$destfile = $this->create_tmp_filepath( $fill_id, $destfilename . '.pdf' );
