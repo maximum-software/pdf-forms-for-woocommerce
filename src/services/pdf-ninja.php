@@ -33,6 +33,9 @@
 			 */
 			public function register_settings()
 			{
+				try { $key = self::get_instance()->get_key(); }
+				catch(Exception $e) { } // ignore errors
+				
 				$settings = array(
 					'id' => 'pdf-ninja',
 					'title' => __( 'Pdf.Ninja API', 'pdf-forms-for-woocommerce' ),
@@ -52,7 +55,7 @@
 										'key-copy-btn-label' => esc_html__( 'copy key', 'pdf-forms-for-woocommerce' ),
 									)
 								),
-								'default' => WooCommerce_Pdf_Ninja::get_instance()->get_key(),
+								'default' => $key,
 								'class' => 'pdf-ninja-key',
 								'id' => 'pdf-forms-for-woocommerce-settings-pdf-ninja-api-key'
 							),
