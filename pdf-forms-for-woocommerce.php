@@ -14,6 +14,9 @@
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  */
 
+if( ! defined( 'ABSPATH' ) )
+	return;
+
 require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/tgm-config.php';
 require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/wrapper.php';
 

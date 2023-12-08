@@ -1,4 +1,8 @@
 <?php
+	
+	if( ! defined( 'ABSPATH' ) )
+		return;
+	
 	require_once dirname( __FILE__ ) . '/lib/class-tgm-plugin-activation.php';
 	
 	add_action( 'tgmpa_register', 'pdf_forms_for_woocommerce_register_required_plugins' );
