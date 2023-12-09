@@ -1348,15 +1348,18 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		private static function log_admin_message( $type, $message )
 		{
-			$errors = get_option( 'pdf-forms-for-woocommerce-errors', array() );
+			$messages = get_option( 'pdf-forms-for-woocommerce-messages', array() );
+			
+			if( ! is_array( $messages ) )
+				$messages = array();
 			
 			// remove old messages to prevent the option from growing too large
-			if( count( $errors ) > 999 )
-				$errors = array_slice( $errors, -999 );
+			if( count( $messages ) > 999 )
+				$messages = array_slice( $messages, -999 );
 			
-			$errors[] = array( 'type' => $type, 'message' => $message );
+			$messages[] = array( 'type' => $type, 'message' => $message );
 			
-			update_option( 'pdf-forms-for-woocommerce-errors', $errors );
+			update_option( 'pdf-forms-for-woocommerce-messages', $messages );
 		}
 		
 		/**
@@ -1364,7 +1367,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		private static function get_admin_messages()
 		{
-			return get_option( 'pdf-forms-for-woocommerce-errors', array() );
+			$messages = get_option( 'pdf-forms-for-woocommerce-messages', array() );
+			if( ! is_array( $messages ) )
+				$messages = array();
+			return $messages;
 		}
 		
 		/**
@@ -1372,7 +1378,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		private static function clear_admin_messages()
 		{
-			update_option( 'pdf-forms-for-woocommerce-errors', array() );
+			update_option( 'pdf-forms-for-woocommerce-messages', array() );
 		}
 		
 		/**
