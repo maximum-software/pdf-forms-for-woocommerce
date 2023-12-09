@@ -26,7 +26,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 	{
 		const VERSION = '1.0.0';
 		const MIN_WC_VERSION = '5.6.0';
-		const MAX_WC_VERSION = '8.1.99';
+		const MAX_WC_VERSION = '8.2.99';
 		private static $BLACKLISTED_WC_VERSIONS = array();
 		
 		const META_KEY = '_pdf-forms-for-woocommerce-data';
