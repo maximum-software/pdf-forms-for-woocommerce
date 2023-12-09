@@ -352,7 +352,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ! $this->pdf_ninja_service )
 			{
 				require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/services/pdf-ninja.php';
-				$this->pdf_ninja_service = WooCommerce_Pdf_Ninja::get_instance();
+				$this->pdf_ninja_service = Pdf_Forms_For_WooCommerce_Pdf_Ninja::get_instance();
 			}
 			
 			return $this->pdf_ninja_service;

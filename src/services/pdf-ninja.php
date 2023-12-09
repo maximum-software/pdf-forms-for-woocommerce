@@ -6,9 +6,9 @@
 	require_once( untrailingslashit( __DIR__ ) . '/service.php' );
 	require_once( untrailingslashit( __DIR__ ) . '/../wrapper.php' );
 	
-	if( ! class_exists( 'WooCommerce_Pdf_Ninja', false ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Pdf_Ninja', false ) )
 	{
-		class WooCommerce_Pdf_Ninja extends Pdf_Forms_For_WooCommerce_Service
+		class Pdf_Forms_For_WooCommerce_Pdf_Ninja extends Pdf_Forms_For_WooCommerce_Service
 		{
 			private static $instance = null;
 			
@@ -66,7 +66,7 @@
 									Pdf_Forms_For_WooCommerce::render( 'new-key',
 										array(
 											'title' => __( 'Get new API key', 'pdf-forms-for-woocommerce' ),
-											'admin-email' => WooCommerce_Pdf_Ninja::get_instance()->get_admin_email(),
+											'admin-email' => self::get_instance()->get_admin_email(),
 											'get-new-key-label' => esc_html__( 'Get New Key', 'pdf-forms-for-woocommerce' ),
 										)
 									),
@@ -365,7 +365,7 @@
 						throw new Exception( __( "Pdf.Ninja API server did not send an expected response", 'pdf-forms-for-woocommerce' ) );
 					
 					if( $result['success'] === false )
-						throw new WooCommerce_Pdf_Ninja_Exception( $result );
+						throw new Pdf_Forms_For_WooCommerce_Pdf_Ninja_Exception( $result );
 					
 					if( $result['success'] == true && isset( $result['fileUrl'] ) )
 					{
@@ -406,7 +406,7 @@
 				{
 					return $this->api_get( $endpoint, $params );
 				}
-				catch( WooCommerce_Pdf_Ninja_Exception $e )
+				catch( Pdf_Forms_For_WooCommerce_Pdf_Ninja_Exception $e )
 				{
 					$reason = $e->getReason();
 					if( $reason == 'noSuchFileId' || $reason == 'md5sumMismatch' )
@@ -432,7 +432,7 @@
 				{
 					return $this->api_post( $endpoint, $payload, $headers, $args_override );
 				}
-				catch( WooCommerce_Pdf_Ninja_Exception $e )
+				catch( Pdf_Forms_For_WooCommerce_Pdf_Ninja_Exception $e )
 				{
 					$reason = $e->getReason();
 					if( $reason == 'noSuchFileId' || $reason == 'md5sumMismatch' )
@@ -852,9 +852,9 @@
 		}
 	}
 	
-	if( ! class_exists( 'WooCommerce_Pdf_Ninja_Exception' ) )
+	if( ! class_exists( 'Pdf_Forms_For_WooCommerce_Pdf_Ninja_Exception' ) )
 	{
-		class WooCommerce_Pdf_Ninja_Exception extends Exception
+		class Pdf_Forms_For_WooCommerce_Pdf_Ninja_Exception extends Exception
 		{
 			private $reason = null;
 			
