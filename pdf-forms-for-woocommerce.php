@@ -276,7 +276,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							'clear-all-messages' => esc_html__( "Clear All Messages", 'pdf-forms-for-woocommerce' )
 							)
 						);
-					echo Pdf_Forms_For_WooCommerce::render_warning_notice( 'admin-messages-'.date('Ymd'), array(
+					echo Pdf_Forms_For_WooCommerce::render_warning_notice( 'admin-messages-'.gmdate('Ymd'), array(
 						'label'   => esc_html__( "PDF Forms Filler for WooCommerce Messages", 'pdf-forms-for-woocommerce' ),
 						'message' => $messageHtml,
 					) );
@@ -1874,7 +1874,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$error_message = self::replace_tags(
 					$caption,
 					array(
-						'timestamp' => date( 'Y-m-d H:i:s' ),
+						'timestamp' => gmdate( 'Y-m-d H:i:s e' ),
 						'product' => $product_id,
 						'order' => $order_id,
 						'error-message' => $e->getMessage(),
