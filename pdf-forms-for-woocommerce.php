@@ -692,10 +692,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				self::render(
 					'order-metabox',
 					array(
-						'reset-settings-instructions' => __( "Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need to be applied to an old order.", 'pdf-forms-for-woocommerce' ),
-						'reset-settings' => __( "Reset Settings", 'pdf-forms-for-woocommerce' ),
-						'reset-pdfs-instructions' => __( "PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing some aspect of the order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
-						'reset-pdfs' => __( "Reset PDFs", 'pdf-forms-for-woocommerce' ),
+						'reset-settings-instructions' => esc_html__( "Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need to be applied to an old order.", 'pdf-forms-for-woocommerce' ),
+						'reset-settings' => esc_html__( "Reset Settings", 'pdf-forms-for-woocommerce' ),
+						'reset-pdfs-instructions' => esc_html__( "PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing some aspect of the order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
+						'reset-pdfs' => esc_html__( "Reset PDFs", 'pdf-forms-for-woocommerce' ),
 					)
 				)
 			);
