@@ -453,8 +453,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( ! current_user_can( 'manage_woocommerce' ) )
 					throw new Exception( __( "Permission denied", 'pdf-forms-for-woocommerce' ) );
 				
-				$email = isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : null;
-				$email = sanitize_email( $email );
+				$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : null;
 				
 				if( ! $email )
 					throw new Exception( __( "Invalid email", 'pdf-forms-for-woocommerce' ) );
