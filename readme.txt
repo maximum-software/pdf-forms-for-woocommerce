@@ -34,7 +34,9 @@ Possible uses:
  * Automated warranty document creation based on date of purchase
  * Automated creation of PDFs that assist with order fulfillment
 
-An external web API (https://pdf.ninja) is used for filling PDF forms (free usage has limitations).
+An [external web API](https://pdf.ninja) is used for working with PDF files (free usage has limitations).
+The plugin comminicates with the external service to create an API key, upload your blank PDF files, retrieve information about your PDF files and eventually add your user information to your PDF files.
+Please see privacy policy at [https://pdf.ninja](https://pdf.ninja).
 
 Requirements:
  * PHP 5.5 or newer
