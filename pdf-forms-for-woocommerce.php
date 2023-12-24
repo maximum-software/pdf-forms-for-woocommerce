@@ -2002,13 +2002,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			global $post;
 			$product_id = $post->ID;
 			
-			$messages = '';
 			$attachments = array();
 			$email_templates = array();
 			$woocommerce_placeholders = array();
 			
 			$service = $this->get_service();
-			$messages .= $service->settings_notices();
+			ob_start();
+			$service->settings_notices();
+			$messages = ob_get_clean();
 			
 			$settings = self::get_metadata( $product_id, 'product-settings' );
 			if( ! is_array( $settings ) )

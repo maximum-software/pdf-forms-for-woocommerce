@@ -839,20 +839,17 @@
 			 */
 			public function settings_notices()
 			{
-				$notices = '';
 				try
 				{
 					$url = $this->get_api_url();
 					$ignore_ssl_errors = $this->get_ignore_ssl_errors();
 					if( substr( $url, 0, 5 ) == 'http:' || $ignore_ssl_errors )
-						$notices .= Pdf_Forms_For_WooCommerce::render_warning_notice( 'insecure-pdf.ninja-connection', array(
-						'label' => esc_html__( "Warning", 'pdf-forms-for-woocommerce' ),
-						'message' => esc_html__( "Your WooCommerce settings indicate that you are using an insecure connection to the Pdf.Ninja API server.", 'pdf-forms-for-woocommerce' ),
-					) );
+						echo Pdf_Forms_For_WooCommerce::render_warning_notice( 'insecure-pdf.ninja-connection', array(
+							'label' => esc_html__( "Warning", 'pdf-forms-for-woocommerce' ),
+							'message' => esc_html__( "Your WooCommerce settings indicate that you are using an insecure connection to the Pdf.Ninja API server.", 'pdf-forms-for-woocommerce' ),
+						) );
 				}
 				catch(Exception $e) { };
-				
-				return $notices;
 			}
 		}
 	}
