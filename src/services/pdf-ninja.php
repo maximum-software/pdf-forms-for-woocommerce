@@ -62,14 +62,19 @@
 							array(
 								'title' => __( 'Get new API key', 'pdf-forms-for-woocommerce' ),
 								'type' => 'pdf-forms-for-woocommerce-setting-html',
-								'html'  => Pdf_Forms_For_WooCommerce::render( 'spinner' ).
-									Pdf_Forms_For_WooCommerce::render( 'new-key',
-										array(
-											'title' => __( 'Get new API key', 'pdf-forms-for-woocommerce' ),
-											'admin-email' => self::get_instance()->get_admin_email(),
-											'get-new-key-label' => esc_html__( 'Get New Key', 'pdf-forms-for-woocommerce' ),
-										)
-									),
+								'callback' => function()
+									{
+										print(
+											Pdf_Forms_For_WooCommerce::render( 'spinner' ) .
+											Pdf_Forms_For_WooCommerce::render( 'new-key',
+												array(
+													'title' => esc_html__( 'Get new API key', 'pdf-forms-for-woocommerce' ),
+													'admin-email' => esc_html( self::get_instance()->get_admin_email() ),
+													'get-new-key-label' => esc_html__( 'Get New Key', 'pdf-forms-for-woocommerce' ),
+												)
+											)
+										);
+									},
 								'is_option' => false,
 							),
 							array(

@@ -78,7 +78,8 @@
 			 */
 			public function output_custom_html( $value )
 			{
-				print( $value['html'] );
+				if( is_array( $value ) && isset( $value['callback'] ) && is_callable( $value['callback'] ) )
+					call_user_func( $value['callback'] );
 			}
 		}
 	}
