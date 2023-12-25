@@ -2006,9 +2006,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$woocommerce_placeholders = array();
 			
 			$service = $this->get_service();
-			ob_start();
-			$service->settings_notices();
-			$messages = ob_get_clean();
 			
 			$settings = self::get_metadata( $product_id, 'product-settings' );
 			if( ! is_array( $settings ) )
@@ -2056,15 +2053,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				);
 			}
 			
-			// capture function output in a variable
-			ob_start();
-			woocommerce_wp_hidden_input( array(
-				'id'    => 'pdf-forms-for-woocommerce-data',
-				'class' => 'pdf-forms-for-woocommerce-data',
-				'value' => Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $settings ),
-			) );
-			$woocommerce_wp_data_input = ob_get_clean();
-			
 			// get product's downloads
 			$downloads = array(
 				array( 'id' => '', 'text' => __( "None", 'pdf-forms-for-woocommerce' ) ),
@@ -2090,10 +2078,22 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				'downloads' => $downloads,
 			);
 			
-			echo self::render( 'spinner' ).
+			echo self::render( 'spinner' ) .
 				self::render( 'product-settings', array(
-					'messages' => $messages,
-					'data-field' => $woocommerce_wp_data_input,
+					'messages' => call_user_func( function() use ( $service ) {
+						ob_start();
+						$service->settings_notices();
+						return ob_get_clean(); // no escaping needed
+					} ),
+					'data-field' => call_user_func( function() use ( $settings ) {
+						ob_start();
+						woocommerce_wp_hidden_input( array(
+							'id'    => 'pdf-forms-for-woocommerce-data',
+							'class' => 'pdf-forms-for-woocommerce-data',
+							'value' => Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $settings ),
+						) );
+						return ob_get_clean(); // no escaping needed
+					} ),
 					'preload-data' => esc_html( Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $preload_data ) ),
 					'instructions' => esc_html__( "You can use this section to attach a PDF file to your product and link WooCommerce placeholders to fields in the PDF file. You can also embed images from a URL into the PDF file. Changes here are applied when the product is saved.", 'pdf-forms-for-woocommerce' ),
 					'attach-pdf' => esc_html__( "Attach a PDF File", 'pdf-forms-for-woocommerce' ),
