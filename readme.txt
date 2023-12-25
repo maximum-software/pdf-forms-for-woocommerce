@@ -2,7 +2,7 @@
 Version: 1.0.0
 Stable tag: 1.0.0
 Requires at least: 5.4
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 5.5
 Tags: pdf, form, filler, woocommerce, attach, email, download
 Plugin URI: https://pdfformsfiller.org/
