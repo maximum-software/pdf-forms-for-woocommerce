@@ -2082,7 +2082,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				self::render( 'product-settings', array(
 					'messages' => call_user_func( function() use ( $service ) {
 						ob_start();
-						$service->settings_notices();
+						if( isset( $service ) ) $service->settings_notices();
 						return ob_get_clean(); // no escaping needed
 					} ),
 					'data-field' => call_user_func( function() use ( $settings ) {
