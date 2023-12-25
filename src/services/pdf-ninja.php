@@ -1,7 +1,6 @@
 <?php
 	
-	if( ! defined( 'ABSPATH' ) )
-		return;
+	if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	
 	require_once( untrailingslashit( __DIR__ ) . '/service.php' );
 	require_once( untrailingslashit( __DIR__ ) . '/../wrapper.php' );
