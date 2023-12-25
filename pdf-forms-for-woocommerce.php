@@ -6,6 +6,8 @@
  * Version: 1.0.0
  * Requires at least: 5.4
  * Requires PHP: 5.5
+ * WC requires at least: 5.6.0
+ * WC tested up to: 8.4
  * Author: Maximum.Software
  * Author URI: https://maximum.software/
  * Text Domain: pdf-forms-for-woocommerce
