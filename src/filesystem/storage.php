@@ -140,7 +140,7 @@
 							// prevent directory listing in each directory in subpath
 							$index_file =  trailingslashit( $path ) . 'index.php';
 							if( ! file_exists( $index_file ) )
-								file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
+								@file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
 						}
 					}
 				}
