@@ -186,8 +186,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ! $order_has_attachments && ! $order_item_product_has_attachments )
 				return;
 			
-			print( self::render( 'spinner' ) );
-			
 			add_meta_box(
 				'pdf-forms-for-woocommerce-metabox', // ID
 				__( 'PDF Forms Filler', 'pdf-forms-for-woocommerce' ), // title
@@ -688,6 +686,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public function display_order_metabox()
 		{
 			print(
+				self::render( 'spinner' ) .
 				self::render(
 					'order-metabox',
 					array(
