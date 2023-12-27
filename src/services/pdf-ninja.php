@@ -668,15 +668,7 @@
 				if( ! isset( $result['content'] ) || ! isset( $result['content_type'] ) || $result['content_type'] != 'image/jpeg' )
 					throw new Exception( __( "Pdf.Ninja API server did not send an expected response", 'pdf-forms-for-woocommerce' ) );
 				
-				$handle = @fopen( $destfile, 'w' );
-				
-				if( ! $handle )
-					throw new Exception( __( "Failed to open file for writing", 'pdf-forms-for-woocommerce' ) );
-				
-				fwrite( $handle, $result['content'] );
-				fclose( $handle );
-				
-				if( ! file_exists( $destfile ) )
+				if( file_put_contents( $destfile, $result['content'] ) === false || ! is_file( $destfile ) )
 					throw new Exception( __( "Failed to create file", 'pdf-forms-for-woocommerce' ) );
 				
 				return true;
@@ -782,15 +774,7 @@
 				if( ! isset( $result['content'] ) || ! isset( $result['content_type'] ) || $result['content_type'] != 'application/pdf' )
 					throw new Exception( __( "Pdf.Ninja API server did not send an expected response", 'pdf-forms-for-woocommerce' ) );
 				
-				$handle = @fopen( $destfile, 'w' );
-				
-				if( ! $handle )
-					throw new Exception( __( "Failed to open file for writing", 'pdf-forms-for-woocommerce' ) );
-				
-				fwrite( $handle, $result['content'] );
-				fclose( $handle );
-				
-				if( ! file_exists( $destfile ) )
+				if( file_put_contents( $destfile, $result['content'] ) === false || ! is_file( $destfile ) )
 					throw new Exception( __( "Failed to create file", 'pdf-forms-for-woocommerce' ) );
 				
 				return true;

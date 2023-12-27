@@ -599,15 +599,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			$body = wp_remote_retrieve_body( $response );
 			
-			$handle = @fopen( $filepath, 'w' );
-			
-			if( ! $handle )
-				throw new Exception( __( "Failed to open file for writing", 'pdf-forms-for-woocommerce' ) );
-			
-			fwrite( $handle, $body );
-			fclose( $handle );
-			
-			if( ! is_file( $filepath ) )
+			if( file_put_contents( $filepath, $body ) === false || ! is_file( $filepath ) )
 				throw new Exception( __( "Failed to create file", 'pdf-forms-for-woocommerce' ) );
 		}
 		
