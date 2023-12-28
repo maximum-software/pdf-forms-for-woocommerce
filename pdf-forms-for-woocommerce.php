@@ -120,6 +120,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		/**
 		 * Adds a metabox to edit order page
 		 */
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- This function does not need nonce verification because it doesn't process any data, it only adds a meta box
 		public function register_order_metabox()
 		{
 			$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : null;
@@ -195,6 +196,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				'default' // priority
 			);
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		
 		/**
 		 * Add PDF Forms settings page to WooCommerce settings
@@ -1969,6 +1971,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public static function render_file( $template_filepath, $attributes = array() )
 		{
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- $template_filepath is a local filesystem path and can't be used with wp_remote_get()
 			return self::replace_tags( file_get_contents( $template_filepath ) , $attributes );
 		}
 		
@@ -2134,6 +2137,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		/**
 		 * Hook that runs on product save action to validate plugin data
 		 */
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification is supposedly already done by WooCommerce prior to calling this function in WC_Admin_Meta_Boxes::save_meta_boxes()
 		public function save_product_data( $product_id )
 		{
 			if( ! isset( $_POST['pdf-forms-for-woocommerce-data'] ) )
@@ -2347,6 +2351,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				WC_Admin_Meta_Boxes::add_error( $error_message );
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		
 		/**
 		 * Adds necessary admin scripts and styles
@@ -2721,10 +2726,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public static function base64url_encode( $data )
 		{
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions -- only used to encode field names to avoid DB/JSON encoding issues
 			return rtrim( strtr( base64_encode( $data ), '+/', '._' ), '=' );
 		}
 		public static function base64url_decode( $data )
 		{
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions -- only used to decode field names to avoid DB/JSON encoding issues
 			return base64_decode( str_pad( strtr( $data, '._', '+/' ), strlen( $data ) % 4, '=', STR_PAD_RIGHT ) );
 		}
 		
@@ -2744,7 +2751,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( $ext == "base64" )
 				{
 					$base64 = true; 
-					if( ! ( $data = base64_decode( $data, $strict=true ) ) )
+					if( ! ( $data = base64_decode( $data, $strict=true ) ) ) // phpcs:ignore Generic.PHP.ForbiddenFunctions -- only used to decode data URI that has base64-encoded content
 						return false;
 				}
 			

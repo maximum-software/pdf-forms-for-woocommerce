@@ -118,6 +118,7 @@
 			 */
 			public function admin_enqueue_scripts( $hook )
 			{
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- The following code does not do anything requiring security checks
 				if( false !== strpos( $hook, 'wc-settings' ) && isset( $_GET['tab'] ) && $_GET['tab'] == "pdf-forms-for-woocommerce-settings" )
 				{
 					wp_register_script( 'pdf_forms_for_woocommerce_copy_key_script', plugins_url( '../../js/copy-key.js', __FILE__ ), array( 'jquery' ), Pdf_Forms_For_WooCommerce::VERSION );
@@ -570,7 +571,7 @@
 				
 				$filepath = get_attached_file( $attachment_id );
 				$filename = wp_basename( $filepath );
-				$filecontents = file_get_contents( $filepath );
+				$filecontents = file_get_contents( $filepath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- $filepath is a local filesystem path and can't be used with wp_remote_get()
 				
 				$payload .= "--{$boundary}\r\n"
 						. "Content-Disposition: form-data; name=\"file\"; filename=\"{$filename}\"\r\n"
@@ -755,7 +756,7 @@
 				foreach( $files as $fileId => $filepath )
 				{
 					$filename = wp_basename( $filepath );
-					$filecontents = file_get_contents( $filepath );
+					$filecontents = file_get_contents( $filepath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- $filepath is a local filesystem path and can't be used with wp_remote_get()
 					
 					$payload .= "--{$boundary}\r\n"
 							. "Content-Disposition: form-data; name=\"images[{$fileId}]\"; filename=\"{$filename}\"\r\n"
