@@ -18,6 +18,7 @@
 
 if( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/tgm-config.php';
 require_once untrailingslashit( dirname( __FILE__ ) ) . '/src/wrapper.php';
 
 if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
