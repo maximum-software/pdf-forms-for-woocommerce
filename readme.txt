@@ -17,15 +17,10 @@ Automatically fill PDF forms with WooCommerce orders and attach generated PDFs t
 == Description ==
 
 This plugin allows WooCommerce store owners to add automatic PDF form filling features for email notification attachments and order downloads to their WooCommerce store.
-An existing PDF can be set up to be filled with customer and order information when an order is placed or processed.
-Images can also be downloaded from a dynamic URL and embedded into the PDF.
-You can then have your customers receive order email notifications with PDF attachments containing customer order data.
-You can also allow your customers to download the filled PDF on their order page via the downloadable files feature of WooCommerce.
-The filled PDF files can be saved in a custom uploads subdirectory on your web server.
 
-What makes this plugin special is its approach to preparing PDF files. It is not generating PDF documents from scratch.
-It modifies the original PDF document that was prepared using third party software and supplied to the plugin.
-This allows users the freedom to design exactly what they need and use their pre-existing documents.
+An existing PDF can be set up to be filled with customer and order information when an order is placed or processed. Images can also be downloaded from a dynamic URL and embedded into the PDF. You can then have your customers receive order email notifications with PDF attachments containing customer order data. You can also allow your customers to download the filled PDF on their order page via the downloadable files feature of WooCommerce. The filled PDF files can be saved in a custom uploads subdirectory on your web server.
+
+What makes this plugin special is its approach to preparing PDF files. It is not generating PDF documents from scratch. It modifies the original PDF document that was prepared using third party software and supplied to the plugin. This allows users the freedom to design exactly what they need and use their pre-existing documents.
 
 Possible uses:
  * Automated creation of tickets for events
@@ -34,9 +29,7 @@ Possible uses:
  * Automated warranty document creation based on date of purchase
  * Automated creation of PDFs that assist with order fulfillment
 
-An [external web API](https://pdf.ninja) is used for working with PDF files (free usage has limitations).
-The plugin comminicates with the external service to create an API key, upload your blank PDF files, retrieve information about your PDF files and eventually add your user information to your PDF files.
-Please see privacy policy at [https://pdf.ninja](https://pdf.ninja).
+An [external web API](https://pdf.ninja) is used for working with PDF files (free usage has limitations). The plugin comminicates with the external service to create an API key, upload your blank PDF files, retrieve information about your PDF files and eventually add your user information to your PDF files. Please see privacy policy at [https://pdf.ninja](https://pdf.ninja).
 
 Requirements:
  * PHP 5.5 or newer
