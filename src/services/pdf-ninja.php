@@ -556,7 +556,7 @@
 					'key'    => $this->get_key(),
 				);
 				
-				$boundary = wp_generate_password( 24 );
+				$boundary = wp_generate_password( 48, $special_chars = false, $extra_special_chars = false );
 				
 				$payload = "";
 				
@@ -743,7 +743,7 @@
 						$params[$key] = $value;
 				}
 				
-				$boundary = wp_generate_password( 24 );
+				$boundary = wp_generate_password( 48, $special_chars = false, $extra_special_chars = false );
 				
 				$payload = "";
 				
