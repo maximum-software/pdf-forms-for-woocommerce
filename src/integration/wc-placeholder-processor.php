@@ -10,7 +10,6 @@
 			private $order;
 			private $order_item;
 			private $product_id;
-			private static $checkout_fields;
 			private static $placeholders;
 			
 			/**
@@ -82,13 +81,71 @@
 			}
 			
 			/**
-			 * Returns checkout fields after caching them
+			 * Returns email placeholders
 			 */
-			private function get_checkout_fields()
+			private static function get_email_placeholders()
 			{
-				if( ! self::$checkout_fields )
-					self::$checkout_fields = WC()->checkout()->get_checkout_fields();
-				return self::$checkout_fields;
+				return array(
+					'blogname' => array( 'key' => 'blogname' ),
+					'site_title' => array( 'key' => 'site_title' ),
+					'site_address' => array( 'key' => 'site_address' ),
+					'site_url' => array( 'key' => 'site_url' ),
+					
+					'order_number' => array( 'key' => 'order_number' ),
+					'order_date' => array( 'key' => 'order_date' ),
+					'order_billing_full_name' => array( 'key' => 'order_billing_full_name', 'email_templates' => array( 'cancelled_order' ) ),
+				);
+			}
+			
+			/**
+			 * Returns order placeholders
+			 */
+			private static function get_order_placeholders()
+			{
+				$placeholders = array();
+				
+				foreach( WC()->checkout()->get_checkout_fields() as $section )
+					foreach( $section as $field_key => $field_args )
+						$placeholders[$field_key] = array( 'key' => $field_key, 'label' => $field_args['label'] );
+				
+				// order_comments is actually customer_note
+				if( isset( $placeholders['order_comments'] ) )
+					$placeholders['customer_note'] = array( 'key' => 'customer_note', 'label' => $placeholders['order_comments']['label'] );
+				
+				// enumerate order getters
+				$order = new WC_Order();
+				$methods = get_class_methods( $order );
+				foreach( $methods as $method )
+					if( 'get_' == substr( $method, 0, 4 ) )
+						if( self::is_callable_for_placeholder( $order, $method ) )
+						{
+							$key = substr( $method, 4 );
+							if( ! isset( $placeholders[$key] ) )
+								$placeholders[$key] = array( 'key' => $key );
+						}
+				
+				return $placeholders;
+			}
+			
+			/**
+			 * Returns order item placeholders
+			 */
+			private static function get_order_item_placeholders()
+			{
+				$placeholders = array();
+				
+				// gather meta keys of items in database
+				global $wpdb;
+				$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM {$wpdb->prefix}woocommerce_order_itemmeta" );
+				// check output for errors
+				if( empty( $wpdb->last_error ) )
+					foreach( $meta_keys as $meta_key )
+					{
+						$key = 'order_item_meta:' . $meta_key;
+						$placeholders[$key] = array( 'key' => $key );
+					}
+				
+				return $placeholders;
 			}
 			
 			/**
@@ -98,28 +155,12 @@
 			{
 				if( ! self::$placeholders )
 				{
-					self::$placeholders = array(
-						array( 'key' => 'blogname' ),
-						array( 'key' => 'site_title' ),
-						array( 'key' => 'site_address' ),
-						array( 'key' => 'site_url' ),
-						
-						array( 'key' => 'order_number' ),
-						array( 'key' => 'order_date' ),
-						array( 'key' => 'order_billing_full_name', 'email_templates' => ['cancelled_order']),
+					self::$placeholders = array_merge(
+						self::get_order_item_placeholders(),
+						self::get_order_placeholders(),
+						self::get_email_placeholders()
 					);
-					
-					foreach( self::get_checkout_fields() as $section )
-						foreach( $section as $field_key => $field_args )
-							self::$placeholders[] = array( 'key' => $field_key, 'label' => $field_args['label'] );
-					
-					// gather meta keys of items in database
-					global $wpdb;
-					$meta_keys = $wpdb->get_col( "SELECT DISTINCT meta_key FROM {$wpdb->prefix}woocommerce_order_itemmeta" );
-					// check output for errors
-					if( empty( $wpdb->last_error ) )
-						foreach( $meta_keys as $meta_key )
-							self::$placeholders[] = array( 'key' => 'order_item_meta:' . $meta_key );
+					ksort( self::$placeholders );
 				}
 				
 				return self::$placeholders;
@@ -132,6 +173,7 @@
 			{
 				$content = $this->process_email_placeholders( $content );
 				$content = $this->process_order_placeholders( $content );
+				$content = $this->process_order_meta( $content );
 				$content = $this->process_order_item_meta( $content );
 				return $content;
 			}
@@ -239,17 +281,48 @@
 			{
 				if( is_a( $this->order, 'WC_Order' ) )
 				{
-					$search = array();
-					foreach( self::get_checkout_fields() as $section )
-						foreach( $section as $field_key => $field_args )
-							$search[] = '/{(' . preg_quote( $field_key, '/' ) . ')}/u';
-					
 					$content = preg_replace_callback(
-					 	$search,
+						 '/{([^}:]+)}/',
 					 	function( $matches )
 					 	{
-							// TODO: fix notice: "Function is_internal_meta_key was called incorrectly. Generic add/update/get meta methods should not be used for internal meta data, including "_billing_first_name". Use getters and setters. Backtrace: edit_post, wp_update_post, wp_insert_post, do_action('save_post'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Admin_Meta_Boxes->save_meta_boxes, do_action('woocommerce_process_shop_order_meta'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Meta_Box_Order_Data::save, WC_Order->save, WC_Order->status_transition, do_action('woocommerce_order_status_on-hold_to_processing'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Emails::send_transactional_email, do_action_ref_array('woocommerce_order_status_on-hold_to_processing_notification'), WP_Hook->do_action, WP_Hook->apply_filters, WC_Email_Customer_Processing_Order->trigger, WC_Email->get_attachments, apply_filters('woocommerce_email_attachments'), WP_Hook->apply_filters, Pdf_Forms_For_WooCommerce->attach_pdfs, Pdf_Forms_For_WooCommerce->fill_pdfs, Pdf_Forms_For_WooCommerce_Placeholder_Processor->process, Pdf_Forms_For_WooCommerce_Placeholder_Processor->process_order_placeholders, preg_replace_callback, Pdf_Forms_For_WooCommerce_Placeholder_Processor->{closure}, WC_Data->get_meta, WC_Data->is_internal_meta_key, wc_doing_it_wrong Please see Debugging in WordPress for more information. (This message was added in version 3.2.0.) in /var/www/html/wp-includes/functions.php on line 5905"
-							return @$this->order->get_meta( '_' . $matches[1], true );
+							$field_key = $matches[1];
+							
+							$value = null;
+							
+							// try to use a getter
+							$getter = 'get_' . ltrim( $field_key, '_' );
+							if( self::is_callable_for_placeholder( $this->order, $getter ) )
+								$value = $this->order->$getter();
+							
+							// order_comments getter is actually get_customer_note
+							if( $value === null && $field_key == 'order_comments' )
+								$value = $this->order->get_customer_note();
+							
+							// try to use a meta key getter
+							if( $value === null )
+							{
+								$value = @$this->order->get_meta( $field_key );
+								// $value will be '' if the meta key does not exist, set it back to null
+								if( $value === '' )
+									$value = null;
+							}
+							
+							// try to use a meta key getter with an underscore prefix
+							if( $value === null )
+							{
+								$value = @$this->order->get_meta( '_' . $field_key );
+								// $value will be '' if the meta key does not exist, set it back to null
+								if( $value === '' )
+									$value = null;
+							}
+							
+							// if the value is still null, the placeholder cannot be handled by this function, so we will keep it unchanged
+							if( $value === null )
+								$value = $matches[0];
+							
+							$value = self::value_to_string( $value );
+							
+							return $value;
 					 	},
 					 	$content
 					);
@@ -258,19 +331,31 @@
 				return $content;
 			}
 			
-			private static function array_to_string( $value, $separator = ', ' )
+			private function process_order_meta( $content )
 			{
-				if( is_array( $value ) )
+				if( is_a( $this->order, 'WC_Order' ) )
 				{
-					$result = '';
-					
-					foreach( $value as $k => $v )
-						$result .= self::array_to_string( $v, $separator ) . $separator;
-					
-					return '[' . rtrim( $result, $separator ) . ']';
+					$content = preg_replace_callback(
+						// TODO: make this work with escape sequences for curly braces in meta key
+						'/{order_meta:([^}]+)}/',
+						function( $matches )
+						{
+							$key = trim( $matches[1] );
+							$value = @$this->order->get_meta( $key );
+							
+							// $value will be '' if the meta key does not exist, then the placeholder cannot be handled by this function, so we will keep it unchanged
+							if( $value === '' )
+								$value = $matches[0];
+							
+							$value = self::value_to_string( $value );
+							
+							return $value;
+						},
+						$content
+					);
 				}
 				
-				return $value;
+				return $content;
 			}
 			
 			private function process_order_item_meta( $content )
@@ -283,12 +368,8 @@
 						function( $matches )
 						{
 							$key = trim( $matches[1] );
-							$value = wc_get_order_item_meta( $this->order_item->get_id(), $key, true );
-							
-							// convert multidimentional arrays to a string
-							if( is_array( $value ) )
-								$value = self::array_to_string( $value );
-							
+							$value = wc_get_order_item_meta( $this->order_item->get_id(), $key );
+							$value = self::value_to_string( $value );
 							return $value;
 						},
 						$content
@@ -296,6 +377,70 @@
 				}
 				
 				return $content;
+			}
+			
+			/**
+			 * Converts an array to a string for placeholder replacement
+			 */
+			private static function array_to_string( $value, $separator = ', ' )
+			{
+				if( is_array( $value ) )
+				{
+					$result = '';
+					
+					foreach( $value as $k => $v )
+						$result .= self::value_to_string( $v, $separator ) . $separator;
+					
+					return '[' . rtrim( $result, $separator ) . ']';
+				}
+				
+				return $value;
+			}
+			
+			/**
+			 * Converts an object to a string for placeholder replacement
+			 */
+			private static function object_to_string( $value )
+			{
+				if( is_object( $value ) )
+				{
+					// attempt sensible conversion to string
+					if( is_a( $value, 'WC_Meta_Data' ) )
+						$value = self::value_to_string( $value->get_data() );
+					else if( is_callable( array( $value, '__toString' ) ) )
+						$value = @$value->__toString();
+					else if( is_callable( array( $value, 'get_name' ) ) )
+						$value = @$value->get_name();
+					else
+						$value = get_class( $value );
+				}
+				
+				return $value;
+			}
+			
+			/**
+			 * Converts a value to a string for placeholder replacement
+			 */
+			private static function value_to_string( $value )
+			{
+				if( is_array( $value ) )
+					return self::array_to_string( $value );
+				else if( is_object( $value ) )
+					return self::object_to_string( $value );
+				else
+					return strval( $value );
+			}
+			
+			/**
+			 * Checks if a method is callable for placeholder replacement
+			 */
+			private static function is_callable_for_placeholder( $object, $method )
+			{
+				return is_callable( array( $object, $method ) )
+					// method must have no required parameters
+					&& empty( array_filter( ( new ReflectionMethod( $object, $method ) )->getParameters(), function( $param ) { return !$param->isOptional(); } ) )
+					// downloads will cause an infinite loop because it will cause fill_pdfs to be called, disallow it
+					&& ( $method != 'get_item_downloads' && $method != 'get_downloadable_items' );
 			}
 		}
 	}
