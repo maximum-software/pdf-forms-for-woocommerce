@@ -282,7 +282,7 @@
 				if( is_a( $this->order, 'WC_Order' ) )
 				{
 					$content = preg_replace_callback(
-						 '/{([^}:]+)}/',
+						'/\{([^\}:]+)\}/',
 					 	function( $matches )
 					 	{
 							$field_key = $matches[1];
@@ -337,7 +337,7 @@
 				{
 					$content = preg_replace_callback(
 						// TODO: make this work with escape sequences for curly braces in meta key
-						'/{order_meta:([^}]+)}/',
+						'/\{order_meta:([^\}]+)\}/',
 						function( $matches )
 						{
 							$key = trim( $matches[1] );
@@ -364,7 +364,7 @@
 				{
 					$content = preg_replace_callback(
 						// TODO: make this work with escape sequences for curly braces in meta key
-						'/{order_item_meta:([^}]+)}/',
+						'/\{order_item_meta:([^\}]+)\}/',
 						function( $matches )
 						{
 							$key = trim( $matches[1] );
