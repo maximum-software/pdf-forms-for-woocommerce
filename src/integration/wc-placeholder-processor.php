@@ -175,6 +175,7 @@
 				$content = $this->process_order_placeholders( $content );
 				$content = $this->process_order_meta( $content );
 				$content = $this->process_order_item_meta( $content );
+				$content = preg_replace( '/\{[^\}]+\}/', '', $content ); // replace any unmatched placeholders with an empty string
 				return $content;
 			}
 			
