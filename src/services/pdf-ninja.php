@@ -305,7 +305,7 @@
 			public function get_ignore_ssl_errors()
 			{
 				if( $this->ignore_ssl_errors === null )
-					$this->ignore_ssl_errors = boolval( get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', false ) );
+					$this->ignore_ssl_errors = get_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', 'no' ) == 'yes';
 				
 				return $this->ignore_ssl_errors;
 			}
@@ -316,7 +316,7 @@
 			public function set_ignore_ssl_errors( $value )
 			{
 				$this->ignore_ssl_errors = $value;
-				update_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', $value );
+				update_option( 'pdf-forms-for-woocommerce-settings-pdf-ninja-ignore-ssl-errors', $value ? 'yes' : 'no' );
 				return true;
 			}
 			
