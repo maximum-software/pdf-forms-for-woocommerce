@@ -31,6 +31,8 @@ Possible uses:
 
 An [external web API](https://pdf.ninja) is used for working with PDF files (free usage has limitations). The plugin comminicates with the external service to create an API key, upload your blank PDF files, retrieve information about your PDF files and eventually add your user information to your PDF files. Please see privacy policy at [https://pdf.ninja](https://pdf.ninja).
 
+Please see [Pdf.Ninja Terms of Use](https://pdf.ninja/#terms) and [Pdf.Ninja Privacy Policy](https://pdf.ninja/#privacy).
+
 Requirements:
  * PHP 5.5 or newer
  * WordPress 5.4 or newer
