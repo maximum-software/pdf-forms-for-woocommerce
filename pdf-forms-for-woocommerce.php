@@ -64,7 +64,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function plugin_init()
 		{
-			load_plugin_textdomain( 'pdf-forms-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+			add_action( 'init', array( $this, 'load_textdomain' ) );
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 			
@@ -104,6 +104,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( $service != $this->pdf_ninja_service )
 					$this->pdf_ninja_service->plugin_init();
 			}
+		}
+		
+		/*
+		 * Loads plugin textdomain
+		 */
+		public function load_textdomain()
+		{
+			load_plugin_textdomain( 'pdf-forms-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 		}
 		
 		/*
