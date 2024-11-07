@@ -242,7 +242,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		{
 			if( ! class_exists( 'WooCommerce' ) || ! defined( 'WC_VERSION' ) )
 			{
-				if( current_user_can( 'install_plugins' ) && current_user_can( 'activate_plugins' ) )
+				if( current_user_can( 'activate_plugins' ) )
 					echo Pdf_Forms_For_WooCommerce::render_error_notice( 'woocommerce-not-installed', array(
 						'label'   => esc_html__( "PDF Forms Filler for WooCommerce Error", 'pdf-forms-for-woocommerce' ),
 						'message' => esc_html__( "The required plugin 'WooCommerce' version is not installed!", 'pdf-forms-for-woocommerce' ),
@@ -251,7 +251,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 			
 			if( ! $this->is_wc_version_supported( WC_VERSION ) )
-				if( current_user_can( 'update_plugins' ) )
+				if( current_user_can( 'activate_plugins' ) )
 					echo Pdf_Forms_For_WooCommerce::render_warning_notice( 'unsupported-woocommerce-version-'.WC_VERSION, array(
 						'label'   => esc_html__( "PDF Forms Filler for WooCommerce Warning", 'pdf-forms-for-woocommerce' ),
 						'message' =>
