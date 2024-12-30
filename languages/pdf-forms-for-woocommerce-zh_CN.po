@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: PDF Forms Filler for WooCommerce 1.0.0\n"
+"Project-Id-Version: PDF Forms Filler for WooCommerce 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
 "woocommerce\n"
 "Language: zh_CN\n"
@@ -34,27 +34,27 @@ msgstr "Maximum.Software"
 msgid "https://maximum.software/"
 msgstr "https://maximum.software/"
 
-#: pdf-forms-for-woocommerce.php:190 src/integration/wc-settings-page.php:16
+#: pdf-forms-for-woocommerce.php:202 src/integration/wc-settings-page.php:15
 msgid "PDF Forms Filler"
 msgstr "PDF表格填充器"
 
-#: pdf-forms-for-woocommerce.php:221
+#: pdf-forms-for-woocommerce.php:234
 msgid "Support"
 msgstr "支持"
 
-#: pdf-forms-for-woocommerce.php:234 src/services/pdf-ninja.php:817
+#: pdf-forms-for-woocommerce.php:247 src/services/pdf-ninja.php:809
 msgid "PDF Forms Filler for WooCommerce Error"
 msgstr "WooCommerce的PDF表格填充器错误"
 
-#: pdf-forms-for-woocommerce.php:235
+#: pdf-forms-for-woocommerce.php:248
 msgid "The required plugin 'WooCommerce' version is not installed!"
 msgstr "所需的插件'WooCommerce'版本未安装！"
 
-#: pdf-forms-for-woocommerce.php:243
+#: pdf-forms-for-woocommerce.php:256
 msgid "PDF Forms Filler for WooCommerce Warning"
 msgstr "WooCommerce的PDF表格填充器警告"
 
-#: pdf-forms-for-woocommerce.php:246
+#: pdf-forms-for-woocommerce.php:259
 msgid ""
 "The currently installed version of 'WooCommerce' plugin ({current-"
 "woocommerce-version}) may not be supported by the current version of 'PDF "
@@ -68,49 +68,44 @@ msgstr ""
 "切换到'WooCommerce'插件版本{supported-woocommerce-version}或以下以确"
 "保'WooCommerce的PDF表格填充器'插件可以正常工作。"
 
-#: pdf-forms-for-woocommerce.php:248
+#: pdf-forms-for-woocommerce.php:261
 msgid "Unknown version"
 msgstr "未知版本"
 
-#: pdf-forms-for-woocommerce.php:273
+#: pdf-forms-for-woocommerce.php:286
 msgid "Clear All Messages"
 msgstr "清除所有消息"
 
-#: pdf-forms-for-woocommerce.php:277
+#: pdf-forms-for-woocommerce.php:290
 msgid "PDF Forms Filler for WooCommerce Messages"
 msgstr "WooCommerce的PDF表格填充器消息"
 
-#: pdf-forms-for-woocommerce.php:448 pdf-forms-for-woocommerce.php:481
-#: pdf-forms-for-woocommerce.php:709 pdf-forms-for-woocommerce.php:743
-#: pdf-forms-for-woocommerce.php:2447 pdf-forms-for-woocommerce.php:2686
+#: pdf-forms-for-woocommerce.php:461 pdf-forms-for-woocommerce.php:493
+#: pdf-forms-for-woocommerce.php:714 pdf-forms-for-woocommerce.php:748
+#: pdf-forms-for-woocommerce.php:2463 pdf-forms-for-woocommerce.php:2702
 msgid "Nonce mismatch"
 msgstr "Nonce不匹配"
 
-#: pdf-forms-for-woocommerce.php:451 pdf-forms-for-woocommerce.php:484
-#: pdf-forms-for-woocommerce.php:712 pdf-forms-for-woocommerce.php:746
-#: pdf-forms-for-woocommerce.php:2455 pdf-forms-for-woocommerce.php:2695
+#: pdf-forms-for-woocommerce.php:464 pdf-forms-for-woocommerce.php:496
+#: pdf-forms-for-woocommerce.php:717 pdf-forms-for-woocommerce.php:751
+#: pdf-forms-for-woocommerce.php:2471 pdf-forms-for-woocommerce.php:2711
 msgid "Permission denied"
 msgstr "权限被拒绝"
 
-#: pdf-forms-for-woocommerce.php:457
+#: pdf-forms-for-woocommerce.php:469
 msgid "Invalid email"
 msgstr "无效的电子邮件"
 
-#: pdf-forms-for-woocommerce.php:593
+#: pdf-forms-for-woocommerce.php:605
 msgid "Failed to download file: {error-message}"
 msgstr "下载文件失败：{error-message}"
 
-#: pdf-forms-for-woocommerce.php:605 src/services/pdf-ninja.php:667
-#: src/services/pdf-ninja.php:781
-msgid "Failed to open file for writing"
-msgstr "无法打开文件进行写入"
-
-#: pdf-forms-for-woocommerce.php:611 src/services/pdf-ninja.php:673
-#: src/services/pdf-ninja.php:787
+#: pdf-forms-for-woocommerce.php:615 pdf-forms-for-woocommerce.php:1449
+#: src/services/pdf-ninja.php:673 src/services/pdf-ninja.php:779
 msgid "Failed to create file"
 msgstr "无法创建文件"
 
-#: pdf-forms-for-woocommerce.php:692
+#: pdf-forms-for-woocommerce.php:697
 msgid ""
 "Product settings are stored in orders when they are created. Resetting "
 "settings is necessary when new product settings need to be applied to an old "
@@ -119,11 +114,11 @@ msgstr ""
 "产品设置在订单创建时存储。当需要将新的产品设置应用于旧订单时，重置设置是必要"
 "的。"
 
-#: pdf-forms-for-woocommerce.php:693
+#: pdf-forms-for-woocommerce.php:698
 msgid "Reset Settings"
 msgstr "重置设置"
 
-#: pdf-forms-for-woocommerce.php:694
+#: pdf-forms-for-woocommerce.php:699
 msgid ""
 "PDFs are refilled when orders status changes. Sometimes you may want to "
 "manually trigger PDFs to be refilled after changing some aspect of the "
@@ -132,31 +127,31 @@ msgstr ""
 "当订单状态更改时，PDF 会被重新填充。有时您可能希望在更改订单的某些方面（如账"
 "单地址）后手动触发 PDF 的重新填充。"
 
-#: pdf-forms-for-woocommerce.php:695
+#: pdf-forms-for-woocommerce.php:700
 msgid "Reset PDFs"
 msgstr "重置PDF"
 
-#: pdf-forms-for-woocommerce.php:716 pdf-forms-for-woocommerce.php:750
+#: pdf-forms-for-woocommerce.php:721 pdf-forms-for-woocommerce.php:755
 msgid "Invalid order ID"
 msgstr "无效的订单ID"
 
-#: pdf-forms-for-woocommerce.php:720 pdf-forms-for-woocommerce.php:754
+#: pdf-forms-for-woocommerce.php:725 pdf-forms-for-woocommerce.php:759
 msgid "Invalid order"
 msgstr "无效的订单"
 
-#: pdf-forms-for-woocommerce.php:1470 pdf-forms-for-woocommerce.php:2462
+#: pdf-forms-for-woocommerce.php:1482 pdf-forms-for-woocommerce.php:2478
 msgid "File type {mime-type} of {file} is unsupported for {purpose}"
 msgstr "{file} 的文件类型 {mime-type} 不支持 {purpose}"
 
-#: pdf-forms-for-woocommerce.php:1471
+#: pdf-forms-for-woocommerce.php:1483
 msgid "image embedding"
 msgstr "嵌入图像"
 
-#: pdf-forms-for-woocommerce.php:1751 pdf-forms-for-woocommerce.php:2526
+#: pdf-forms-for-woocommerce.php:1763 pdf-forms-for-woocommerce.php:2542
 msgid "Attachment file is not accessible"
 msgstr "附件文件不可访问"
 
-#: pdf-forms-for-woocommerce.php:1867
+#: pdf-forms-for-woocommerce.php:1879
 msgid ""
 "[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
 "message} at {error-file}:{error-line}"
@@ -164,7 +159,7 @@ msgstr ""
 "[{timestamp}] (订单:{order}, 产品:{product}) 填充PDF时出错: {error-message} "
 "位于 {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1869
+#: pdf-forms-for-woocommerce.php:1881
 msgid ""
 "[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
 "message} at {error-file}:{error-line}"
@@ -172,26 +167,26 @@ msgstr ""
 "[{timestamp}] (订单:{order}) 填充订单 {order} 的PDF时出错: {error-message} 位"
 "于 {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1871
+#: pdf-forms-for-woocommerce.php:1883
 msgid ""
 "[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-"
 "line}"
 msgstr ""
 "[{timestamp}] 填充PDF时出错: {error-message} 位于 {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1981
+#: pdf-forms-for-woocommerce.php:1994
 msgid "PDF Forms"
 msgstr "PDF表单"
 
-#: pdf-forms-for-woocommerce.php:2062
+#: pdf-forms-for-woocommerce.php:2064
 msgid "None"
 msgstr "无"
 
-#: pdf-forms-for-woocommerce.php:2063
+#: pdf-forms-for-woocommerce.php:2065
 msgid "Create a new downloadable file"
 msgstr "创建一个新的可下载文件"
 
-#: pdf-forms-for-woocommerce.php:2090
+#: pdf-forms-for-woocommerce.php:2104
 msgid ""
 "You can use this section to attach a PDF file to your product and link "
 "WooCommerce placeholders to fields in the PDF file. You can also embed "
@@ -201,57 +196,57 @@ msgstr ""
 "您可以使用此部分将PDF文件附加到产品并将WooCommerce占位符链接到PDF文件中的字"
 "段。您还可以将URL中的图像嵌入到PDF文件中。当产品保存时，这里的更改将被应用。"
 
-#: pdf-forms-for-woocommerce.php:2091
+#: pdf-forms-for-woocommerce.php:2105
 msgid "Attach a PDF File"
 msgstr "附加一个PDF文件"
 
-#: pdf-forms-for-woocommerce.php:2092 pdf-forms-for-woocommerce.php:2112
+#: pdf-forms-for-woocommerce.php:2106 pdf-forms-for-woocommerce.php:2126
 msgid "Delete"
 msgstr "删除"
 
-#: pdf-forms-for-woocommerce.php:2093
+#: pdf-forms-for-woocommerce.php:2107
 msgid "Map Value"
 msgstr "映射值"
 
-#: pdf-forms-for-woocommerce.php:2094
+#: pdf-forms-for-woocommerce.php:2108
 msgid "Options"
 msgstr "选项"
 
-#: pdf-forms-for-woocommerce.php:2095
+#: pdf-forms-for-woocommerce.php:2109
 msgid "Skip when empty"
 msgstr "为空时跳过"
 
-#: pdf-forms-for-woocommerce.php:2096
+#: pdf-forms-for-woocommerce.php:2110
 msgid "Attach the filled PDF file to the following emails:"
 msgstr "将填充的PDF文件附加到以下电子邮件："
 
-#: pdf-forms-for-woocommerce.php:2097
+#: pdf-forms-for-woocommerce.php:2111
 msgid "Flatten"
 msgstr "压平"
 
-#: pdf-forms-for-woocommerce.php:2098
+#: pdf-forms-for-woocommerce.php:2112
 msgid "New filled PDF file name (placeholders allowed):"
 msgstr "新的填写过的PDF文件名（允许占位符）："
 
-#: pdf-forms-for-woocommerce.php:2099
+#: pdf-forms-for-woocommerce.php:2113
 msgid "Path for saving filled PDF file (placeholders allowed):"
 msgstr "保存填写过的PDF文件的路径（允许占位符）："
 
-#: pdf-forms-for-woocommerce.php:2100
+#: pdf-forms-for-woocommerce.php:2114
 msgid ""
 "Provide a download link to the filled PDF file via the product's "
 "downloadable file:"
 msgstr "通过产品的可下载文件提供已填写的PDF文件的下载链接："
 
-#: pdf-forms-for-woocommerce.php:2101
+#: pdf-forms-for-woocommerce.php:2115
 msgid "(leave blank to disable this option)"
 msgstr "（留空以禁用此选项）"
 
-#: pdf-forms-for-woocommerce.php:2102
+#: pdf-forms-for-woocommerce.php:2116
 msgid "Field Mapper Tool"
 msgstr "字段映射工具"
 
-#: pdf-forms-for-woocommerce.php:2103
+#: pdf-forms-for-woocommerce.php:2117
 msgid ""
 "This tool can be used to link WooCommerce placeholders to fields in the "
 "attached PDF files. When an order email notification is sent or downloadable "
@@ -263,31 +258,31 @@ msgstr ""
 "件通知或请求可下载的文件时，带有占位符数据的文本将被插入到PDF文件中的相应字段"
 "中，并且填写的PDF将变得可用。"
 
-#: pdf-forms-for-woocommerce.php:2104
+#: pdf-forms-for-woocommerce.php:2118
 msgid "PDF field"
 msgstr "PDF字段"
 
-#: pdf-forms-for-woocommerce.php:2105
+#: pdf-forms-for-woocommerce.php:2119
 msgid "WooCommerce placeholders"
 msgstr "WooCommerce占位符"
 
-#: pdf-forms-for-woocommerce.php:2106
+#: pdf-forms-for-woocommerce.php:2120
 msgid "Add Mapping"
 msgstr "添加映射"
 
-#: pdf-forms-for-woocommerce.php:2107
+#: pdf-forms-for-woocommerce.php:2121
 msgid "Delete All"
 msgstr "全部删除"
 
-#: pdf-forms-for-woocommerce.php:2108
+#: pdf-forms-for-woocommerce.php:2122
 msgid "New Field:"
 msgstr "新字段："
 
-#: pdf-forms-for-woocommerce.php:2109
+#: pdf-forms-for-woocommerce.php:2123
 msgid "Image Embedding Tool"
 msgstr "图像嵌入工具"
 
-#: pdf-forms-for-woocommerce.php:2110
+#: pdf-forms-for-woocommerce.php:2124
 msgid ""
 "This tool allows embedding of images into PDF files. Images are taken from "
 "the provided URLs that may contain placeholders. You can select a PDF file "
@@ -298,243 +293,243 @@ msgstr ""
 "择PDF文件的某一页并绘制用于插入图像的边界框。或者，您也可以在每一页的中心插入"
 "您的图像。"
 
-#: pdf-forms-for-woocommerce.php:2111
+#: pdf-forms-for-woocommerce.php:2125
 msgid "Embed Image"
 msgstr "嵌入图像"
 
-#: pdf-forms-for-woocommerce.php:2113
+#: pdf-forms-for-woocommerce.php:2127
 msgid "PDF file"
 msgstr "PDF文件"
 
-#: pdf-forms-for-woocommerce.php:2114
+#: pdf-forms-for-woocommerce.php:2128
 msgid "Page"
 msgstr "页面"
 
-#: pdf-forms-for-woocommerce.php:2115
+#: pdf-forms-for-woocommerce.php:2129
 msgid "Select a region where the image needs to be embeded."
 msgstr "选择需要嵌入图像的区域。"
 
-#: pdf-forms-for-woocommerce.php:2116
+#: pdf-forms-for-woocommerce.php:2130
 msgid "Top"
 msgstr "顶部"
 
-#: pdf-forms-for-woocommerce.php:2117
+#: pdf-forms-for-woocommerce.php:2131
 msgid "Left"
 msgstr "左侧"
 
-#: pdf-forms-for-woocommerce.php:2118
+#: pdf-forms-for-woocommerce.php:2132
 msgid "Width"
 msgstr "宽度"
 
-#: pdf-forms-for-woocommerce.php:2119
+#: pdf-forms-for-woocommerce.php:2133
 msgid "Height"
 msgstr "高度"
 
-#: pdf-forms-for-woocommerce.php:2120
+#: pdf-forms-for-woocommerce.php:2134
 msgid "pts"
 msgstr "点"
 
-#: pdf-forms-for-woocommerce.php:2122
+#: pdf-forms-for-woocommerce.php:2136
 msgid ""
 "Have a question/comment/problem? Feel free to use {a-href-forum}the support "
 "forum{/a}."
 msgstr "有问题/意见/问题吗？请随时使用{a-href-forum}支持论坛{/a}。"
 
-#: pdf-forms-for-woocommerce.php:2128 pdf-forms-for-woocommerce.php:2394
+#: pdf-forms-for-woocommerce.php:2142 pdf-forms-for-woocommerce.php:2410
 msgid "Show Help"
 msgstr "显示帮助"
 
-#: pdf-forms-for-woocommerce.php:2129 pdf-forms-for-woocommerce.php:2395
+#: pdf-forms-for-woocommerce.php:2143 pdf-forms-for-woocommerce.php:2411
 msgid "Hide Help"
 msgstr "隐藏帮助"
 
-#: pdf-forms-for-woocommerce.php:2147
+#: pdf-forms-for-woocommerce.php:2162
 msgid "Failed to decode data"
 msgstr "无法解码数据"
 
-#: pdf-forms-for-woocommerce.php:2338
+#: pdf-forms-for-woocommerce.php:2353
 msgid ""
 "Error saving PDF form data: {error-message} at {error-file}:{error-line}"
 msgstr "保存PDF表单数据时出错：{error-message} 在 {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:2386
+#: pdf-forms-for-woocommerce.php:2402
 msgid "Failed to determine post ID"
 msgstr "无法确定帖子ID"
 
-#: pdf-forms-for-woocommerce.php:2387
+#: pdf-forms-for-woocommerce.php:2403
 msgid "Failed to load PDF form data"
 msgstr "无法加载PDF表单数据"
 
-#: pdf-forms-for-woocommerce.php:2388 src/services/pdf-ninja.php:130
-#: src/services/pdf-ninja.php:865
+#: pdf-forms-for-woocommerce.php:2404 src/services/pdf-ninja.php:138
+#: src/services/pdf-ninja.php:854
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: pdf-forms-for-woocommerce.php:2389
+#: pdf-forms-for-woocommerce.php:2405
 msgid ""
 "Are you sure you want to delete this file?  This will delete field mappings "
 "and image embeds associated with this file."
 msgstr "您确定要删除此文件吗？这将删除与此文件关联的字段映射和嵌入的图像。"
 
-#: pdf-forms-for-woocommerce.php:2390
+#: pdf-forms-for-woocommerce.php:2406
 msgid "Are you sure you want to delete this mapping?"
 msgstr "您确定要删除此映射吗？"
 
-#: pdf-forms-for-woocommerce.php:2391
+#: pdf-forms-for-woocommerce.php:2407
 msgid "Are you sure you want to delete all mappings?"
 msgstr "您确定要删除所有映射吗？"
 
-#: pdf-forms-for-woocommerce.php:2392
+#: pdf-forms-for-woocommerce.php:2408
 msgid "Are you sure you want to attach a PDF file without any form fields?"
 msgstr "您确定要附加一个没有任何表单字段的PDF文件吗？"
 
-#: pdf-forms-for-woocommerce.php:2393
+#: pdf-forms-for-woocommerce.php:2409
 msgid "Are you sure you want to delete this embeded image?"
 msgstr "您确定要删除此嵌入的图像吗？"
 
-#: pdf-forms-for-woocommerce.php:2396
+#: pdf-forms-for-woocommerce.php:2412
 msgid "Select a PDF file"
 msgstr "选择一个PDF文件"
 
-#: pdf-forms-for-woocommerce.php:2397
+#: pdf-forms-for-woocommerce.php:2413
 msgid "Select"
 msgstr "选择"
 
-#: pdf-forms-for-woocommerce.php:2398
+#: pdf-forms-for-woocommerce.php:2414
 msgid "All PDFs"
 msgstr "所有PDF"
 
-#: pdf-forms-for-woocommerce.php:2399
+#: pdf-forms-for-woocommerce.php:2415
 msgid "All"
 msgstr "全部"
 
-#: pdf-forms-for-woocommerce.php:2400
+#: pdf-forms-for-woocommerce.php:2416
 msgid "--- EMPTY ---"
 msgstr "--- 空 ---"
 
-#: pdf-forms-for-woocommerce.php:2421
+#: pdf-forms-for-woocommerce.php:2437
 msgid "Are you sure you want to reset settings for this order?"
 msgstr "您确定要重置此订单的设置吗？"
 
-#: pdf-forms-for-woocommerce.php:2422
+#: pdf-forms-for-woocommerce.php:2438
 msgid "Are you sure you want to reset PDFs for this order?"
 msgstr "您确定要重置此订单的PDF吗？"
 
-#: pdf-forms-for-woocommerce.php:2452
+#: pdf-forms-for-woocommerce.php:2468
 msgid "Invalid attachment ID"
 msgstr "无效的附件ID"
 
-#: pdf-forms-for-woocommerce.php:2463
+#: pdf-forms-for-woocommerce.php:2479
 msgid "PDF form filling"
 msgstr "PDF表单填充"
 
-#: pdf-forms-for-woocommerce.php:2543
+#: pdf-forms-for-woocommerce.php:2559
 msgid "Could not read attached file"
 msgstr "无法读取附加的文件"
 
-#: pdf-forms-for-woocommerce.php:2574
+#: pdf-forms-for-woocommerce.php:2590
 msgid "No service"
 msgstr "无服务"
 
-#: pdf-forms-for-woocommerce.php:2652
+#: pdf-forms-for-woocommerce.php:2668
 msgid "Failed to determine upload path"
 msgstr "无法确定上传路径"
 
-#: pdf-forms-for-woocommerce.php:2692
+#: pdf-forms-for-woocommerce.php:2708
 msgid "Invalid page number"
 msgstr "无效的页码"
 
-#: pdf-forms-for-woocommerce.php:2701
+#: pdf-forms-for-woocommerce.php:2717
 msgid "Failed to retrieve page snapshot"
 msgstr "无法检索页面快照"
 
-#: src/filesystem/storage.php:135
+#: src/filesystem/storage.php:134
 msgid "Can't create directory because a file with the same name already exists"
 msgstr "由于已存在同名文件，无法创建目录"
 
-#: src/services/pdf-ninja.php:38 src/services/pdf-ninja.php:42
+#: src/services/pdf-ninja.php:40 src/services/pdf-ninja.php:44
 msgid "Pdf.Ninja API"
 msgstr "Pdf.Ninja API"
 
-#: src/services/pdf-ninja.php:44
+#: src/services/pdf-ninja.php:46
 msgid "The following form allows you to edit your API settings."
 msgstr "以下表格允许您编辑您的API设置。"
 
-#: src/services/pdf-ninja.php:48
+#: src/services/pdf-ninja.php:50
 msgid "API Key"
 msgstr "API 密钥"
 
-#: src/services/pdf-ninja.php:52 src/services/pdf-ninja.php:118
+#: src/services/pdf-ninja.php:54 src/services/pdf-ninja.php:126
 msgid "copy key"
 msgstr "复制密钥"
 
-#: src/services/pdf-ninja.php:60 src/services/pdf-ninja.php:65
+#: src/services/pdf-ninja.php:62 src/services/pdf-ninja.php:70
 msgid "Get new API key"
 msgstr "获取新的API密钥"
 
-#: src/services/pdf-ninja.php:67
+#: src/services/pdf-ninja.php:72
 msgid "Get New Key"
 msgstr "获取新密钥"
 
-#: src/services/pdf-ninja.php:73
+#: src/services/pdf-ninja.php:80
 msgid "API URL"
 msgstr "API URL"
 
-#: src/services/pdf-ninja.php:75
+#: src/services/pdf-ninja.php:82
 msgid "Enter your API URL"
 msgstr "输入您的API URL"
 
-#: src/services/pdf-ninja.php:81
+#: src/services/pdf-ninja.php:88
 msgid "API version"
 msgstr "API 版本"
 
-#: src/services/pdf-ninja.php:83
+#: src/services/pdf-ninja.php:90
 msgid "Select API version"
 msgstr "选择API版本"
 
-#: src/services/pdf-ninja.php:93
+#: src/services/pdf-ninja.php:100
 msgid "Data Security"
 msgstr "数据安全"
 
-#: src/services/pdf-ninja.php:95
+#: src/services/pdf-ninja.php:102
 msgid "Ignore SSL errors"
 msgstr "忽略SSL错误"
 
-#: src/services/pdf-ninja.php:119
+#: src/services/pdf-ninja.php:127
 msgid "copied!"
 msgstr "已复制！"
 
-#: src/services/pdf-ninja.php:171
+#: src/services/pdf-ninja.php:179
 msgid "Failed to get the Pdf.Ninja API key on last attempt."
 msgstr "在最后一次尝试中无法获取Pdf.Ninja API密钥。"
 
-#: src/services/pdf-ninja.php:241
+#: src/services/pdf-ninja.php:249
 msgid "Failed to determine the administrator's email address."
 msgstr "无法确定管理员的电子邮件地址。"
 
-#: src/services/pdf-ninja.php:345
+#: src/services/pdf-ninja.php:353
 msgid "Failed to connect to {url}"
 msgstr "无法连接到 {url}"
 
-#: src/services/pdf-ninja.php:359
+#: src/services/pdf-ninja.php:367
 msgid "Failed to decode API server response"
 msgstr "无法解码API服务器的响应"
 
-#: src/services/pdf-ninja.php:362 src/services/pdf-ninja.php:489
-#: src/services/pdf-ninja.php:617 src/services/pdf-ninja.php:630
-#: src/services/pdf-ninja.php:662 src/services/pdf-ninja.php:776
+#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497
+#: src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
+#: src/services/pdf-ninja.php:670 src/services/pdf-ninja.php:776
 msgid "Pdf.Ninja API server did not send an expected response"
 msgstr "Pdf.Ninja API服务器未发送预期的响应"
 
-#: src/services/pdf-ninja.php:373
+#: src/services/pdf-ninja.php:381
 msgid "Failed to download a file from the API server"
 msgstr "无法从API服务器下载文件"
 
-#: src/services/pdf-ninja.php:533
+#: src/services/pdf-ninja.php:541
 msgid "Unknown attachment URL"
 msgstr "未知的附件URL"
 
-#: src/services/pdf-ninja.php:562
+#: src/services/pdf-ninja.php:570
 msgid "File is not accessible in the local file system"
 msgstr "文件在本地文件系统中不可访问"
 
@@ -542,25 +537,28 @@ msgstr "文件在本地文件系统中不可访问"
 msgid "Failed to encode JSON data"
 msgstr "无法编码JSON数据"
 
-#: src/services/pdf-ninja.php:820
+#: src/services/pdf-ninja.php:812
 msgid ""
 "Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-"
 "service-page}Please retry manually{/a}."
 msgstr ""
 "上次尝试获取Pdf.Ninja API密钥失败。{a-href-edit-service-page}请手动重试{/a}。"
 
-#: src/services/pdf-ninja.php:841
+#: src/services/pdf-ninja.php:832
 msgid "Warning"
 msgstr "警告"
 
-#: src/services/pdf-ninja.php:842
+#: src/services/pdf-ninja.php:833
 msgid ""
 "Your WooCommerce settings indicate that you are using an insecure connection "
 "to the Pdf.Ninja API server."
 msgstr "您的WooCommerce设置显示您正在使用不安全的连接到Pdf.Ninja API服务器。"
 
-#: src/services/service.php:22 src/services/service.php:27
-#: src/services/service.php:32 src/services/service.php:37
-#: src/services/service.php:42
+#: src/services/service.php:21 src/services/service.php:26
+#: src/services/service.php:31 src/services/service.php:36
+#: src/services/service.php:41
 msgid "Missing feature"
 msgstr "缺少功能"
+
+#~ msgid "Failed to open file for writing"
+#~ msgstr "无法打开文件进行写入"

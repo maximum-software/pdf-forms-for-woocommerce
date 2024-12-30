@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: PDF Forms Filler for WooCommerce 1.0.0\n"
+"Project-Id-Version: PDF Forms Filler for WooCommerce 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
 "woocommerce\n"
 "Language: ru_RU\n"
@@ -34,27 +34,27 @@ msgstr "Maximum.Software"
 msgid "https://maximum.software/"
 msgstr "https://maximum.software/"
 
-#: pdf-forms-for-woocommerce.php:190 src/integration/wc-settings-page.php:16
+#: pdf-forms-for-woocommerce.php:202 src/integration/wc-settings-page.php:15
 msgid "PDF Forms Filler"
 msgstr "Заполнитель форм PDF"
 
-#: pdf-forms-for-woocommerce.php:221
+#: pdf-forms-for-woocommerce.php:234
 msgid "Support"
 msgstr "Поддержка"
 
-#: pdf-forms-for-woocommerce.php:234 src/services/pdf-ninja.php:817
+#: pdf-forms-for-woocommerce.php:247 src/services/pdf-ninja.php:809
 msgid "PDF Forms Filler for WooCommerce Error"
 msgstr "Ошибка плагина «Заполнитель PDF форм для WooCommerce»"
 
-#: pdf-forms-for-woocommerce.php:235
+#: pdf-forms-for-woocommerce.php:248
 msgid "The required plugin 'WooCommerce' version is not installed!"
 msgstr "Необходимая версия плагина «WooCommerce» не установлена!"
 
-#: pdf-forms-for-woocommerce.php:243
+#: pdf-forms-for-woocommerce.php:256
 msgid "PDF Forms Filler for WooCommerce Warning"
 msgstr "Предупреждение о заполнителе форм PDF для WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:246
+#: pdf-forms-for-woocommerce.php:259
 msgid ""
 "The currently installed version of 'WooCommerce' plugin ({current-"
 "woocommerce-version}) may not be supported by the current version of 'PDF "
@@ -70,49 +70,44 @@ msgstr ""
 "чтобы гарантировать корректную работу плагина «PDF Forms Filler for "
 "WooCommerce»."
 
-#: pdf-forms-for-woocommerce.php:248
+#: pdf-forms-for-woocommerce.php:261
 msgid "Unknown version"
 msgstr "Неизвестная версия"
 
-#: pdf-forms-for-woocommerce.php:273
+#: pdf-forms-for-woocommerce.php:286
 msgid "Clear All Messages"
 msgstr "Очистить все сообщения"
 
-#: pdf-forms-for-woocommerce.php:277
+#: pdf-forms-for-woocommerce.php:290
 msgid "PDF Forms Filler for WooCommerce Messages"
 msgstr "Сообщения заполнителя форм PDF для WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:448 pdf-forms-for-woocommerce.php:481
-#: pdf-forms-for-woocommerce.php:709 pdf-forms-for-woocommerce.php:743
-#: pdf-forms-for-woocommerce.php:2447 pdf-forms-for-woocommerce.php:2686
+#: pdf-forms-for-woocommerce.php:461 pdf-forms-for-woocommerce.php:493
+#: pdf-forms-for-woocommerce.php:714 pdf-forms-for-woocommerce.php:748
+#: pdf-forms-for-woocommerce.php:2463 pdf-forms-for-woocommerce.php:2702
 msgid "Nonce mismatch"
 msgstr "Несовпадение nonce"
 
-#: pdf-forms-for-woocommerce.php:451 pdf-forms-for-woocommerce.php:484
-#: pdf-forms-for-woocommerce.php:712 pdf-forms-for-woocommerce.php:746
-#: pdf-forms-for-woocommerce.php:2455 pdf-forms-for-woocommerce.php:2695
+#: pdf-forms-for-woocommerce.php:464 pdf-forms-for-woocommerce.php:496
+#: pdf-forms-for-woocommerce.php:717 pdf-forms-for-woocommerce.php:751
+#: pdf-forms-for-woocommerce.php:2471 pdf-forms-for-woocommerce.php:2711
 msgid "Permission denied"
 msgstr "Доступ запрещен"
 
-#: pdf-forms-for-woocommerce.php:457
+#: pdf-forms-for-woocommerce.php:469
 msgid "Invalid email"
 msgstr "Неверный адрес электронной почты"
 
-#: pdf-forms-for-woocommerce.php:593
+#: pdf-forms-for-woocommerce.php:605
 msgid "Failed to download file: {error-message}"
 msgstr "Не удалось скачать файл: {error-message}"
 
-#: pdf-forms-for-woocommerce.php:605 src/services/pdf-ninja.php:667
-#: src/services/pdf-ninja.php:781
-msgid "Failed to open file for writing"
-msgstr "Не удалось открыть файл для записи"
-
-#: pdf-forms-for-woocommerce.php:611 src/services/pdf-ninja.php:673
-#: src/services/pdf-ninja.php:787
+#: pdf-forms-for-woocommerce.php:615 pdf-forms-for-woocommerce.php:1449
+#: src/services/pdf-ninja.php:673 src/services/pdf-ninja.php:779
 msgid "Failed to create file"
 msgstr "Не удалось создать файл"
 
-#: pdf-forms-for-woocommerce.php:692
+#: pdf-forms-for-woocommerce.php:697
 msgid ""
 "Product settings are stored in orders when they are created. Resetting "
 "settings is necessary when new product settings need to be applied to an old "
@@ -122,11 +117,11 @@ msgstr ""
 "необходим, когда требуется применить новые настройки продукта к старому "
 "заказу."
 
-#: pdf-forms-for-woocommerce.php:693
+#: pdf-forms-for-woocommerce.php:698
 msgid "Reset Settings"
 msgstr "Сбросить настройки"
 
-#: pdf-forms-for-woocommerce.php:694
+#: pdf-forms-for-woocommerce.php:699
 msgid ""
 "PDFs are refilled when orders status changes. Sometimes you may want to "
 "manually trigger PDFs to be refilled after changing some aspect of the "
@@ -136,31 +131,31 @@ msgstr ""
 "потребоваться вручную запустить заполнение PDF-файлов после изменения "
 "некоторых аспектов заказа, таких как адрес оплаты."
 
-#: pdf-forms-for-woocommerce.php:695
+#: pdf-forms-for-woocommerce.php:700
 msgid "Reset PDFs"
 msgstr "Сбросить файлы PDF"
 
-#: pdf-forms-for-woocommerce.php:716 pdf-forms-for-woocommerce.php:750
+#: pdf-forms-for-woocommerce.php:721 pdf-forms-for-woocommerce.php:755
 msgid "Invalid order ID"
 msgstr "Неверный идентификатор заказа"
 
-#: pdf-forms-for-woocommerce.php:720 pdf-forms-for-woocommerce.php:754
+#: pdf-forms-for-woocommerce.php:725 pdf-forms-for-woocommerce.php:759
 msgid "Invalid order"
 msgstr "Неверный заказ"
 
-#: pdf-forms-for-woocommerce.php:1470 pdf-forms-for-woocommerce.php:2462
+#: pdf-forms-for-woocommerce.php:1482 pdf-forms-for-woocommerce.php:2478
 msgid "File type {mime-type} of {file} is unsupported for {purpose}"
 msgstr "Тип файла {mime-type} из {file} не поддерживается для {purpose}"
 
-#: pdf-forms-for-woocommerce.php:1471
+#: pdf-forms-for-woocommerce.php:1483
 msgid "image embedding"
 msgstr "вставки изображений"
 
-#: pdf-forms-for-woocommerce.php:1751 pdf-forms-for-woocommerce.php:2526
+#: pdf-forms-for-woocommerce.php:1763 pdf-forms-for-woocommerce.php:2542
 msgid "Attachment file is not accessible"
 msgstr "Файл вложения недоступен"
 
-#: pdf-forms-for-woocommerce.php:1867
+#: pdf-forms-for-woocommerce.php:1879
 msgid ""
 "[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
 "message} at {error-file}:{error-line}"
@@ -168,7 +163,7 @@ msgstr ""
 "[{timestamp}] (заказ:{order}, продукт:{product}) Ошибка заполнения PDF: "
 "{error-message} в {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1869
+#: pdf-forms-for-woocommerce.php:1881
 msgid ""
 "[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
 "message} at {error-file}:{error-line}"
@@ -176,7 +171,7 @@ msgstr ""
 "[{timestamp}] Ошибка заполнения PDF: {error-message} в {error-file}:{error-"
 "line}"
 
-#: pdf-forms-for-woocommerce.php:1871
+#: pdf-forms-for-woocommerce.php:1883
 msgid ""
 "[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-"
 "line}"
@@ -184,19 +179,19 @@ msgstr ""
 "[{timestamp}] Ошибка заполнения PDF: {error-message} в {error-file}:{error-"
 "line}"
 
-#: pdf-forms-for-woocommerce.php:1981
+#: pdf-forms-for-woocommerce.php:1994
 msgid "PDF Forms"
 msgstr "Формы PDF"
 
-#: pdf-forms-for-woocommerce.php:2062
+#: pdf-forms-for-woocommerce.php:2064
 msgid "None"
 msgstr "Нет"
 
-#: pdf-forms-for-woocommerce.php:2063
+#: pdf-forms-for-woocommerce.php:2065
 msgid "Create a new downloadable file"
 msgstr "Создать новый файл для загрузки"
 
-#: pdf-forms-for-woocommerce.php:2090
+#: pdf-forms-for-woocommerce.php:2104
 msgid ""
 "You can use this section to attach a PDF file to your product and link "
 "WooCommerce placeholders to fields in the PDF file. You can also embed "
@@ -208,43 +203,43 @@ msgstr ""
 "можете встроить изображения из URL-адреса в файл PDF. Изменения здесь "
 "применяются при сохранении продукта."
 
-#: pdf-forms-for-woocommerce.php:2091
+#: pdf-forms-for-woocommerce.php:2105
 msgid "Attach a PDF File"
 msgstr "Прикрепить файл PDF"
 
-#: pdf-forms-for-woocommerce.php:2092 pdf-forms-for-woocommerce.php:2112
+#: pdf-forms-for-woocommerce.php:2106 pdf-forms-for-woocommerce.php:2126
 msgid "Delete"
 msgstr "Удалить"
 
-#: pdf-forms-for-woocommerce.php:2093
+#: pdf-forms-for-woocommerce.php:2107
 msgid "Map Value"
 msgstr "Значение"
 
-#: pdf-forms-for-woocommerce.php:2094
+#: pdf-forms-for-woocommerce.php:2108
 msgid "Options"
 msgstr "Опции"
 
-#: pdf-forms-for-woocommerce.php:2095
+#: pdf-forms-for-woocommerce.php:2109
 msgid "Skip when empty"
 msgstr "Пропустить когда пусто"
 
-#: pdf-forms-for-woocommerce.php:2096
+#: pdf-forms-for-woocommerce.php:2110
 msgid "Attach the filled PDF file to the following emails:"
 msgstr "Прикрепить заполненный файл PDF к следующим электронным письмам:"
 
-#: pdf-forms-for-woocommerce.php:2097
+#: pdf-forms-for-woocommerce.php:2111
 msgid "Flatten"
 msgstr "Свести"
 
-#: pdf-forms-for-woocommerce.php:2098
+#: pdf-forms-for-woocommerce.php:2112
 msgid "New filled PDF file name (placeholders allowed):"
 msgstr "Новое имя заполненного файла PDF (разрешены заполнители):"
 
-#: pdf-forms-for-woocommerce.php:2099
+#: pdf-forms-for-woocommerce.php:2113
 msgid "Path for saving filled PDF file (placeholders allowed):"
 msgstr "Путь для сохранения заполненного файла PDF (разрешены заполнители):"
 
-#: pdf-forms-for-woocommerce.php:2100
+#: pdf-forms-for-woocommerce.php:2114
 msgid ""
 "Provide a download link to the filled PDF file via the product's "
 "downloadable file:"
@@ -252,15 +247,15 @@ msgstr ""
 "Предоставить сслыку для загрузки заполненного файла PDF через загружаемый "
 "файл продукта:"
 
-#: pdf-forms-for-woocommerce.php:2101
+#: pdf-forms-for-woocommerce.php:2115
 msgid "(leave blank to disable this option)"
 msgstr "(оставьте пустым, чтобы отключить эту опцию)"
 
-#: pdf-forms-for-woocommerce.php:2102
+#: pdf-forms-for-woocommerce.php:2116
 msgid "Field Mapper Tool"
 msgstr "Инструмент для связывания полей"
 
-#: pdf-forms-for-woocommerce.php:2103
+#: pdf-forms-for-woocommerce.php:2117
 msgid ""
 "This tool can be used to link WooCommerce placeholders to fields in the "
 "attached PDF files. When an order email notification is sent or downloadable "
@@ -274,31 +269,31 @@ msgstr ""
 "данными заполнителя будет вставлен в соответствующие поля в файле PDF, и "
 "заполненный PDF будет доступен."
 
-#: pdf-forms-for-woocommerce.php:2104
+#: pdf-forms-for-woocommerce.php:2118
 msgid "PDF field"
 msgstr "Поле PDF"
 
-#: pdf-forms-for-woocommerce.php:2105
+#: pdf-forms-for-woocommerce.php:2119
 msgid "WooCommerce placeholders"
 msgstr "Заполнители WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:2106
+#: pdf-forms-for-woocommerce.php:2120
 msgid "Add Mapping"
 msgstr "Добавить сопоставление"
 
-#: pdf-forms-for-woocommerce.php:2107
+#: pdf-forms-for-woocommerce.php:2121
 msgid "Delete All"
 msgstr "Удалить все"
 
-#: pdf-forms-for-woocommerce.php:2108
+#: pdf-forms-for-woocommerce.php:2122
 msgid "New Field:"
 msgstr "Новое поле:"
 
-#: pdf-forms-for-woocommerce.php:2109
+#: pdf-forms-for-woocommerce.php:2123
 msgid "Image Embedding Tool"
 msgstr "Инструмент для вставки изображений"
 
-#: pdf-forms-for-woocommerce.php:2110
+#: pdf-forms-for-woocommerce.php:2124
 msgid ""
 "This tool allows embedding of images into PDF files. Images are taken from "
 "the provided URLs that may contain placeholders. You can select a PDF file "
@@ -311,43 +306,43 @@ msgstr ""
 "вставки изображения. В качестве альтернативы, вы можете вставить свое "
 "изображение в центр каждой страницы."
 
-#: pdf-forms-for-woocommerce.php:2111
+#: pdf-forms-for-woocommerce.php:2125
 msgid "Embed Image"
 msgstr "Вставить"
 
-#: pdf-forms-for-woocommerce.php:2113
+#: pdf-forms-for-woocommerce.php:2127
 msgid "PDF file"
 msgstr "Файл PDF"
 
-#: pdf-forms-for-woocommerce.php:2114
+#: pdf-forms-for-woocommerce.php:2128
 msgid "Page"
 msgstr "Страница"
 
-#: pdf-forms-for-woocommerce.php:2115
+#: pdf-forms-for-woocommerce.php:2129
 msgid "Select a region where the image needs to be embeded."
 msgstr "Выберите регион, в который должно быть встроено изображение."
 
-#: pdf-forms-for-woocommerce.php:2116
+#: pdf-forms-for-woocommerce.php:2130
 msgid "Top"
 msgstr "Сверху"
 
-#: pdf-forms-for-woocommerce.php:2117
+#: pdf-forms-for-woocommerce.php:2131
 msgid "Left"
 msgstr "Слева"
 
-#: pdf-forms-for-woocommerce.php:2118
+#: pdf-forms-for-woocommerce.php:2132
 msgid "Width"
 msgstr "Ширина"
 
-#: pdf-forms-for-woocommerce.php:2119
+#: pdf-forms-for-woocommerce.php:2133
 msgid "Height"
 msgstr "Высота"
 
-#: pdf-forms-for-woocommerce.php:2120
+#: pdf-forms-for-woocommerce.php:2134
 msgid "pts"
 msgstr "пт"
 
-#: pdf-forms-for-woocommerce.php:2122
+#: pdf-forms-for-woocommerce.php:2136
 msgid ""
 "Have a question/comment/problem? Feel free to use {a-href-forum}the support "
 "forum{/a}."
@@ -355,39 +350,39 @@ msgstr ""
 "У вас есть вопрос/комментарий/проблема? Не стесняйтесь использовать {a-href-"
 "forum}форум поддержки{/a}."
 
-#: pdf-forms-for-woocommerce.php:2128 pdf-forms-for-woocommerce.php:2394
+#: pdf-forms-for-woocommerce.php:2142 pdf-forms-for-woocommerce.php:2410
 msgid "Show Help"
 msgstr "Показать справку"
 
-#: pdf-forms-for-woocommerce.php:2129 pdf-forms-for-woocommerce.php:2395
+#: pdf-forms-for-woocommerce.php:2143 pdf-forms-for-woocommerce.php:2411
 msgid "Hide Help"
 msgstr "Скрыть справку"
 
-#: pdf-forms-for-woocommerce.php:2147
+#: pdf-forms-for-woocommerce.php:2162
 msgid "Failed to decode data"
 msgstr "Не удалось декодировать данные"
 
-#: pdf-forms-for-woocommerce.php:2338
+#: pdf-forms-for-woocommerce.php:2353
 msgid ""
 "Error saving PDF form data: {error-message} at {error-file}:{error-line}"
 msgstr ""
 "Ошибка при сохранении данных формы PDF: {error-message} в {error-file}:"
 "{error-line}"
 
-#: pdf-forms-for-woocommerce.php:2386
+#: pdf-forms-for-woocommerce.php:2402
 msgid "Failed to determine post ID"
 msgstr "Не удалось определить идентификатор записи"
 
-#: pdf-forms-for-woocommerce.php:2387
+#: pdf-forms-for-woocommerce.php:2403
 msgid "Failed to load PDF form data"
 msgstr "Не удалось загрузить данные формы PDF"
 
-#: pdf-forms-for-woocommerce.php:2388 src/services/pdf-ninja.php:130
-#: src/services/pdf-ninja.php:865
+#: pdf-forms-for-woocommerce.php:2404 src/services/pdf-ninja.php:138
+#: src/services/pdf-ninja.php:854
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
-#: pdf-forms-for-woocommerce.php:2389
+#: pdf-forms-for-woocommerce.php:2405
 msgid ""
 "Are you sure you want to delete this file?  This will delete field mappings "
 "and image embeds associated with this file."
@@ -395,166 +390,166 @@ msgstr ""
 "Вы действительно хотите удалить этот файл? Это приведет к удалению "
 "сопоставлений полей и изображений, связанных с этим файлом."
 
-#: pdf-forms-for-woocommerce.php:2390
+#: pdf-forms-for-woocommerce.php:2406
 msgid "Are you sure you want to delete this mapping?"
 msgstr "Вы действительно хотите удалить это сопоставление?"
 
-#: pdf-forms-for-woocommerce.php:2391
+#: pdf-forms-for-woocommerce.php:2407
 msgid "Are you sure you want to delete all mappings?"
 msgstr "Вы уверены, что хотите удалить все сопоставления?"
 
-#: pdf-forms-for-woocommerce.php:2392
+#: pdf-forms-for-woocommerce.php:2408
 msgid "Are you sure you want to attach a PDF file without any form fields?"
 msgstr "Вы уверены, что хотите прикрепить файл PDF без полей формы?"
 
-#: pdf-forms-for-woocommerce.php:2393
+#: pdf-forms-for-woocommerce.php:2409
 msgid "Are you sure you want to delete this embeded image?"
 msgstr "Вы уверены, что хотите удалить это встраиваемое изображение?"
 
-#: pdf-forms-for-woocommerce.php:2396
+#: pdf-forms-for-woocommerce.php:2412
 msgid "Select a PDF file"
 msgstr "Выберите файл PDF"
 
-#: pdf-forms-for-woocommerce.php:2397
+#: pdf-forms-for-woocommerce.php:2413
 msgid "Select"
 msgstr "Выбрать"
 
-#: pdf-forms-for-woocommerce.php:2398
+#: pdf-forms-for-woocommerce.php:2414
 msgid "All PDFs"
 msgstr "Все PDF-файлы"
 
-#: pdf-forms-for-woocommerce.php:2399
+#: pdf-forms-for-woocommerce.php:2415
 msgid "All"
 msgstr "Все"
 
-#: pdf-forms-for-woocommerce.php:2400
+#: pdf-forms-for-woocommerce.php:2416
 msgid "--- EMPTY ---"
 msgstr "--- ПУСТО ---"
 
-#: pdf-forms-for-woocommerce.php:2421
+#: pdf-forms-for-woocommerce.php:2437
 msgid "Are you sure you want to reset settings for this order?"
 msgstr "Вы уверены, что хотите сбросить настройки для этого заказа?"
 
-#: pdf-forms-for-woocommerce.php:2422
+#: pdf-forms-for-woocommerce.php:2438
 msgid "Are you sure you want to reset PDFs for this order?"
 msgstr "Вы уверены, что хотите сбросить PDF для этого заказа?"
 
-#: pdf-forms-for-woocommerce.php:2452
+#: pdf-forms-for-woocommerce.php:2468
 msgid "Invalid attachment ID"
 msgstr "Недопустимый идентификатор вложения"
 
-#: pdf-forms-for-woocommerce.php:2463
+#: pdf-forms-for-woocommerce.php:2479
 msgid "PDF form filling"
 msgstr "заполнения формы PDF"
 
-#: pdf-forms-for-woocommerce.php:2543
+#: pdf-forms-for-woocommerce.php:2559
 msgid "Could not read attached file"
 msgstr "Не удалось прочитать прикрепленный файл"
 
-#: pdf-forms-for-woocommerce.php:2574
+#: pdf-forms-for-woocommerce.php:2590
 msgid "No service"
 msgstr "Нет службы"
 
-#: pdf-forms-for-woocommerce.php:2652
+#: pdf-forms-for-woocommerce.php:2668
 msgid "Failed to determine upload path"
 msgstr "Не удалось определить путь для загрузки"
 
-#: pdf-forms-for-woocommerce.php:2692
+#: pdf-forms-for-woocommerce.php:2708
 msgid "Invalid page number"
 msgstr "Недопустимый номер страницы"
 
-#: pdf-forms-for-woocommerce.php:2701
+#: pdf-forms-for-woocommerce.php:2717
 msgid "Failed to retrieve page snapshot"
 msgstr "Не удалось получить снимок страницы"
 
-#: src/filesystem/storage.php:135
+#: src/filesystem/storage.php:134
 msgid "Can't create directory because a file with the same name already exists"
 msgstr ""
 "Невозможно создать каталог, потому что файл с таким же именем уже существует"
 
-#: src/services/pdf-ninja.php:38 src/services/pdf-ninja.php:42
+#: src/services/pdf-ninja.php:40 src/services/pdf-ninja.php:44
 msgid "Pdf.Ninja API"
 msgstr "Pdf.Ninja API"
 
-#: src/services/pdf-ninja.php:44
+#: src/services/pdf-ninja.php:46
 msgid "The following form allows you to edit your API settings."
 msgstr "Следующая форма позволяет вам редактировать настройки API."
 
-#: src/services/pdf-ninja.php:48
+#: src/services/pdf-ninja.php:50
 msgid "API Key"
 msgstr "Ключ API"
 
-#: src/services/pdf-ninja.php:52 src/services/pdf-ninja.php:118
+#: src/services/pdf-ninja.php:54 src/services/pdf-ninja.php:126
 msgid "copy key"
 msgstr "копировать ключ"
 
-#: src/services/pdf-ninja.php:60 src/services/pdf-ninja.php:65
+#: src/services/pdf-ninja.php:62 src/services/pdf-ninja.php:70
 msgid "Get new API key"
 msgstr "Получить новый API ключ"
 
-#: src/services/pdf-ninja.php:67
+#: src/services/pdf-ninja.php:72
 msgid "Get New Key"
 msgstr "Получить новый ключ"
 
-#: src/services/pdf-ninja.php:73
+#: src/services/pdf-ninja.php:80
 msgid "API URL"
 msgstr "Адрес API"
 
-#: src/services/pdf-ninja.php:75
+#: src/services/pdf-ninja.php:82
 msgid "Enter your API URL"
 msgstr "Введите ваш URL API"
 
-#: src/services/pdf-ninja.php:81
+#: src/services/pdf-ninja.php:88
 msgid "API version"
 msgstr "Версия API"
 
-#: src/services/pdf-ninja.php:83
+#: src/services/pdf-ninja.php:90
 msgid "Select API version"
 msgstr "Выберите версию API"
 
-#: src/services/pdf-ninja.php:93
+#: src/services/pdf-ninja.php:100
 msgid "Data Security"
 msgstr "Безопасность данных"
 
-#: src/services/pdf-ninja.php:95
+#: src/services/pdf-ninja.php:102
 msgid "Ignore SSL errors"
 msgstr "Игнорировать ошибки SSL"
 
-#: src/services/pdf-ninja.php:119
+#: src/services/pdf-ninja.php:127
 msgid "copied!"
 msgstr "скопировано!"
 
-#: src/services/pdf-ninja.php:171
+#: src/services/pdf-ninja.php:179
 msgid "Failed to get the Pdf.Ninja API key on last attempt."
 msgstr "Не удалось получить ключ API Pdf.Ninja при последней попытке."
 
-#: src/services/pdf-ninja.php:241
+#: src/services/pdf-ninja.php:249
 msgid "Failed to determine the administrator's email address."
 msgstr "Не удалось определить адрес электронной почты администратора."
 
-#: src/services/pdf-ninja.php:345
+#: src/services/pdf-ninja.php:353
 msgid "Failed to connect to {url}"
 msgstr "Не удалось подключиться к {url}"
 
-#: src/services/pdf-ninja.php:359
+#: src/services/pdf-ninja.php:367
 msgid "Failed to decode API server response"
 msgstr "Не удалось декодировать ответ от сервера API"
 
-#: src/services/pdf-ninja.php:362 src/services/pdf-ninja.php:489
-#: src/services/pdf-ninja.php:617 src/services/pdf-ninja.php:630
-#: src/services/pdf-ninja.php:662 src/services/pdf-ninja.php:776
+#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497
+#: src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
+#: src/services/pdf-ninja.php:670 src/services/pdf-ninja.php:776
 msgid "Pdf.Ninja API server did not send an expected response"
 msgstr "Сервер API Pdf.Ninja не послал ожидаемый ответ"
 
-#: src/services/pdf-ninja.php:373
+#: src/services/pdf-ninja.php:381
 msgid "Failed to download a file from the API server"
 msgstr "Не удалось загрузить файл с сервера API"
 
-#: src/services/pdf-ninja.php:533
+#: src/services/pdf-ninja.php:541
 msgid "Unknown attachment URL"
 msgstr "Неизвестный URL вложения"
 
-#: src/services/pdf-ninja.php:562
+#: src/services/pdf-ninja.php:570
 msgid "File is not accessible in the local file system"
 msgstr "Файл недоступен в локальной файловой системе"
 
@@ -562,7 +557,7 @@ msgstr "Файл недоступен в локальной файловой с�
 msgid "Failed to encode JSON data"
 msgstr "Не удалось кодировать данные JSON"
 
-#: src/services/pdf-ninja.php:820
+#: src/services/pdf-ninja.php:812
 msgid ""
 "Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-"
 "service-page}Please retry manually{/a}."
@@ -570,11 +565,11 @@ msgstr ""
 "Не удалось получить ключ API Pdf.Ninja при последней попытке. {a-href-edit-"
 "service-page}Повторите попытку вручную{/a}."
 
-#: src/services/pdf-ninja.php:841
+#: src/services/pdf-ninja.php:832
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: src/services/pdf-ninja.php:842
+#: src/services/pdf-ninja.php:833
 msgid ""
 "Your WooCommerce settings indicate that you are using an insecure connection "
 "to the Pdf.Ninja API server."
@@ -582,8 +577,11 @@ msgstr ""
 "Настройки WooCommerce указывают на то, что вы используете небезопасное "
 "соединение с сервером API Pdf.Ninja."
 
-#: src/services/service.php:22 src/services/service.php:27
-#: src/services/service.php:32 src/services/service.php:37
-#: src/services/service.php:42
+#: src/services/service.php:21 src/services/service.php:26
+#: src/services/service.php:31 src/services/service.php:36
+#: src/services/service.php:41
 msgid "Missing feature"
 msgstr "Отсутствующая функция"
+
+#~ msgid "Failed to open file for writing"
+#~ msgstr "Не удалось открыть файл для записи"
