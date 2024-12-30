@@ -1,6 +1,6 @@
 === PDF Forms Filler for WooCommerce ===
-Version: 1.0.6
-Stable tag: 1.0.6
+Version: 1.1.0
+Stable tag: 1.1.0
 Requires at least: 5.4
 Tested up to: 6.7
 Requires PHP: 5.5
@@ -54,6 +54,15 @@ Special thanks to the following sponsors of this plugin:
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
 
 == Changelog ==
+
+= 1.1.0 =
+
+* Release date: December 30, 2024
+
+* Added HPOS support
+* Added 'delete all value mappings' button
+* Verified support for WC 9.5
+* Other bug fixes and improvements
 
 = 1.0.6 =
 
