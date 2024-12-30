@@ -2087,7 +2087,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$attributes['classes'] = trim( $attributes['classes'] . " notice-$type" );
 			
 			if( !isset( $attributes['label'] ) )
-				$attributes['label'] = __( "PDF Forms Filler for WooCommerce" );
+				$attributes['label'] = __( "PDF Forms Filler for WooCommerce", 'pdf-forms-for-woocommerce' );
 			
 			if( $notice_id )
 			{
