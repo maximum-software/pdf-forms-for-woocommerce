@@ -7,7 +7,7 @@
  * Requires at least: 5.4
  * Requires PHP: 5.5
  * Requires Plugins: woocommerce
- * WC requires at least: 5.6.0
+ * WC requires at least: 7.1.0
  * WC tested up to: 9.4.0
  * Author: Maximum.Software
  * Author URI: https://maximum.software/
@@ -40,6 +40,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		private $tmp_storage = null;
 		private $filled_pdfs = array();
 		private $new_orders = array();
+		private $delayed_saving_orders = array();
+		private $do_not_save_orders = array();
 		
 		private function __construct()
 		{
@@ -82,7 +84,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'admin_menu', array( $this, 'register_services' ) );
 			add_action( 'add_meta_boxes', array( $this, 'register_order_metabox' ) );
 			
-			add_action( 'woocommerce_new_order', array( $this, 'woocommerce_new_order' ), 10, 2 );
+			add_action( 'before_woocommerce_init', array( $this, 'before_woocommerce_init' ) );
+			add_action( 'woocommerce_new_order', array( $this, 'woocommerce_new_order' ), 10, 2 ); // since 2.7.0
 			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_after_order_object_save', array( $this, 'woocommerce_after_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
@@ -90,13 +93,17 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
 			
-			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 1, 2 );
+			add_action( 'before_delete_post', array( $this, 'before_delete_post' ), 10, 1 );
+			add_action( 'woocommerce_before_delete_order', array( $this, 'woocommerce_before_delete_order' ), 10, 1 ); // since WC 7.1.0
+			add_action( 'woocommerce_before_delete_order_item', array( $this, 'woocommerce_before_delete_order_item' ), 10, 1 ); // since WC 2.0.9
 			
 			add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
 			add_action( 'woocommerce_product_data_panels', array( $this, 'print_product_data_tab_contents' ) );
 			add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_data' ), 99 );
 			
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'register_settings' ) );
+			
+			add_action( 'shutdown', array( $this, 'save_delayed_orders' ) );
 			
 			if( $service = $this->get_service() )
 			{
@@ -112,6 +119,25 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public function load_textdomain()
 		{
 			load_plugin_textdomain( 'pdf-forms-for-woocommerce', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		}
+		
+		/*
+		 * Declares WC compatibility
+		 */
+		public function before_woocommerce_init()
+		{
+			if( is_callable( array( '\Automattic\WooCommerce\Utilities\FeaturesUtil', 'declare_compatibility' ) ) )
+				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		}
+		
+		/*
+		 * Checks if WC High-Performance Order Storage is enabled
+		 */
+		public static function is_wc_hpos_enabled()
+		{
+			return
+				is_callable( array( '\Automattic\WooCommerce\Utilities\OrderUtil', 'custom_orders_table_usage_is_enabled' ) )
+				&& \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
 		}
 		
 		/*
@@ -133,19 +159,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- This function does not need nonce verification because it doesn't process any data, it only adds a meta box
 		public function register_order_metabox()
 		{
-			$post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : null;
-			
-			// check post id
-			if( ! $post_id )
-				return;
-			
-			// display meta box only on the order edit page
-			$post_type = get_post_type( $post_id );
-			if( $post_type !== 'shop_order' )
-				return;
-			
-			// check order
-			$order = wc_get_order( $post_id );
+			// get current order
+			$order = wc_get_order();
 			if( ! is_a( $order, 'WC_Order' ) )
 				return;
 			
@@ -154,7 +169,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$order_item_product_has_attachments = false;
 			
 			// check order metadata for attachments
-			$settings = self::get_metadata( $post_id );
+			$settings = $this->get_order_metadata( $order );
 			if( is_array( $settings )
 			&& isset( $settings['product-settings'] )
 			&& is_array( $product_settings = $settings['product-settings'] ) )
@@ -201,7 +216,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				'pdf-forms-for-woocommerce-metabox', // ID
 				__( 'PDF Forms Filler', 'pdf-forms-for-woocommerce' ), // title
 				array( $this, 'display_order_metabox' ), // callback
-				'shop_order', // screen
+				self::is_wc_hpos_enabled() ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order',
 				'side', // context
 				'default' // priority
 			);
@@ -378,11 +393,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Function for retrieving metadata
+		 * Function for decoding metadata
 		 */
-		public static function get_metadata( $post_id, $key = null )
+		private static function decode_metadata( $data, $key = null )
 		{
-			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
 			if( ! empty( $data ) )
 				$data = json_decode( $data, true );
 			if( ! is_array( $data ) )
@@ -398,19 +412,39 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		}
 		
 		/**
-		 * Function for setting metadata
-		 * If $key is null, the whole metadata element is removed
-		 * If $value is null, the metadata subelement with the given key is removed
+		 * Function for retrieving metadata
 		 */
-		public static function set_metadata( $post_id, $key = null, $value = null )
+		public static function get_metadata( $post_id, $key = null )
 		{
-			// TODO: fix race condition
-			$data = get_post_meta( $post_id, self::META_KEY, $single=true );
-			if( ! empty( $data ) )
-				$data = json_decode( $data, true );
-			if( ! is_array( $data ) )
-				$data = array();
+			return self::decode_metadata( get_post_meta( $post_id, self::META_KEY, $single=true ), $key );
+		}
+		
+		/**
+		 * Function for retrieving order metadata
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 * $key is the metadata key for a specific metadata element
+		 * If $key is null, the whole metadata store is returned
+		 */
+		public function get_order_metadata( $order, $key = null )
+		{
+			if( ! is_a( $order, 'WC_Order' ) )
+			{
+				$order = wc_get_order( $order );
+				if( ! is_a( $order, 'WC_Order' ) )
+					return null;
+			}
 			
+			if( ! self::is_wc_hpos_enabled() )
+				return self::get_metadata( $order->get_id(), $key );
+			
+			return self::decode_metadata( $order->get_meta( self::META_KEY, $single=true ), $key );
+		}
+		
+		/**
+		 * Function for updating metadata
+		 */
+		private static function update_metadata_array( $data, $key = null, $value = null )
+		{
 			if( $key === null )
 				$data = null;
 			else
@@ -422,24 +456,113 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				}
 				else
 					$data[$key] = $value;
+				
+				if( empty( $data ) )
+					$data = null;
+				else
+					$data['version'] = self::VERSION; // keep track of schema version
 			}
 			
-			if( empty( $data ) )
-				delete_post_meta( $post_id, self::META_KEY );
-			else
+			return $data;
+		}
+		
+		/**
+		 * Function for encoding metadata
+		 */
+		private static function encode_metadata( $data, $hpos = false )
+		{
+			$data = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
+			
+			if( !$hpos )
 			{
-				$data['version'] = self::VERSION; // keep track of schema version
-				
-				$data = Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $data );
-				
 				// wp bug workaround
 				// https://developer.wordpress.org/reference/functions/update_post_meta/#workaround
 				$data = wp_slash( $data );
+			}
+			
+			return $data;
+		}
+		
+		/**
+		 * Function for setting metadata
+		 * If $key is null, the whole metadata store is removed
+		 * If $value is null, the metadata element with the given key is removed
+		 */
+		public static function set_metadata( $post_id, $key = null, $value = null )
+		{
+			// TODO: fix race condition
+			$data = self::get_metadata( $post_id );
+			$data = self::update_metadata_array( $data, $key, $value );
+			
+			if( $data === null)
+				delete_post_meta( $post_id, self::META_KEY );
+			else
+				update_post_meta( $post_id, self::META_KEY, self::encode_metadata( $data ) );
+			
+			return $value;
+		}
+		
+		/**
+		 * Function for setting order metadata
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 * If $key is null, the whole metadata store is removed
+		 * If $value is null, the metadata element with the given key is removed
+		 */
+		public function set_order_metadata( $order, $key = null, $value = null )
+		{
+			$by_id = is_numeric( $order );
+			
+			if( ! is_a( $order, 'WC_Order' ) )
+			{
+				// $order is probably order ID or post
+				$order = wc_get_order( $order );
+				if( ! is_a( $order, 'WC_Order' ) )
+					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
+			}
+			
+			// TODO: do we need to add special support for HPOS migration state? maybe $order->update_meta_data() updates old post order meta as well?
+			if( ! self::is_wc_hpos_enabled() )
+				return self::set_metadata( $order->get_id(), $key, $value );
+			
+			$data = $this->get_order_metadata( $order );
+			$new_data = self::update_metadata_array( $data, $key, $value );
+			
+			// if metadata has changed, update it
+			if( $data != $new_data )
+			{
+				$data = $new_data;
 				
-				update_post_meta( $post_id, self::META_KEY, $data );
+				if( $data === null)
+					$order->delete_meta_data( self::META_KEY );
+				else
+					$order->update_meta_data( self::META_KEY, self::encode_metadata( $data, true ) );
+				
+				$order_id = $order->get_id();
+				if( ! isset( $this->do_not_save_orders[$order_id] ) )
+				{
+					if( $by_id )
+						$order->save();
+					else
+					{
+						// save after all changes have been made
+						if( $order_id )
+							$this->delayed_saving_orders[$order_id] = $order;
+					}
+				}
 			}
 			
 			return $value;
+		}
+		
+		/**
+		 * Function for delay-saving orders
+		 * Used to avoid multiple unnecessary saves and other issues
+		 */
+		public function save_delayed_orders()
+		{
+			foreach( $this->delayed_saving_orders as $order )
+				$order->save();
+			$this->delayed_saving_orders = array();
 		}
 		
 		/**
@@ -448,6 +571,16 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		public static function unset_metadata( $post_id, $key = null )
 		{
 			return self::set_metadata( $post_id, $key, null );
+		}
+		
+		/**
+		 * Function for removing order metadata
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 * If $key is null, the whole metadata store is removed
+		 */
+		public function unset_order_metadata( $order, $key = null )
+		{
+			return $this->set_order_metadata( $order, $key, null );
 		}
 		
 		/**
@@ -687,7 +820,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		/**
 		 * Outputs order metabox
 		 */
-		public function display_order_metabox()
+		public function display_order_metabox( $post_or_order_object = null )
 		{
 			print(
 				self::render( 'spinner' ) .
@@ -724,7 +857,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( ! is_a( $order, 'WC_Order' ) )
 					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
 				
-				self::reset_order_settings( $order );
+				$this->reset_order_settings( $order );
 			}
 			catch ( Exception $e )
 			{
@@ -759,10 +892,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
 				
 				// remove downloadable files
-				self::unset_downloadable_files( $order_id );
+				$this->unset_downloadable_files( $order );
 				
 				// refilling is necessary only if PDFs are being saved in wp-uploads
-				$product_settings = self::get_metadata( $order_id, 'product-settings' );
+				$product_settings = $this->get_order_metadata( $order, 'product-settings' );
 				if( is_array( $product_settings ) && ! empty( $product_settings ) )
 				{
 					$placeholder_processor = $this->get_placeholder_processor();
@@ -821,7 +954,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function woocommerce_new_order( $order_id, $order )
 		{
-			$this->new_orders[] = $order_id;
+			$this->new_orders[$order_id] = $order_id;
 		}
 		
 		/**
@@ -846,7 +979,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					if( $old_status != $new_status )
 					{
 						// remove stale downloadable files
-						self::unset_downloadable_files( $order_id );
+						$this->unset_downloadable_files( $order );
 					}
 				}
 			}
@@ -854,13 +987,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		
 		/*
 		 * Resets product settings for an order
+		 * $order must be an instance of WC_Order
 		 */
-		private static function reset_order_settings( $order )
+		private function reset_order_settings( $order )
 		{
-			$order_id = $order->get_id();
-			
-			self::unset_metadata( $order_id, 'product-settings' );
-			
 			// TODO: save copies of source PDF files in pdf-forms-for-woocommerce/pdf-cache directory in case they are deleted from media library and use the cached copy for this order
 			
 			$product_settings = array();
@@ -875,8 +1005,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$product_settings[$product_id] = $settings;
 			}
 			
-			if( ! empty( $product_settings ) )
-				self::set_metadata( $order_id, 'product-settings', $product_settings );
+			if( empty( $product_settings ) )
+				$this->unset_order_metadata( $order, 'product-settings' );
+			else
+				$this->set_order_metadata( $order, 'product-settings', $product_settings );
 		}
 		
 		/**
@@ -890,12 +1022,12 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$order_id = $order->get_id();
 			
 			// don't do anything if this order is not new
-			if( ! in_array( $order_id, $this->new_orders ) )
+			if( ! isset( $this->new_orders[$order_id] ) )
 				return;
 			
 			unset( $this->new_orders[$order_id] );
 			
-			self::reset_order_settings( $order );
+			$this->reset_order_settings( $order );
 		}
 		
 		/**
@@ -906,7 +1038,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( $email_id !== null && is_a( $order, 'WC_Order' ) && is_a( $email, 'WC_Email' ) )
 			{
 				$order_id = $order->get_id();
-				$product_settings = self::get_metadata( $order_id, 'product-settings' );
+				$product_settings = $this->get_order_metadata( $order, 'product-settings' );
 				if( is_array( $product_settings ) && ! empty( $product_settings ) )
 				{
 					$placeholder_processor = $this->get_placeholder_processor();
@@ -960,12 +1092,17 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			return $email_attachments;
 		}
 		
-		public static function get_order_storage( $order_id )
+		/**
+		 * Returns the storage instance for the order
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 */
+		public function get_order_storage( $order )
 		{
 			// TODO: fix race condition
 			$storage = self::get_storage();
-			$storage_directory = self::get_metadata( $order_id, 'storage-dir' );
-			$order_directory = self::get_metadata( $order_id, 'order-dir' );
+			
+			$storage_directory = $this->get_order_metadata( $order, 'storage-dir' );
+			$order_directory = $this->get_order_metadata( $order, 'order-dir' );
 			if( $storage_directory && $order_directory )
 			{
 				$storage->set_site_root_relative_storage_path( $storage_directory );
@@ -974,34 +1111,43 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			else
 			{
 				$storage_directory = $storage->get_site_root_relative_storage_path();
+				$order_id = $order;
+				if( is_a( $order, 'WC_Order' ) )
+					$order_id = $order->get_id();
+				else if( is_a( $order, 'WP_Post' ) )
+					$order_id = $order->ID;
 				$order_directory = 'pdf-forms-for-woocommerce/order-files/' . sanitize_file_name( $order_id . '-' . wp_hash( wp_rand() . microtime() ) );
 				$storage->set_subpath( $order_directory );
-				self::set_metadata( $order_id, 'storage-dir', $storage_directory );
-				self::set_metadata( $order_id, 'order-dir', $order_directory );
+				$this->set_order_metadata( $order, 'storage-dir', $storage_directory );
+				$this->set_order_metadata( $order, 'order-dir', $order_directory );
 			}
 			
 			return $storage;
 		}
 		
-		public static function delete_order_storage( $order_id )
+		/**
+		 * Deletes the storage directory for the order
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 */
+		public function delete_order_storage( $order )
 		{
 			// TODO: fix race condition
-			$storage_directory = self::get_metadata( $order_id, 'storage-dir' );
-			$order_directory = self::get_metadata( $order_id, 'order-dir' );
+			$storage_directory = $this->get_order_metadata( $order, 'storage-dir' );
+			$order_directory = $this->get_order_metadata( $order, 'order-dir' );
 			if( $storage_directory && $order_directory )
 			{
 				$storage = self::get_storage();
 				$storage->set_site_root_relative_storage_path( $storage_directory );
 				$storage->set_subpath( $order_directory );
 				$storage->delete_subpath_recursively();
-				self::unset_metadata( $order_id, 'storage-dir' );
-				self::unset_metadata( $order_id, 'order-dir' );
+				$this->unset_order_metadata( $order, 'storage-dir' );
+				$this->unset_order_metadata( $order, 'order-dir' );
 			}
 		}
 		
-		public static function get_downloadable_files( $order_id, $order_item_id = null )
+		public function get_downloadable_files( $order, $order_item_id = null )
 		{
-			$downloadable_files = self::get_metadata( $order_id, 'downloadable-files' );
+			$downloadable_files = $this->get_order_metadata( $order, 'downloadable-files' );
 			if( is_array( $downloadable_files ) )
 			{
 				if( $order_item_id === null )
@@ -1018,10 +1164,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			return array();
 		}
 		
-		public static function set_downloadable_files( $order_id, $order_item_id = null, $order_item_files = null )
+		/**
+		 * Sets downloadable files for the order
+		 * $order can be either an instance of WC_Order, an instance of WP_Post or a numeric order/post ID
+		 */
+		public function set_downloadable_files( $order, $order_item_id = null, $order_item_files = null )
 		{
 			// TODO: fix race condition
-			$downloadable_files = self::get_metadata( $order_id, 'downloadable-files' );
+			$downloadable_files = $this->get_order_metadata( $order, 'downloadable-files' );
 			if( ! is_array( $downloadable_files ) )
 				$downloadable_files = array();
 			
@@ -1041,34 +1191,37 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$downloadable_files[$order_item_id] = $order_item_files;
 			}
 			
-			self::set_metadata( $order_id, 'downloadable-files', $downloadable_files );
+			if( count( $downloadable_files ) == 0 )
+				$downloadable_files = null;
+			
+			$this->set_order_metadata( $order, 'downloadable-files', $downloadable_files );
 		}
 		
-		public static function get_downloadable_file( $order_id, $order_item_id, $attachment_id )
+		public function get_downloadable_file( $order, $order_item_id, $attachment_id )
 		{
-			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			$downloadable_files = $this->get_downloadable_files( $order, $order_item_id );
 			if( isset( $downloadable_files[$attachment_id] ) )
 				return $downloadable_files[$attachment_id];
 			return null;
 		}
 		
-		public static function set_downloadable_file( $order_id, $order_item_id, $attachment_id, $fileurl, $filename )
+		public function set_downloadable_file( $order, $order_item_id, $attachment_id, $fileurl, $filename )
 		{
 			// TODO: fix race condition
-			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			$downloadable_files = $this->get_downloadable_files( $order, $order_item_id );
 			$downloadable_files[$attachment_id] = array(
 				'attachment_id' => $attachment_id,
 				'file' => $fileurl,
 				'filename' => $filename,
 			);
-			self::set_downloadable_files( $order_id, $order_item_id, $downloadable_files );
+			$this->set_downloadable_files( $order, $order_item_id, $downloadable_files );
 		}
 		
-		public static function unset_downloadable_files( $order_id, $order_item_id = null )
+		public function unset_downloadable_files( $order, $order_item_id = null )
 		{
 			// TODO: fix race condition
 			
-			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			$downloadable_files = $this->get_downloadable_files( $order, $order_item_id );
 			
 			if( $order_item_id !== null )
 				$downloadable_files = array( $downloadable_files );
@@ -1081,14 +1234,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			// TODO: delete order directories if they are empty
 			
-			self::set_downloadable_files( $order_id, $order_item_id, null );
+			$this->set_downloadable_files( $order, $order_item_id, null );
 		}
 		
-		public static function unset_downloadable_file( $order_id, $order_item_id, $attachment_id )
+		public function unset_downloadable_file( $order, $order_item_id, $attachment_id )
 		{
 			// TODO: fix race condition
 			
-			$downloadable_files = self::get_downloadable_files( $order_id, $order_item_id );
+			$downloadable_files = $this->get_downloadable_files( $order, $order_item_id );
 			if( is_array( $downloadable_files ) && isset( $downloadable_files[$attachment_id] ) )
 			{
 				// delete file
@@ -1099,18 +1252,18 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				unset( $downloadable_files[$attachment_id] );
 				
-				self::set_downloadable_files( $order_item_id, $downloadable_files );
+				$this->set_downloadable_files( $order, $order_item_id, $downloadable_files );
 			}
 		}
 		
 		public function woocommerce_get_item_downloads( $files, $order_item, $order )
 		{
-			if( is_array( $files ) && is_object( $order_item ) && is_object( $order ) )
+			if( is_array( $files ) && is_a( $order_item, 'WC_Order_Item' ) && is_a( $order, 'WC_Order' ) )
 			{
 				$order_id = $order->get_id();
 				$order_item_id = $order_item->get_id();
 				$product_id = $order_item->get_product_id();
-				$product_settings = self::get_metadata( $order_id, 'product-settings' );
+				$product_settings = $this->get_order_metadata( $order, 'product-settings' );
 				
 				if( is_array( $product_settings )
 				&& isset( $product_settings[$product_id] )
@@ -1130,7 +1283,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							&& isset( $options['download_id'] )
 							&& $options['download_id'] == $download_id )
 							{
-								$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+								$downloadable_file = $this->get_downloadable_file( $order, $order_item_id, $attachment_id );
 								
 								if( ! is_array( $downloadable_file ) || ! isset( $downloadable_file['file'] ) )
 								{
@@ -1144,7 +1297,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									// save a list of filled pdfs so that we don't need to fill them again when attaching them to emails
 									$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 									
-									$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+									$downloadable_file = $this->get_downloadable_file( $order, $order_item_id, $attachment_id );
 								}
 								
 								if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
@@ -1199,7 +1352,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$order = wc_get_order( $order_id );
 				if( is_a( $order, 'WC_Order' ) )
 				{
-					$product_settings = self::get_metadata( $order_id, 'product-settings' );
+					$product_settings = $this->get_order_metadata( $order, 'product-settings' );
 					if( ! is_array( $product_settings ) )
 						$product_settings = array();
 					
@@ -1277,7 +1430,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					$order_item = $downloads_items[$download_index];
 					$order_item_id = $order_item->get_id();
 					
-					$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+					$downloadable_file = $this->get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 					
 					if( ! is_array( $downloadable_file ) || ! isset( $downloadable_file['file'] ) )
 					{
@@ -1290,7 +1443,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						// fill PDFs so that they are also saved to the order directory
 						$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 						
-						$downloadable_file = self::get_downloadable_file( $order_id, $order_item_id, $attachment_id );
+						$downloadable_file = $this->get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 					}
 					
 					if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
@@ -1313,37 +1466,51 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		
 		/*
 		 * Runs when post is deleted to clean up files
+		 * The legacy / custom post type (CPT) order storage requires this hook
 		 */
 		public function before_delete_post( $post_id )
 		{
+			if( self::is_wc_hpos_enabled() )
+				return;
+			
 			$type = get_post_type( $post_id );
+			
 			// delete the order directory
 			if($type == 'shop_order')
-				$this->before_delete_order( $post_id, wc_get_order( $post_id ) );
+				$this->woocommerce_before_delete_order( $post_id );
 			// delete the order item's downloadable files
 			else if($type == 'line_item')
-				$this->before_delete_order_item( $post_id );
+				$this->woocommerce_before_delete_order_item( $post_id );
 		}
 		
 		/*
 		 * Runs when order is deleted to clean up order's items' downloadable files
 		 */
-		public function before_delete_order( $order_id, $order )
+		public function woocommerce_before_delete_order( $order_id )
 		{
+			// TODO: looks like this hook isn't executing for CPT order storage type?
+			
+			// don't save the order because it is being deleted anyway
+			$this->do_not_save_orders[$order_id] = $order_id;
+			
 			// remove downloadable files
-			self::unset_downloadable_files( $order_id );
+			$this->unset_downloadable_files( $order_id );
 			
 			// delete order directory
-			self::delete_order_storage( $order_id );
+			$this->delete_order_storage( $order_id );
 		}
 		
 		/*
 		 * Runs when order item is deleted to clean up order item's downloadable files
 		 */
-		public function before_delete_order_item( $order_item_id )
+		public function woocommerce_before_delete_order_item( $order_item_id )
 		{
+			$order_id = wc_get_order_id_by_order_item_id( $order_item_id );
+			if( ! $order_id )
+				return;
+			
 			// remove order item downloadable files
-			self::unset_downloadable_files( wc_get_order_id_by_order_item_id( $order_item_id ), $order_item_id );
+			$this->unset_downloadable_files( $order_id, $order_item_id );
 		}
 		
 		/**
@@ -1773,15 +1940,14 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				{
 					$storage = self::get_storage();
 					
-					$order_id = null;
 					$order = $placeholder_processor->get_order();
-					if( is_a( $order, 'WC_Order' ) )
-						$order_id = $order->get_id();
+					if( ! is_a( $order, 'WC_Order' ) )
+						$order = null;
 					$order_item_id = null;
 					$order_item = $placeholder_processor->get_order_item();
 					if( is_a( $order_item, 'WC_Order_Item' ) )
 						$order_item_id = $order_item->get_id();
-					$saved_files = self::get_metadata( $order_id, 'saved-files' );
+					$saved_files = $this->get_order_metadata( $order, 'saved-files' );
 					if( ! is_array( $saved_files ) )
 						$saved_files = array();
 					
@@ -1824,7 +1990,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							// determine if we need to overwrite an existing file or create a new one
 							$overwrite = true; // by default, overwrite existing files to prevent a huge number of files from accumulating from the same order item / attachment
 							$filename = $filedata['filename'];
-							if( $order_id )
+							if( $order )
 							{
 								$filename_id = $order_item_id . '-' . $filedata['attachment_id'];
 								if( isset( $saved_files[$filename_id] ) )
@@ -1838,26 +2004,26 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							
 							$filename = $storage->save( $filedata['file'], $filename, $overwrite );
 							
-							if( $order_id && ! $overwrite )
+							if( $order && ! $overwrite )
 							{
 								// store filename in order metadata
 								$saved_files[$filename_id] = $filename;
-								self::set_metadata( $order_id, 'saved-files', $saved_files);
+								$this->set_order_metadata( $order, 'saved-files', $saved_files);
 							}
 						}
 						
 						$save_order_file = $filedata['options']['download_id'];
 						if ( ! empty( $save_order_file ) )
 						{
-							if( $order_id && $order_item_id )
+							if( $order && $order_item_id )
 							{
-								$order_storage = self::get_order_storage( $order_id );
+								$order_storage = $this->get_order_storage( $order );
 								$order_storage->set_subpath( trailingslashit( $order_storage->get_subpath() ) . sanitize_file_name( $order_item_id ) );
 								$dstfilename = $order_storage->save( $filedata['file'], $filedata['filename'] , $overwrite = true );
 								
 								// record file data in order meta
-								self::set_downloadable_file(
-									$order_id,
+								$this->set_downloadable_file(
+									$order,
 									$order_item_id,
 									$attachment_id,
 									trailingslashit( $order_storage->get_site_root_relative_path() ) . $dstfilename,
@@ -2427,14 +2593,18 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			}
 			
 			// if we are on the order edit page then load the order page admin scripts
-			if( ( 'post.php' == $hook ) && 'shop_order' == $post_type )
+			$is_order_page = self::is_wc_hpos_enabled() ?
+				  ( ( 'woocommerce_page_wc-orders' == $hook ) && isset( $_GET['id'] ) )
+				: ( ( 'post.php' == $hook ) && 'shop_order' == $post_type );
+			if( $is_order_page )
 			{
 				wp_register_script( 'pdf_forms_for_woocommerce_admin_order_script', plugins_url( 'js/admin-order.js', __FILE__ ), array( 'jquery' ), self::VERSION );
 				
+				$order = wc_get_order();
 				wp_localize_script( 'pdf_forms_for_woocommerce_admin_order_script', 'pdf_forms_for_woocommerce', array(
 					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
-					'order_id' => get_the_ID(),
+					'order_id' => is_a( $order, 'WC_Order' ) ? $order->get_id() : null,
 					'__Confirm_Reset_Settings' => __( 'Are you sure you want to reset settings for this order?', 'pdf-forms-for-woocommerce' ),
 					'__Confirm_Reset_PDFs' => __( 'Are you sure you want to reset PDFs for this order?', 'pdf-forms-for-woocommerce' ),
 				) );
