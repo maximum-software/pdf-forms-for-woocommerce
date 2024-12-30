@@ -103,8 +103,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			
 			add_filter( 'woocommerce_get_settings_pages', array( $this, 'register_settings' ) );
 			
-			add_action( 'shutdown', array( $this, 'save_delayed_orders' ) );
-			
 			if( $service = $this->get_service() )
 			{
 				$service->plugin_init();
@@ -546,7 +544,11 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					{
 						// save after all changes have been made
 						if( $order_id )
+						{
+							if( count( $this->delayed_saving_orders ) == 0 )
+								add_action( 'shutdown', array( $this, 'save_delayed_orders' ) );
 							$this->delayed_saving_orders[$order_id] = $order;
+						}
 					}
 				}
 			}
