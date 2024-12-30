@@ -1647,7 +1647,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						throw new Exception(
 							self::replace_tags(
 								__( "File type {mime-type} of {file} is unsupported for {purpose}", 'pdf-forms-for-woocommerce' ),
-								array( 'mime-type' => $mimetype, 'file' => $filename, 'purpose' => __( "image embedding", 'pdf-forms-for-woocommerce') )
+								array( 'mime-type' => $mimetype, 'file' => $filename, 'purpose' => __( "image embedding", 'pdf-forms-for-woocommerce' ) )
 							)
 						);
 					
@@ -2647,7 +2647,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					throw new Exception(
 						self::replace_tags(
 							__( "File type {mime-type} of {file} is unsupported for {purpose}", 'pdf-forms-for-woocommerce' ),
-							array( 'mime-type' => $mimetype, 'file' => wp_basename( $filepath ), 'purpose' => __("PDF form filling", 'pdf-forms-for-woocommerce') )
+							array( 'mime-type' => $mimetype, 'file' => wp_basename( $filepath ), 'purpose' => __( "PDF form filling", 'pdf-forms-for-woocommerce' ) )
 						)
 					);
 				
