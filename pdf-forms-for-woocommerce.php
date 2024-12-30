@@ -518,7 +518,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
 			}
 			
-			// TODO: do we need to add special support for HPOS migration state? maybe $order->update_meta_data() updates old post order meta as well?
 			if( ! self::is_wc_hpos_enabled() )
 				return self::set_metadata( $order->get_id(), $key, $value );
 			
@@ -1490,8 +1489,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function woocommerce_before_delete_order( $order_id )
 		{
-			// TODO: looks like this hook isn't executing for CPT order storage type?
-			
 			// don't save the order because it is being deleted anyway
 			$this->do_not_save_orders[$order_id] = $order_id;
 			
