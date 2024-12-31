@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PDF Forms Filler for WooCommerce 1.1.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
-"woocommerce\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-woocommerce\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Plugin Name of the plugin
+#: pdf-forms-for-woocommerce.php:2089
 msgid "PDF Forms Filler for WooCommerce"
 msgstr "WooCommerceのためのPDFフォームフィラー"
 
@@ -20,11 +20,8 @@ msgstr "https://pdfformsfiller.org/"
 
 #. Description of the plugin
 msgid ""
-"Automatically fill PDF forms with WooCommerce orders and attach generated "
-"PDFs to email notifications and order downloads."
-msgstr ""
-"WooCommerceの注文でPDFフォームを自動的に入力し、生成されたPDFをEメール通知と"
-"注文ダウンロードに添付します。"
+"Automatically fill PDF forms with WooCommerce orders and attach generated PDFs to email notifications and order downloads."
+msgstr "WooCommerceの注文でPDFフォームを自動的に入力し、生成されたPDFをEメール通知と注文ダウンロードに添付します。"
 
 #. Author of the plugin
 msgid "Maximum.Software"
@@ -34,430 +31,388 @@ msgstr "Maximum.Software"
 msgid "https://maximum.software/"
 msgstr "https://maximum.software/"
 
-#: pdf-forms-for-woocommerce.php:202 src/integration/wc-settings-page.php:15
+#: pdf-forms-for-woocommerce.php:215 src/integration/wc-settings-page.php:15
 msgid "PDF Forms Filler"
 msgstr "PDFフォームフィラー"
 
-#: pdf-forms-for-woocommerce.php:234
+#: pdf-forms-for-woocommerce.php:247
 msgid "Support"
 msgstr "サポート"
 
-#: pdf-forms-for-woocommerce.php:247 src/services/pdf-ninja.php:809
+#: pdf-forms-for-woocommerce.php:260 src/services/pdf-ninja.php:809
 msgid "PDF Forms Filler for WooCommerce Error"
 msgstr "WooCommerceのためのPDFフォームフィラーエラー"
 
-#: pdf-forms-for-woocommerce.php:248
+#: pdf-forms-for-woocommerce.php:261
 msgid "The required plugin 'WooCommerce' version is not installed!"
-msgstr ""
-"必要なプラグイン「WooCommerce」のバージョンがインストールされていません！"
+msgstr "必要なプラグイン「WooCommerce」のバージョンがインストールされていません！"
 
-#: pdf-forms-for-woocommerce.php:256
+#: pdf-forms-for-woocommerce.php:269
 msgid "PDF Forms Filler for WooCommerce Warning"
 msgstr "WooCommerceのためのPDFフォームフィラー警告"
 
-#: pdf-forms-for-woocommerce.php:259
+#: pdf-forms-for-woocommerce.php:272
 msgid ""
-"The currently installed version of 'WooCommerce' plugin ({current-"
-"woocommerce-version}) may not be supported by the current version of 'PDF "
-"Forms Filler for WooCommerce' plugin ({current-plugin-version}), please "
-"switch to 'WooCommerce' plugin version {supported-woocommerce-version} or "
-"below to ensure that 'PDF Forms Filler for WooCommerce' plugin would work "
+"The currently installed version of 'WooCommerce' plugin ({current-woocommerce-version}) may not be supported by the current "
+"version of 'PDF Forms Filler for WooCommerce' plugin ({current-plugin-version}), please switch to 'WooCommerce' plugin "
+"version {supported-woocommerce-version} or below to ensure that 'PDF Forms Filler for WooCommerce' plugin would work "
 "correctly."
 msgstr ""
-"現在インストールされている「WooCommerce」プラグインのバージョン({current-"
-"woocommerce-version})は、'PDF Forms Filler for WooCommerce'プラグインの現在の"
-"バージョン({current-plugin-version})でサポートされていない場合がありま"
-"す。'PDF Forms Filler for WooCommerce'プラグインが正しく動作するよう"
-"に、'WooCommerce'プラグインのバージョン{supported-woocommerce-version}以下に"
-"切り替えてください。"
+"現在インストールされている「WooCommerce」プラグインのバージョン({current-woocommerce-version})は、'PDF Forms Filler for "
+"WooCommerce'プラグインの現在のバージョン({current-plugin-version})でサポートされていない場合があります。'PDF Forms Filler "
+"for WooCommerce'プラグインが正しく動作するように、'WooCommerce'プラグインのバージョン{supported-woocommerce-version}以下に切"
+"り替えてください。"
 
-#: pdf-forms-for-woocommerce.php:261
+#: pdf-forms-for-woocommerce.php:274
 msgid "Unknown version"
 msgstr "未知のバージョン"
 
-#: pdf-forms-for-woocommerce.php:286
+#: pdf-forms-for-woocommerce.php:299
 msgid "Clear All Messages"
 msgstr "すべてのメッセージをクリア"
 
-#: pdf-forms-for-woocommerce.php:290
+#: pdf-forms-for-woocommerce.php:303
 msgid "PDF Forms Filler for WooCommerce Messages"
 msgstr "WooCommerceのためのPDFフォームフィラーメッセージ"
 
-#: pdf-forms-for-woocommerce.php:461 pdf-forms-for-woocommerce.php:493
-#: pdf-forms-for-woocommerce.php:714 pdf-forms-for-woocommerce.php:748
-#: pdf-forms-for-woocommerce.php:2463 pdf-forms-for-woocommerce.php:2702
-msgid "Nonce mismatch"
-msgstr "Nonceが一致しません"
-
-#: pdf-forms-for-woocommerce.php:464 pdf-forms-for-woocommerce.php:496
-#: pdf-forms-for-woocommerce.php:717 pdf-forms-for-woocommerce.php:751
-#: pdf-forms-for-woocommerce.php:2471 pdf-forms-for-woocommerce.php:2711
-msgid "Permission denied"
-msgstr "許可が拒否されました"
-
-#: pdf-forms-for-woocommerce.php:469
-msgid "Invalid email"
-msgstr "無効なメール"
-
-#: pdf-forms-for-woocommerce.php:605
-msgid "Failed to download file: {error-message}"
-msgstr "ファイルのダウンロードに失敗しました: {error-message}"
-
-#: pdf-forms-for-woocommerce.php:615 pdf-forms-for-woocommerce.php:1449
-#: src/services/pdf-ninja.php:673 src/services/pdf-ninja.php:779
-msgid "Failed to create file"
-msgstr "ファイルの作成に失敗しました"
-
-#: pdf-forms-for-woocommerce.php:697
-msgid ""
-"Product settings are stored in orders when they are created. Resetting "
-"settings is necessary when new product settings need to be applied to an old "
-"order."
-msgstr ""
-"製品の設定は、注文が作成されたときに注文に保存されます。新しい製品の設定を古"
-"い注文に適用する必要がある場合、設定をリセットする必要があります。"
-
-#: pdf-forms-for-woocommerce.php:698
-msgid "Reset Settings"
-msgstr "設定をリセット"
-
-#: pdf-forms-for-woocommerce.php:699
-msgid ""
-"PDFs are refilled when orders status changes. Sometimes you may want to "
-"manually trigger PDFs to be refilled after changing some aspect of the "
-"order, such as the billing address."
-msgstr ""
-"注文ステータスが変更されると、PDFが再度埋められます。注文の一部、例えば請求先"
-"住所を変更した後に、手動でPDFを再度埋めるトリガーをかけたいことがあるかもしれ"
-"ません。"
-
-#: pdf-forms-for-woocommerce.php:700
-msgid "Reset PDFs"
-msgstr "PDFをリセット"
-
-#: pdf-forms-for-woocommerce.php:721 pdf-forms-for-woocommerce.php:755
-msgid "Invalid order ID"
-msgstr "無効な注文ID"
-
-#: pdf-forms-for-woocommerce.php:725 pdf-forms-for-woocommerce.php:759
+#: pdf-forms-for-woocommerce.php:518 pdf-forms-for-woocommerce.php:859 pdf-forms-for-woocommerce.php:893
 msgid "Invalid order"
 msgstr "無効な注文"
 
-#: pdf-forms-for-woocommerce.php:1482 pdf-forms-for-woocommerce.php:2478
+#: pdf-forms-for-woocommerce.php:595 pdf-forms-for-woocommerce.php:627 pdf-forms-for-woocommerce.php:848
+#: pdf-forms-for-woocommerce.php:882 pdf-forms-for-woocommerce.php:2633 pdf-forms-for-woocommerce.php:2872
+msgid "Nonce mismatch"
+msgstr "Nonceが一致しません"
+
+#: pdf-forms-for-woocommerce.php:598 pdf-forms-for-woocommerce.php:630 pdf-forms-for-woocommerce.php:851
+#: pdf-forms-for-woocommerce.php:885 pdf-forms-for-woocommerce.php:2641 pdf-forms-for-woocommerce.php:2881
+msgid "Permission denied"
+msgstr "許可が拒否されました"
+
+#: pdf-forms-for-woocommerce.php:603
+msgid "Invalid email"
+msgstr "無効なメール"
+
+#: pdf-forms-for-woocommerce.php:739
+msgid "Failed to download file: {error-message}"
+msgstr "ファイルのダウンロードに失敗しました: {error-message}"
+
+#: pdf-forms-for-woocommerce.php:749 pdf-forms-for-woocommerce.php:1615 src/services/pdf-ninja.php:673
+#: src/services/pdf-ninja.php:779
+msgid "Failed to create file"
+msgstr "ファイルの作成に失敗しました"
+
+#: pdf-forms-for-woocommerce.php:831
+msgid ""
+"Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need "
+"to be applied to an old order."
+msgstr ""
+"製品の設定は、注文が作成されたときに注文に保存されます。新しい製品の設定を古い注文に適用する必要がある場合、設定をリセットす"
+"る必要があります。"
+
+#: pdf-forms-for-woocommerce.php:832
+msgid "Reset Settings"
+msgstr "設定をリセット"
+
+#: pdf-forms-for-woocommerce.php:833
+msgid ""
+"PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing "
+"some aspect of the order, such as the billing address."
+msgstr ""
+"注文ステータスが変更されると、PDFが再度埋められます。注文の一部、例えば請求先住所を変更した後に、手動でPDFを再度埋めるトリ"
+"ガーをかけたいことがあるかもしれません。"
+
+#: pdf-forms-for-woocommerce.php:834
+msgid "Reset PDFs"
+msgstr "PDFをリセット"
+
+#: pdf-forms-for-woocommerce.php:855 pdf-forms-for-woocommerce.php:889
+msgid "Invalid order ID"
+msgstr "無効な注文ID"
+
+#: pdf-forms-for-woocommerce.php:1648 pdf-forms-for-woocommerce.php:2648
 msgid "File type {mime-type} of {file} is unsupported for {purpose}"
 msgstr "{file}のファイルタイプ{mime-type}は{purpose}には対応していません"
 
-#: pdf-forms-for-woocommerce.php:1483
+#: pdf-forms-for-woocommerce.php:1649
 msgid "image embedding"
 msgstr "画像の埋め込み"
 
-#: pdf-forms-for-woocommerce.php:1763 pdf-forms-for-woocommerce.php:2542
+#: pdf-forms-for-woocommerce.php:1929 pdf-forms-for-woocommerce.php:2712
 msgid "Attachment file is not accessible"
 msgstr "添付ファイルにアクセスできません"
 
-#: pdf-forms-for-woocommerce.php:1879
-msgid ""
-"[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
-"message} at {error-file}:{error-line}"
-msgstr ""
-"[{timestamp}] (注文:{order}、製品:{product}) PDFの入力エラー: {error-"
-"message}、場所:{error-file}:{error-line}"
+#: pdf-forms-for-woocommerce.php:2044
+msgid "[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-message} at {error-file}:{error-line}"
+msgstr "[{timestamp}] (注文:{order}、製品:{product}) PDFの入力エラー: {error-message}、場所:{error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1881
-msgid ""
-"[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
-"message} at {error-file}:{error-line}"
-msgstr ""
-"[{timestamp}] (注文:{order}) 注文{order}のPDF入力エラー: {error-message}、場"
-"所:{error-file}:{error-line}"
+#: pdf-forms-for-woocommerce.php:2046
+msgid "[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-message} at {error-file}:{error-line}"
+msgstr "[{timestamp}] (注文:{order}) 注文{order}のPDF入力エラー: {error-message}、場所:{error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1883
-msgid ""
-"[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-"
-"line}"
-msgstr ""
-"[{timestamp}] PDFの入力エラー: {error-message}、場所:{error-file}:{error-"
-"line}"
+#: pdf-forms-for-woocommerce.php:2048
+msgid "[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-line}"
+msgstr "[{timestamp}] PDFの入力エラー: {error-message}、場所:{error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1994
+#: pdf-forms-for-woocommerce.php:2159
 msgid "PDF Forms"
 msgstr "PDFフォーム"
 
-#: pdf-forms-for-woocommerce.php:2064
+#: pdf-forms-for-woocommerce.php:2229
 msgid "None"
 msgstr "なし"
 
-#: pdf-forms-for-woocommerce.php:2065
+#: pdf-forms-for-woocommerce.php:2230
 msgid "Create a new downloadable file"
 msgstr "新しいダウンロード可能なファイルを作成"
 
-#: pdf-forms-for-woocommerce.php:2104
+#: pdf-forms-for-woocommerce.php:2269
 msgid ""
-"You can use this section to attach a PDF file to your product and link "
-"WooCommerce placeholders to fields in the PDF file. You can also embed "
-"images from a URL into the PDF file. Changes here are applied when the "
-"product is saved."
+"You can use this section to attach a PDF file to your product and link WooCommerce placeholders to fields in the PDF file. "
+"You can also embed images from a URL into the PDF file. Changes here are applied when the product is saved."
 msgstr ""
-"このセクションを使用して、製品にPDFファイルを添付し、WooCommerceのプレースホ"
-"ルダーをPDFファイルのフィールドにリンクすることができます。URLからの画像もPDF"
-"ファイルに埋め込むことができます。ここでの変更は、製品が保存されたときに適用"
-"されます。"
+"このセクションを使用して、製品にPDFファイルを添付し、WooCommerceのプレースホルダーをPDFファイルのフィールドにリンクすることが"
+"できます。URLからの画像もPDFファイルに埋め込むことができます。ここでの変更は、製品が保存されたときに適用されます。"
 
-#: pdf-forms-for-woocommerce.php:2105
+#: pdf-forms-for-woocommerce.php:2270
 msgid "Attach a PDF File"
 msgstr "PDFファイルを添付"
 
-#: pdf-forms-for-woocommerce.php:2106 pdf-forms-for-woocommerce.php:2126
+#: pdf-forms-for-woocommerce.php:2271 pdf-forms-for-woocommerce.php:2291
 msgid "Delete"
 msgstr "削除"
 
-#: pdf-forms-for-woocommerce.php:2107
+#: pdf-forms-for-woocommerce.php:2272
 msgid "Map Value"
 msgstr "値をマッピング"
 
-#: pdf-forms-for-woocommerce.php:2108
+#: pdf-forms-for-woocommerce.php:2273
 msgid "Options"
 msgstr "オプション"
 
-#: pdf-forms-for-woocommerce.php:2109
+#: pdf-forms-for-woocommerce.php:2274
 msgid "Skip when empty"
 msgstr "空の場合はスキップ"
 
-#: pdf-forms-for-woocommerce.php:2110
+#: pdf-forms-for-woocommerce.php:2275
 msgid "Attach the filled PDF file to the following emails:"
 msgstr "次のメールに入力済みのPDFファイルを添付:"
 
-#: pdf-forms-for-woocommerce.php:2111
+#: pdf-forms-for-woocommerce.php:2276
 msgid "Flatten"
 msgstr "フラット化"
 
-#: pdf-forms-for-woocommerce.php:2112
+#: pdf-forms-for-woocommerce.php:2277
 msgid "New filled PDF file name (placeholders allowed):"
 msgstr "新しい入力済みPDFファイル名（プレースホルダーが使用可能）:"
 
-#: pdf-forms-for-woocommerce.php:2113
+#: pdf-forms-for-woocommerce.php:2278
 msgid "Path for saving filled PDF file (placeholders allowed):"
 msgstr "入力済みPDFファイルを保存するパス（プレースホルダーが使用可能）:"
 
-#: pdf-forms-for-woocommerce.php:2114
-msgid ""
-"Provide a download link to the filled PDF file via the product's "
-"downloadable file:"
-msgstr ""
-"製品のダウンロード可能なファイルを介して、入力済みPDFファイルへのダウンロード"
-"リンクを提供する:"
+#: pdf-forms-for-woocommerce.php:2279
+msgid "Provide a download link to the filled PDF file via the product's downloadable file:"
+msgstr "製品のダウンロード可能なファイルを介して、入力済みPDFファイルへのダウンロードリンクを提供する:"
 
-#: pdf-forms-for-woocommerce.php:2115
+#: pdf-forms-for-woocommerce.php:2280
 msgid "(leave blank to disable this option)"
 msgstr "（このオプションを無効にするには空白のままにしてください）"
 
-#: pdf-forms-for-woocommerce.php:2116
+#: pdf-forms-for-woocommerce.php:2281
 msgid "Field Mapper Tool"
 msgstr "フィールドマッパーツール"
 
-#: pdf-forms-for-woocommerce.php:2117
+#: pdf-forms-for-woocommerce.php:2282
 msgid ""
-"This tool can be used to link WooCommerce placeholders to fields in the "
-"attached PDF files. When an order email notification is sent or downloadable "
-"file is requested, text with placeholder data will be inserted into the "
-"corresponding fields in the PDF file and the filled PDF will be made "
-"available."
+"This tool can be used to link WooCommerce placeholders to fields in the attached PDF files. When an order email notification "
+"is sent or downloadable file is requested, text with placeholder data will be inserted into the corresponding fields in the "
+"PDF file and the filled PDF will be made available."
 msgstr ""
-"このツールは、WooCommerceのプレースホルダーを添付されたPDFファイルのフィール"
-"ドにリンクするために使用できます。注文のEメール通知が送信されるか、ダウンロー"
-"ド可能なファイルが要求されたとき、プレースホルダーデータを含むテキストがPDF"
-"ファイルの対応するフィールドに挿入され、入力済みのPDFが利用できるようになりま"
-"す。"
+"このツールは、WooCommerceのプレースホルダーを添付されたPDFファイルのフィールドにリンクするために使用できます。注文のEメール通"
+"知が送信されるか、ダウンロード可能なファイルが要求されたとき、プレースホルダーデータを含むテキストがPDFファイルの対応する"
+"フィールドに挿入され、入力済みのPDFが利用できるようになります。"
 
-#: pdf-forms-for-woocommerce.php:2118
+#: pdf-forms-for-woocommerce.php:2283
 msgid "PDF field"
 msgstr "PDFフィールド"
 
-#: pdf-forms-for-woocommerce.php:2119
+#: pdf-forms-for-woocommerce.php:2284
 msgid "WooCommerce placeholders"
 msgstr "WooCommerceのプレースホルダー"
 
-#: pdf-forms-for-woocommerce.php:2120
+#: pdf-forms-for-woocommerce.php:2285
 msgid "Add Mapping"
 msgstr "マッピングを追加"
 
-#: pdf-forms-for-woocommerce.php:2121
+#: pdf-forms-for-woocommerce.php:2286
 msgid "Delete All"
 msgstr "すべて削除"
 
-#: pdf-forms-for-woocommerce.php:2122
+#: pdf-forms-for-woocommerce.php:2287
 msgid "New Field:"
 msgstr "新しいフィールド:"
 
-#: pdf-forms-for-woocommerce.php:2123
+#: pdf-forms-for-woocommerce.php:2288
 msgid "Image Embedding Tool"
 msgstr "画像埋め込みツール"
 
-#: pdf-forms-for-woocommerce.php:2124
+#: pdf-forms-for-woocommerce.php:2289
 msgid ""
-"This tool allows embedding of images into PDF files. Images are taken from "
-"the provided URLs that may contain placeholders. You can select a PDF file "
-"page and draw a bounding box for image insertion. Alternatively, you can "
-"insert your image in the center of every page."
+"This tool allows embedding of images into PDF files. Images are taken from the provided URLs that may contain placeholders. "
+"You can select a PDF file page and draw a bounding box for image insertion. Alternatively, you can insert your image in the "
+"center of every page."
 msgstr ""
-"このツールを使用すると、PDFファイルに画像を埋め込むことができます。画像は、プ"
-"レースホルダーを含む可能性がある提供されたURLから取得されます。PDFファイルの"
-"ページを選択して、画像の挿入のための境界ボックスを描画することができます。あ"
-"るいは、各ページの中央に画像を挿入することもできます。"
+"このツールを使用すると、PDFファイルに画像を埋め込むことができます。画像は、プレースホルダーを含む可能性がある提供されたURLか"
+"ら取得されます。PDFファイルのページを選択して、画像の挿入のための境界ボックスを描画することができます。あるいは、各ページの中"
+"央に画像を挿入することもできます。"
 
-#: pdf-forms-for-woocommerce.php:2125
+#: pdf-forms-for-woocommerce.php:2290
 msgid "Embed Image"
 msgstr "画像を埋め込む"
 
-#: pdf-forms-for-woocommerce.php:2127
+#: pdf-forms-for-woocommerce.php:2292
 msgid "PDF file"
 msgstr "PDFファイル"
 
-#: pdf-forms-for-woocommerce.php:2128
+#: pdf-forms-for-woocommerce.php:2293
 msgid "Page"
 msgstr "ページ"
 
-#: pdf-forms-for-woocommerce.php:2129
+#: pdf-forms-for-woocommerce.php:2294
 msgid "Select a region where the image needs to be embeded."
 msgstr "画像を埋め込む必要がある領域を選択してください。"
 
-#: pdf-forms-for-woocommerce.php:2130
+#: pdf-forms-for-woocommerce.php:2295
 msgid "Top"
 msgstr "上"
 
-#: pdf-forms-for-woocommerce.php:2131
+#: pdf-forms-for-woocommerce.php:2296
 msgid "Left"
 msgstr "左"
 
-#: pdf-forms-for-woocommerce.php:2132
+#: pdf-forms-for-woocommerce.php:2297
 msgid "Width"
 msgstr "幅"
 
-#: pdf-forms-for-woocommerce.php:2133
+#: pdf-forms-for-woocommerce.php:2298
 msgid "Height"
 msgstr "高さ"
 
-#: pdf-forms-for-woocommerce.php:2134
+#: pdf-forms-for-woocommerce.php:2299
 msgid "pts"
 msgstr "pts"
 
-#: pdf-forms-for-woocommerce.php:2136
-msgid ""
-"Have a question/comment/problem? Feel free to use {a-href-forum}the support "
-"forum{/a}."
-msgstr ""
-"質問/コメント/問題がありますか？{a-href-forum}サポートフォーラム{/a}を自由に"
-"使用してください。"
+#: pdf-forms-for-woocommerce.php:2301
+msgid "Have a question/comment/problem? Feel free to use {a-href-forum}the support forum{/a}."
+msgstr "質問/コメント/問題がありますか？{a-href-forum}サポートフォーラム{/a}を自由に使用してください。"
 
-#: pdf-forms-for-woocommerce.php:2142 pdf-forms-for-woocommerce.php:2410
+#: pdf-forms-for-woocommerce.php:2307 pdf-forms-for-woocommerce.php:2576
 msgid "Show Help"
 msgstr "ヘルプを表示"
 
-#: pdf-forms-for-woocommerce.php:2143 pdf-forms-for-woocommerce.php:2411
+#: pdf-forms-for-woocommerce.php:2308 pdf-forms-for-woocommerce.php:2577
 msgid "Hide Help"
 msgstr "ヘルプを非表示"
 
-#: pdf-forms-for-woocommerce.php:2162
+#: pdf-forms-for-woocommerce.php:2327
 msgid "Failed to decode data"
 msgstr "データのデコードに失敗しました"
 
-#: pdf-forms-for-woocommerce.php:2353
-msgid ""
-"Error saving PDF form data: {error-message} at {error-file}:{error-line}"
-msgstr ""
-"PDFフォームデータの保存中にエラーが発生しました: {error-message} 位置: "
-"{error-file}:{error-line}"
+#: pdf-forms-for-woocommerce.php:2518
+msgid "Error saving PDF form data: {error-message} at {error-file}:{error-line}"
+msgstr "PDFフォームデータの保存中にエラーが発生しました: {error-message} 位置: {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:2402
+#: pdf-forms-for-woocommerce.php:2567
 msgid "Failed to determine post ID"
 msgstr "投稿IDの特定に失敗しました"
 
-#: pdf-forms-for-woocommerce.php:2403
+#: pdf-forms-for-woocommerce.php:2568
 msgid "Failed to load PDF form data"
 msgstr "PDFフォームデータの読み込みに失敗しました"
 
-#: pdf-forms-for-woocommerce.php:2404 src/services/pdf-ninja.php:138
-#: src/services/pdf-ninja.php:854
+#: pdf-forms-for-woocommerce.php:2569 src/services/pdf-ninja.php:138 src/services/pdf-ninja.php:854
 msgid "Unknown error"
 msgstr "未知のエラー"
 
-#: pdf-forms-for-woocommerce.php:2405
-msgid ""
-"Are you sure you want to delete this file?  This will delete field mappings "
-"and image embeds associated with this file."
+#: pdf-forms-for-woocommerce.php:2570
+msgid "Are you sure you want to delete this file?  This will delete field mappings and image embeds associated with this file."
 msgstr ""
-"このファイルを削除してもよろしいですか？ これにより、このファイルに関連する"
-"フィールドのマッピングと埋め込み画像が削除されます。"
+"このファイルを削除してもよろしいですか？ これにより、このファイルに関連するフィールドのマッピングと埋め込み画像が削除されま"
+"す。"
 
-#: pdf-forms-for-woocommerce.php:2406
+#: pdf-forms-for-woocommerce.php:2571
 msgid "Are you sure you want to delete this mapping?"
 msgstr "このマッピングを削除してもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2407
+#: pdf-forms-for-woocommerce.php:2572
 msgid "Are you sure you want to delete all mappings?"
 msgstr "すべてのマッピングを削除してもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2408
+#: pdf-forms-for-woocommerce.php:2573
+msgid "Are you sure you want to delete all value mappings?"
+msgstr "すべての値マッピングを削除してもよろしいですか？"
+
+#: pdf-forms-for-woocommerce.php:2574
 msgid "Are you sure you want to attach a PDF file without any form fields?"
 msgstr "フォームフィールドがないPDFファイルを添付してもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2409
+#: pdf-forms-for-woocommerce.php:2575
 msgid "Are you sure you want to delete this embeded image?"
 msgstr "この埋め込まれた画像を削除してもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2412
+#: pdf-forms-for-woocommerce.php:2578
 msgid "Select a PDF file"
 msgstr "PDFファイルを選択"
 
-#: pdf-forms-for-woocommerce.php:2413
+#: pdf-forms-for-woocommerce.php:2579
 msgid "Select"
 msgstr "選択"
 
-#: pdf-forms-for-woocommerce.php:2414
+#: pdf-forms-for-woocommerce.php:2580
 msgid "All PDFs"
 msgstr "すべてのPDF"
 
-#: pdf-forms-for-woocommerce.php:2415
+#: pdf-forms-for-woocommerce.php:2581
 msgid "All"
 msgstr "すべて"
 
-#: pdf-forms-for-woocommerce.php:2416
+#: pdf-forms-for-woocommerce.php:2582
 msgid "--- EMPTY ---"
 msgstr "--- 空 ---"
 
-#: pdf-forms-for-woocommerce.php:2437
+#: pdf-forms-for-woocommerce.php:2607
 msgid "Are you sure you want to reset settings for this order?"
 msgstr "この注文の設定をリセットしてもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2438
+#: pdf-forms-for-woocommerce.php:2608
 msgid "Are you sure you want to reset PDFs for this order?"
 msgstr "この注文のPDFをリセットしてもよろしいですか？"
 
-#: pdf-forms-for-woocommerce.php:2468
+#: pdf-forms-for-woocommerce.php:2638
 msgid "Invalid attachment ID"
 msgstr "無効な添付ID"
 
-#: pdf-forms-for-woocommerce.php:2479
+#: pdf-forms-for-woocommerce.php:2649
 msgid "PDF form filling"
 msgstr "PDFフォームの入力"
 
-#: pdf-forms-for-woocommerce.php:2559
+#: pdf-forms-for-woocommerce.php:2729
 msgid "Could not read attached file"
 msgstr "添付ファイルを読み込めませんでした"
 
-#: pdf-forms-for-woocommerce.php:2590
+#: pdf-forms-for-woocommerce.php:2760
 msgid "No service"
 msgstr "サービスがありません"
 
-#: pdf-forms-for-woocommerce.php:2668
+#: pdf-forms-for-woocommerce.php:2838
 msgid "Failed to determine upload path"
 msgstr "アップロードパスの特定に失敗しました"
 
-#: pdf-forms-for-woocommerce.php:2708
+#: pdf-forms-for-woocommerce.php:2878
 msgid "Invalid page number"
 msgstr "無効なページ番号"
 
-#: pdf-forms-for-woocommerce.php:2717
+#: pdf-forms-for-woocommerce.php:2887
 msgid "Failed to retrieve page snapshot"
 msgstr "ページのスナップショットの取得に失敗しました"
 
@@ -533,8 +488,7 @@ msgstr "{url}への接続に失敗しました"
 msgid "Failed to decode API server response"
 msgstr "APIサーバーのレスポンスのデコードに失敗しました"
 
-#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497
-#: src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
+#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497 src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
 #: src/services/pdf-ninja.php:670 src/services/pdf-ninja.php:776
 msgid "Pdf.Ninja API server did not send an expected response"
 msgstr "Pdf.Ninja APIサーバーから期待されるレスポンスが送信されませんでした"
@@ -556,30 +510,18 @@ msgid "Failed to encode JSON data"
 msgstr "JSONデータのエンコードに失敗しました"
 
 #: src/services/pdf-ninja.php:812
-msgid ""
-"Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-"
-"service-page}Please retry manually{/a}."
-msgstr ""
-"最後の試みでPdf.Ninja APIキーの取得に失敗しました。{a-href-edit-service-page}"
-"手動で再試行してください{/a}。"
+msgid "Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-service-page}Please retry manually{/a}."
+msgstr "最後の試みでPdf.Ninja APIキーの取得に失敗しました。{a-href-edit-service-page}手動で再試行してください{/a}。"
 
 #: src/services/pdf-ninja.php:832
 msgid "Warning"
 msgstr "警告"
 
 #: src/services/pdf-ninja.php:833
-msgid ""
-"Your WooCommerce settings indicate that you are using an insecure connection "
-"to the Pdf.Ninja API server."
-msgstr ""
-"WooCommerceの設定によれば、Pdf.Ninja APIサーバーへの安全でない接続を使用して"
-"いることが示されています。"
+msgid "Your WooCommerce settings indicate that you are using an insecure connection to the Pdf.Ninja API server."
+msgstr "WooCommerceの設定によれば、Pdf.Ninja APIサーバーへの安全でない接続を使用していることが示されています。"
 
-#: src/services/service.php:21 src/services/service.php:26
-#: src/services/service.php:31 src/services/service.php:36
+#: src/services/service.php:21 src/services/service.php:26 src/services/service.php:31 src/services/service.php:36
 #: src/services/service.php:41
 msgid "Missing feature"
 msgstr "欠落している機能"
-
-#~ msgid "Failed to open file for writing"
-#~ msgstr "書き込みのためのファイルを開くことができませんでした"

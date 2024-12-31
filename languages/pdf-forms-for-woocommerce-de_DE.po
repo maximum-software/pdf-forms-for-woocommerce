@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PDF Forms Filler for WooCommerce 1.1.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-"
-"woocommerce\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pdf-forms-for-woocommerce\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Plugin Name of the plugin
+#: pdf-forms-for-woocommerce.php:2089
 msgid "PDF Forms Filler for WooCommerce"
 msgstr "PDF Formulare Ausfüller für WooCommerce"
 
@@ -20,11 +20,10 @@ msgstr "https://pdfformsfiller.org/"
 
 #. Description of the plugin
 msgid ""
-"Automatically fill PDF forms with WooCommerce orders and attach generated "
-"PDFs to email notifications and order downloads."
+"Automatically fill PDF forms with WooCommerce orders and attach generated PDFs to email notifications and order downloads."
 msgstr ""
-"PDF-Formulare automatisch mit WooCommerce-Bestellungen ausfüllen und "
-"generierte PDFs an E-Mail-Benachrichtigungen und Bestell-Downloads anhängen."
+"PDF-Formulare automatisch mit WooCommerce-Bestellungen ausfüllen und generierte PDFs an E-Mail-Benachrichtigungen und "
+"Bestell-Downloads anhängen."
 
 #. Author of the plugin
 msgid "Maximum.Software"
@@ -34,445 +33,399 @@ msgstr "Maximum.Software"
 msgid "https://maximum.software/"
 msgstr "https://maximum.software/"
 
-#: pdf-forms-for-woocommerce.php:202 src/integration/wc-settings-page.php:15
+#: pdf-forms-for-woocommerce.php:215 src/integration/wc-settings-page.php:15
 msgid "PDF Forms Filler"
 msgstr "PDF Formulare Ausfüller"
 
-#: pdf-forms-for-woocommerce.php:234
+#: pdf-forms-for-woocommerce.php:247
 msgid "Support"
 msgstr "Support"
 
-#: pdf-forms-for-woocommerce.php:247 src/services/pdf-ninja.php:809
+#: pdf-forms-for-woocommerce.php:260 src/services/pdf-ninja.php:809
 msgid "PDF Forms Filler for WooCommerce Error"
 msgstr "Fehler bei PDF Formulare Ausfüller für WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:248
+#: pdf-forms-for-woocommerce.php:261
 msgid "The required plugin 'WooCommerce' version is not installed!"
-msgstr ""
-"Die erforderliche Version des Plugins 'WooCommerce' ist nicht installiert!"
+msgstr "Die erforderliche Version des Plugins 'WooCommerce' ist nicht installiert!"
 
-#: pdf-forms-for-woocommerce.php:256
+#: pdf-forms-for-woocommerce.php:269
 msgid "PDF Forms Filler for WooCommerce Warning"
 msgstr "Warnung bei PDF Formulare Ausfüller für WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:259
+#: pdf-forms-for-woocommerce.php:272
 msgid ""
-"The currently installed version of 'WooCommerce' plugin ({current-"
-"woocommerce-version}) may not be supported by the current version of 'PDF "
-"Forms Filler for WooCommerce' plugin ({current-plugin-version}), please "
-"switch to 'WooCommerce' plugin version {supported-woocommerce-version} or "
-"below to ensure that 'PDF Forms Filler for WooCommerce' plugin would work "
+"The currently installed version of 'WooCommerce' plugin ({current-woocommerce-version}) may not be supported by the current "
+"version of 'PDF Forms Filler for WooCommerce' plugin ({current-plugin-version}), please switch to 'WooCommerce' plugin "
+"version {supported-woocommerce-version} or below to ensure that 'PDF Forms Filler for WooCommerce' plugin would work "
 "correctly."
 msgstr ""
-"Die derzeit installierte Version des Plugins 'WooCommerce' ({current-"
-"woocommerce-version}) wird möglicherweise nicht von der aktuellen Version "
-"des Plugins 'PDF Formulare Ausfüller für WooCommerce' ({current-plugin-"
-"version}) unterstützt. Bitte wechseln Sie zur 'WooCommerce' Plugin-Version "
-"{supported-woocommerce-version} oder darunter, um sicherzustellen, dass das "
+"Die derzeit installierte Version des Plugins 'WooCommerce' ({current-woocommerce-version}) wird möglicherweise nicht von der "
+"aktuellen Version des Plugins 'PDF Formulare Ausfüller für WooCommerce' ({current-plugin-version}) unterstützt. Bitte "
+"wechseln Sie zur 'WooCommerce' Plugin-Version {supported-woocommerce-version} oder darunter, um sicherzustellen, dass das "
 "Plugin 'PDF Formulare Ausfüller für WooCommerce' korrekt funktioniert."
 
-#: pdf-forms-for-woocommerce.php:261
+#: pdf-forms-for-woocommerce.php:274
 msgid "Unknown version"
 msgstr "Unbekannte Version"
 
-#: pdf-forms-for-woocommerce.php:286
+#: pdf-forms-for-woocommerce.php:299
 msgid "Clear All Messages"
 msgstr "Alle Nachrichten löschen"
 
-#: pdf-forms-for-woocommerce.php:290
+#: pdf-forms-for-woocommerce.php:303
 msgid "PDF Forms Filler for WooCommerce Messages"
 msgstr "Nachrichten von PDF Formulare Ausfüller für WooCommerce"
 
-#: pdf-forms-for-woocommerce.php:461 pdf-forms-for-woocommerce.php:493
-#: pdf-forms-for-woocommerce.php:714 pdf-forms-for-woocommerce.php:748
-#: pdf-forms-for-woocommerce.php:2463 pdf-forms-for-woocommerce.php:2702
-msgid "Nonce mismatch"
-msgstr "Nonce-Nichtübereinstimmung"
-
-#: pdf-forms-for-woocommerce.php:464 pdf-forms-for-woocommerce.php:496
-#: pdf-forms-for-woocommerce.php:717 pdf-forms-for-woocommerce.php:751
-#: pdf-forms-for-woocommerce.php:2471 pdf-forms-for-woocommerce.php:2711
-msgid "Permission denied"
-msgstr "Berechtigung verweigert"
-
-#: pdf-forms-for-woocommerce.php:469
-msgid "Invalid email"
-msgstr "Ungültige E-Mail"
-
-#: pdf-forms-for-woocommerce.php:605
-msgid "Failed to download file: {error-message}"
-msgstr "Datei konnte nicht heruntergeladen werden: {error-message}"
-
-#: pdf-forms-for-woocommerce.php:615 pdf-forms-for-woocommerce.php:1449
-#: src/services/pdf-ninja.php:673 src/services/pdf-ninja.php:779
-msgid "Failed to create file"
-msgstr "Fehler beim Erstellen der Datei"
-
-#: pdf-forms-for-woocommerce.php:697
-msgid ""
-"Product settings are stored in orders when they are created. Resetting "
-"settings is necessary when new product settings need to be applied to an old "
-"order."
-msgstr ""
-"Produkteinstellungen werden bei der Erstellung von Bestellungen gespeichert. "
-"Das Zurücksetzen der Einstellungen ist notwendig, wenn neue "
-"Produkteinstellungen auf eine alte Bestellung angewendet werden sollen."
-
-#: pdf-forms-for-woocommerce.php:698
-msgid "Reset Settings"
-msgstr "Einstellungen zurücksetzen"
-
-#: pdf-forms-for-woocommerce.php:699
-msgid ""
-"PDFs are refilled when orders status changes. Sometimes you may want to "
-"manually trigger PDFs to be refilled after changing some aspect of the "
-"order, such as the billing address."
-msgstr ""
-"PDFs werden neu befüllt, wenn sich der Bestellstatus ändert. Manchmal "
-"möchten Sie PDFs manuell neu befüllen lassen, nachdem Sie einen Aspekt der "
-"Bestellung geändert haben, wie z.B. die Rechnungsadresse."
-
-#: pdf-forms-for-woocommerce.php:700
-msgid "Reset PDFs"
-msgstr "PDFs zurücksetzen"
-
-#: pdf-forms-for-woocommerce.php:721 pdf-forms-for-woocommerce.php:755
-msgid "Invalid order ID"
-msgstr "Ungültige Bestell-ID"
-
-#: pdf-forms-for-woocommerce.php:725 pdf-forms-for-woocommerce.php:759
+#: pdf-forms-for-woocommerce.php:518 pdf-forms-for-woocommerce.php:859 pdf-forms-for-woocommerce.php:893
 msgid "Invalid order"
 msgstr "Ungültige Bestellung"
 
-#: pdf-forms-for-woocommerce.php:1482 pdf-forms-for-woocommerce.php:2478
-msgid "File type {mime-type} of {file} is unsupported for {purpose}"
-msgstr ""
-"Der Dateityp {mime-type} von {file} wird für {purpose} nicht unterstützt."
+#: pdf-forms-for-woocommerce.php:595 pdf-forms-for-woocommerce.php:627 pdf-forms-for-woocommerce.php:848
+#: pdf-forms-for-woocommerce.php:882 pdf-forms-for-woocommerce.php:2633 pdf-forms-for-woocommerce.php:2872
+msgid "Nonce mismatch"
+msgstr "Nonce-Nichtübereinstimmung"
 
-#: pdf-forms-for-woocommerce.php:1483
+#: pdf-forms-for-woocommerce.php:598 pdf-forms-for-woocommerce.php:630 pdf-forms-for-woocommerce.php:851
+#: pdf-forms-for-woocommerce.php:885 pdf-forms-for-woocommerce.php:2641 pdf-forms-for-woocommerce.php:2881
+msgid "Permission denied"
+msgstr "Berechtigung verweigert"
+
+#: pdf-forms-for-woocommerce.php:603
+msgid "Invalid email"
+msgstr "Ungültige E-Mail"
+
+#: pdf-forms-for-woocommerce.php:739
+msgid "Failed to download file: {error-message}"
+msgstr "Datei konnte nicht heruntergeladen werden: {error-message}"
+
+#: pdf-forms-for-woocommerce.php:749 pdf-forms-for-woocommerce.php:1615 src/services/pdf-ninja.php:673
+#: src/services/pdf-ninja.php:779
+msgid "Failed to create file"
+msgstr "Fehler beim Erstellen der Datei"
+
+#: pdf-forms-for-woocommerce.php:831
+msgid ""
+"Product settings are stored in orders when they are created. Resetting settings is necessary when new product settings need "
+"to be applied to an old order."
+msgstr ""
+"Produkteinstellungen werden bei der Erstellung von Bestellungen gespeichert. Das Zurücksetzen der Einstellungen ist "
+"notwendig, wenn neue Produkteinstellungen auf eine alte Bestellung angewendet werden sollen."
+
+#: pdf-forms-for-woocommerce.php:832
+msgid "Reset Settings"
+msgstr "Einstellungen zurücksetzen"
+
+#: pdf-forms-for-woocommerce.php:833
+msgid ""
+"PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing "
+"some aspect of the order, such as the billing address."
+msgstr ""
+"PDFs werden neu befüllt, wenn sich der Bestellstatus ändert. Manchmal möchten Sie PDFs manuell neu befüllen lassen, nachdem "
+"Sie einen Aspekt der Bestellung geändert haben, wie z.B. die Rechnungsadresse."
+
+#: pdf-forms-for-woocommerce.php:834
+msgid "Reset PDFs"
+msgstr "PDFs zurücksetzen"
+
+#: pdf-forms-for-woocommerce.php:855 pdf-forms-for-woocommerce.php:889
+msgid "Invalid order ID"
+msgstr "Ungültige Bestell-ID"
+
+#: pdf-forms-for-woocommerce.php:1648 pdf-forms-for-woocommerce.php:2648
+msgid "File type {mime-type} of {file} is unsupported for {purpose}"
+msgstr "Der Dateityp {mime-type} von {file} wird für {purpose} nicht unterstützt."
+
+#: pdf-forms-for-woocommerce.php:1649
 msgid "image embedding"
 msgstr "Bildeinbettungstool"
 
-#: pdf-forms-for-woocommerce.php:1763 pdf-forms-for-woocommerce.php:2542
+#: pdf-forms-for-woocommerce.php:1929 pdf-forms-for-woocommerce.php:2712
 msgid "Attachment file is not accessible"
 msgstr "Auf die Anhangsdatei kann nicht zugegriffen werden"
 
-#: pdf-forms-for-woocommerce.php:1879
-msgid ""
-"[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-"
-"message} at {error-file}:{error-line}"
+#: pdf-forms-for-woocommerce.php:2044
+msgid "[{timestamp}] (order:{order}, product:{product}) Error filling PDFs: {error-message} at {error-file}:{error-line}"
 msgstr ""
-"[{timestamp}] (Bestellung:{order}, Produkt:{product}) Fehler beim Befüllen "
-"der PDFs: {error-message} in {error-file}:{error-line}"
-
-#: pdf-forms-for-woocommerce.php:1881
-msgid ""
-"[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-"
-"message} at {error-file}:{error-line}"
-msgstr ""
-"[{timestamp}] (Bestellung:{order}) Fehler beim Befüllen der PDFs für die "
-"Bestellung {order}: {error-message} in {error-file}:{error-line}"
-
-#: pdf-forms-for-woocommerce.php:1883
-msgid ""
-"[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-"
+"[{timestamp}] (Bestellung:{order}, Produkt:{product}) Fehler beim Befüllen der PDFs: {error-message} in {error-file}:{error-"
 "line}"
+
+#: pdf-forms-for-woocommerce.php:2046
+msgid "[{timestamp}] (order:{order}) Error filling PDFs for order {order}: {error-message} at {error-file}:{error-line}"
 msgstr ""
-"[{timestamp}] Fehler beim Befüllen der PDFs: {error-message} in {error-file}:"
+"[{timestamp}] (Bestellung:{order}) Fehler beim Befüllen der PDFs für die Bestellung {order}: {error-message} in {error-file}:"
 "{error-line}"
 
-#: pdf-forms-for-woocommerce.php:1994
+#: pdf-forms-for-woocommerce.php:2048
+msgid "[{timestamp}] Error filling PDFs: {error-message} at {error-file}:{error-line}"
+msgstr "[{timestamp}] Fehler beim Befüllen der PDFs: {error-message} in {error-file}:{error-line}"
+
+#: pdf-forms-for-woocommerce.php:2159
 msgid "PDF Forms"
 msgstr "PDF-Formulare"
 
-#: pdf-forms-for-woocommerce.php:2064
+#: pdf-forms-for-woocommerce.php:2229
 msgid "None"
 msgstr "Keine"
 
-#: pdf-forms-for-woocommerce.php:2065
+#: pdf-forms-for-woocommerce.php:2230
 msgid "Create a new downloadable file"
 msgstr "Eine neue herunterladbare Datei erstellen"
 
-#: pdf-forms-for-woocommerce.php:2104
+#: pdf-forms-for-woocommerce.php:2269
 msgid ""
-"You can use this section to attach a PDF file to your product and link "
-"WooCommerce placeholders to fields in the PDF file. You can also embed "
-"images from a URL into the PDF file. Changes here are applied when the "
-"product is saved."
+"You can use this section to attach a PDF file to your product and link WooCommerce placeholders to fields in the PDF file. "
+"You can also embed images from a URL into the PDF file. Changes here are applied when the product is saved."
 msgstr ""
-"Sie können diesen Bereich verwenden, um eine PDF-Datei an Ihr Produkt "
-"anzuhängen und WooCommerce-Platzhalter mit Feldern in der PDF-Datei zu "
-"verknüpfen. Sie können auch Bilder von einer URL in die PDF-Datei einbetten. "
-"Änderungen hier werden angewendet, wenn das Produkt gespeichert wird."
+"Sie können diesen Bereich verwenden, um eine PDF-Datei an Ihr Produkt anzuhängen und WooCommerce-Platzhalter mit Feldern in "
+"der PDF-Datei zu verknüpfen. Sie können auch Bilder von einer URL in die PDF-Datei einbetten. Änderungen hier werden "
+"angewendet, wenn das Produkt gespeichert wird."
 
-#: pdf-forms-for-woocommerce.php:2105
+#: pdf-forms-for-woocommerce.php:2270
 msgid "Attach a PDF File"
 msgstr "Hänge eine PDF-Datei an"
 
-#: pdf-forms-for-woocommerce.php:2106 pdf-forms-for-woocommerce.php:2126
+#: pdf-forms-for-woocommerce.php:2271 pdf-forms-for-woocommerce.php:2291
 msgid "Delete"
 msgstr "Löschen"
 
-#: pdf-forms-for-woocommerce.php:2107
+#: pdf-forms-for-woocommerce.php:2272
 msgid "Map Value"
 msgstr "Wert zuordnen"
 
-#: pdf-forms-for-woocommerce.php:2108
+#: pdf-forms-for-woocommerce.php:2273
 msgid "Options"
 msgstr "Optionen"
 
-#: pdf-forms-for-woocommerce.php:2109
+#: pdf-forms-for-woocommerce.php:2274
 msgid "Skip when empty"
 msgstr "Überspringen, wenn leer"
 
-#: pdf-forms-for-woocommerce.php:2110
+#: pdf-forms-for-woocommerce.php:2275
 msgid "Attach the filled PDF file to the following emails:"
 msgstr "Das ausgefüllte PDF an die folgenden E-Mails anhängen:"
 
-#: pdf-forms-for-woocommerce.php:2111
+#: pdf-forms-for-woocommerce.php:2276
 msgid "Flatten"
 msgstr "Verflachen"
 
-#: pdf-forms-for-woocommerce.php:2112
+#: pdf-forms-for-woocommerce.php:2277
 msgid "New filled PDF file name (placeholders allowed):"
 msgstr "Name der neu ausgefüllten PDF-Datei (Platzhalter erlaubt):"
 
-#: pdf-forms-for-woocommerce.php:2113
+#: pdf-forms-for-woocommerce.php:2278
 msgid "Path for saving filled PDF file (placeholders allowed):"
 msgstr "Pfad zum Speichern der ausgefüllten PDF-Datei (Platzhalter erlaubt):"
 
-#: pdf-forms-for-woocommerce.php:2114
-msgid ""
-"Provide a download link to the filled PDF file via the product's "
-"downloadable file:"
-msgstr ""
-"Stellen Sie einen Download-Link für die ausgefüllte PDF-Datei über die "
-"herunterladbare Datei des Produkts bereit:"
+#: pdf-forms-for-woocommerce.php:2279
+msgid "Provide a download link to the filled PDF file via the product's downloadable file:"
+msgstr "Stellen Sie einen Download-Link für die ausgefüllte PDF-Datei über die herunterladbare Datei des Produkts bereit:"
 
-#: pdf-forms-for-woocommerce.php:2115
+#: pdf-forms-for-woocommerce.php:2280
 msgid "(leave blank to disable this option)"
 msgstr "(freilassen, um diese Option zu deaktivieren)"
 
-#: pdf-forms-for-woocommerce.php:2116
+#: pdf-forms-for-woocommerce.php:2281
 msgid "Field Mapper Tool"
 msgstr "Feldzuordnertool"
 
-#: pdf-forms-for-woocommerce.php:2117
+#: pdf-forms-for-woocommerce.php:2282
 msgid ""
-"This tool can be used to link WooCommerce placeholders to fields in the "
-"attached PDF files. When an order email notification is sent or downloadable "
-"file is requested, text with placeholder data will be inserted into the "
-"corresponding fields in the PDF file and the filled PDF will be made "
-"available."
+"This tool can be used to link WooCommerce placeholders to fields in the attached PDF files. When an order email notification "
+"is sent or downloadable file is requested, text with placeholder data will be inserted into the corresponding fields in the "
+"PDF file and the filled PDF will be made available."
 msgstr ""
-"Mit diesem Tool können WooCommerce-Platzhalter mit Feldern in den "
-"angehängten PDF-Dateien verknüpft werden. Wenn eine Bestell-E-Mail-"
-"Benachrichtigung gesendet wird oder eine herunterladbare Datei angefordert "
-"wird, wird der Text mit Platzhalterdaten in die entsprechenden Felder in der "
-"PDF-Datei eingefügt und die ausgefüllte PDF wird zur Verfügung gestellt."
+"Mit diesem Tool können WooCommerce-Platzhalter mit Feldern in den angehängten PDF-Dateien verknüpft werden. Wenn eine "
+"Bestell-E-Mail-Benachrichtigung gesendet wird oder eine herunterladbare Datei angefordert wird, wird der Text mit "
+"Platzhalterdaten in die entsprechenden Felder in der PDF-Datei eingefügt und die ausgefüllte PDF wird zur Verfügung gestellt."
 
-#: pdf-forms-for-woocommerce.php:2118
+#: pdf-forms-for-woocommerce.php:2283
 msgid "PDF field"
 msgstr "PDF-Feld"
 
-#: pdf-forms-for-woocommerce.php:2119
+#: pdf-forms-for-woocommerce.php:2284
 msgid "WooCommerce placeholders"
 msgstr "WooCommerce Platzhalter"
 
-#: pdf-forms-for-woocommerce.php:2120
+#: pdf-forms-for-woocommerce.php:2285
 msgid "Add Mapping"
 msgstr "Feldzuordnung hinzufügen"
 
-#: pdf-forms-for-woocommerce.php:2121
+#: pdf-forms-for-woocommerce.php:2286
 msgid "Delete All"
 msgstr "Alles löschen"
 
-#: pdf-forms-for-woocommerce.php:2122
+#: pdf-forms-for-woocommerce.php:2287
 msgid "New Field:"
 msgstr "Neues Feld:"
 
-#: pdf-forms-for-woocommerce.php:2123
+#: pdf-forms-for-woocommerce.php:2288
 msgid "Image Embedding Tool"
 msgstr "Bildeinbettung"
 
-#: pdf-forms-for-woocommerce.php:2124
+#: pdf-forms-for-woocommerce.php:2289
 msgid ""
-"This tool allows embedding of images into PDF files. Images are taken from "
-"the provided URLs that may contain placeholders. You can select a PDF file "
-"page and draw a bounding box for image insertion. Alternatively, you can "
-"insert your image in the center of every page."
+"This tool allows embedding of images into PDF files. Images are taken from the provided URLs that may contain placeholders. "
+"You can select a PDF file page and draw a bounding box for image insertion. Alternatively, you can insert your image in the "
+"center of every page."
 msgstr ""
-"Mit diesem Tool können Bilder in PDF-Dateien eingebettet werden. Bilder "
-"werden von den bereitgestellten URLs genommen, die Platzhalter enthalten "
-"können. Sie können eine PDF-Dateiseite auswählen und ein Begrenzungsrahmen "
-"für die Bildinsertion zeichnen. Alternativ können Sie Ihr Bild in die Mitte "
-"jeder Seite einfügen."
+"Mit diesem Tool können Bilder in PDF-Dateien eingebettet werden. Bilder werden von den bereitgestellten URLs genommen, die "
+"Platzhalter enthalten können. Sie können eine PDF-Dateiseite auswählen und ein Begrenzungsrahmen für die Bildinsertion "
+"zeichnen. Alternativ können Sie Ihr Bild in die Mitte jeder Seite einfügen."
 
-#: pdf-forms-for-woocommerce.php:2125
+#: pdf-forms-for-woocommerce.php:2290
 msgid "Embed Image"
 msgstr "Bild einbetten"
 
-#: pdf-forms-for-woocommerce.php:2127
+#: pdf-forms-for-woocommerce.php:2292
 msgid "PDF file"
 msgstr "PDF-Datei"
 
-#: pdf-forms-for-woocommerce.php:2128
+#: pdf-forms-for-woocommerce.php:2293
 msgid "Page"
 msgstr "Seite"
 
-#: pdf-forms-for-woocommerce.php:2129
+#: pdf-forms-for-woocommerce.php:2294
 msgid "Select a region where the image needs to be embeded."
 msgstr "Wähle einen Bereich in den das Bild eingebettet werden soll."
 
-#: pdf-forms-for-woocommerce.php:2130
+#: pdf-forms-for-woocommerce.php:2295
 msgid "Top"
 msgstr "Oben"
 
-#: pdf-forms-for-woocommerce.php:2131
+#: pdf-forms-for-woocommerce.php:2296
 msgid "Left"
 msgstr "Links"
 
-#: pdf-forms-for-woocommerce.php:2132
+#: pdf-forms-for-woocommerce.php:2297
 msgid "Width"
 msgstr "Breite"
 
-#: pdf-forms-for-woocommerce.php:2133
+#: pdf-forms-for-woocommerce.php:2298
 msgid "Height"
 msgstr "Höhe"
 
-#: pdf-forms-for-woocommerce.php:2134
+#: pdf-forms-for-woocommerce.php:2299
 msgid "pts"
 msgstr "Pkt"
 
-#: pdf-forms-for-woocommerce.php:2136
-msgid ""
-"Have a question/comment/problem? Feel free to use {a-href-forum}the support "
-"forum{/a}."
-msgstr ""
-"Haben Sie eine Frage/Anmerkung/Problem? Nutzen Sie gerne {a-href-forum}das "
-"Support-Forum{/a}."
+#: pdf-forms-for-woocommerce.php:2301
+msgid "Have a question/comment/problem? Feel free to use {a-href-forum}the support forum{/a}."
+msgstr "Haben Sie eine Frage/Anmerkung/Problem? Nutzen Sie gerne {a-href-forum}das Support-Forum{/a}."
 
-#: pdf-forms-for-woocommerce.php:2142 pdf-forms-for-woocommerce.php:2410
+#: pdf-forms-for-woocommerce.php:2307 pdf-forms-for-woocommerce.php:2576
 msgid "Show Help"
 msgstr "Hilfe anzeigen"
 
-#: pdf-forms-for-woocommerce.php:2143 pdf-forms-for-woocommerce.php:2411
+#: pdf-forms-for-woocommerce.php:2308 pdf-forms-for-woocommerce.php:2577
 msgid "Hide Help"
 msgstr "Hilfe ausblenden"
 
-#: pdf-forms-for-woocommerce.php:2162
+#: pdf-forms-for-woocommerce.php:2327
 msgid "Failed to decode data"
 msgstr "Daten konnten nicht entschlüsselt werden"
 
-#: pdf-forms-for-woocommerce.php:2353
-msgid ""
-"Error saving PDF form data: {error-message} at {error-file}:{error-line}"
-msgstr ""
-"Fehler beim Speichern der PDF-Formulardaten: {error-message} in {error-file}:"
-"{error-line}"
+#: pdf-forms-for-woocommerce.php:2518
+msgid "Error saving PDF form data: {error-message} at {error-file}:{error-line}"
+msgstr "Fehler beim Speichern der PDF-Formulardaten: {error-message} in {error-file}:{error-line}"
 
-#: pdf-forms-for-woocommerce.php:2402
+#: pdf-forms-for-woocommerce.php:2567
 msgid "Failed to determine post ID"
 msgstr "Post-ID konnte nicht ermittelt werden"
 
-#: pdf-forms-for-woocommerce.php:2403
+#: pdf-forms-for-woocommerce.php:2568
 msgid "Failed to load PDF form data"
 msgstr "PDF-Formulardaten konnten nicht geladen werden"
 
-#: pdf-forms-for-woocommerce.php:2404 src/services/pdf-ninja.php:138
-#: src/services/pdf-ninja.php:854
+#: pdf-forms-for-woocommerce.php:2569 src/services/pdf-ninja.php:138 src/services/pdf-ninja.php:854
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
-#: pdf-forms-for-woocommerce.php:2405
-msgid ""
-"Are you sure you want to delete this file?  This will delete field mappings "
-"and image embeds associated with this file."
+#: pdf-forms-for-woocommerce.php:2570
+msgid "Are you sure you want to delete this file?  This will delete field mappings and image embeds associated with this file."
 msgstr ""
-"Möchtest du diese Datei wirklich löschen? Dadurch werden alle "
-"Feldzuordnungen und Bildeinbettungen gelöscht, die mit dieser Datei "
-"verknüpft sind."
+"Möchtest du diese Datei wirklich löschen? Dadurch werden alle Feldzuordnungen und Bildeinbettungen gelöscht, die mit dieser "
+"Datei verknüpft sind."
 
-#: pdf-forms-for-woocommerce.php:2406
+#: pdf-forms-for-woocommerce.php:2571
 msgid "Are you sure you want to delete this mapping?"
 msgstr "Möchtest du diese Zuordnung wirklich löschen?"
 
-#: pdf-forms-for-woocommerce.php:2407
+#: pdf-forms-for-woocommerce.php:2572
 msgid "Are you sure you want to delete all mappings?"
 msgstr "Möchten Sie wirklich alle Zuordnungen löschen?"
 
-#: pdf-forms-for-woocommerce.php:2408
+#: pdf-forms-for-woocommerce.php:2573
+msgid "Are you sure you want to delete all value mappings?"
+msgstr "Sind Sie sicher, dass Sie alle Wertzuordnungen löschen möchten?"
+
+#: pdf-forms-for-woocommerce.php:2574
 msgid "Are you sure you want to attach a PDF file without any form fields?"
 msgstr "Möchten Sie wirklich eine PDF-Datei ohne Formularfelder anhängen?"
 
-#: pdf-forms-for-woocommerce.php:2409
+#: pdf-forms-for-woocommerce.php:2575
 msgid "Are you sure you want to delete this embeded image?"
 msgstr "Bist du sicher, dass du dieses eingebettete Bild löschen möchtest?"
 
-#: pdf-forms-for-woocommerce.php:2412
+#: pdf-forms-for-woocommerce.php:2578
 msgid "Select a PDF file"
 msgstr "Wählen Sie eine PDF-Datei aus"
 
-#: pdf-forms-for-woocommerce.php:2413
+#: pdf-forms-for-woocommerce.php:2579
 msgid "Select"
 msgstr "Auswählen"
 
-#: pdf-forms-for-woocommerce.php:2414
+#: pdf-forms-for-woocommerce.php:2580
 msgid "All PDFs"
 msgstr "Alle PDF-Dateien"
 
-#: pdf-forms-for-woocommerce.php:2415
+#: pdf-forms-for-woocommerce.php:2581
 msgid "All"
 msgstr "Alle"
 
-#: pdf-forms-for-woocommerce.php:2416
+#: pdf-forms-for-woocommerce.php:2582
 msgid "--- EMPTY ---"
 msgstr "--- LEER ---"
 
-#: pdf-forms-for-woocommerce.php:2437
+#: pdf-forms-for-woocommerce.php:2607
 msgid "Are you sure you want to reset settings for this order?"
-msgstr ""
-"Sind Sie sicher, dass Sie die Einstellungen für diese Bestellung "
-"zurücksetzen möchten?"
+msgstr "Sind Sie sicher, dass Sie die Einstellungen für diese Bestellung zurücksetzen möchten?"
 
-#: pdf-forms-for-woocommerce.php:2438
+#: pdf-forms-for-woocommerce.php:2608
 msgid "Are you sure you want to reset PDFs for this order?"
-msgstr ""
-"Sind Sie sicher, dass Sie die PDFs für diese Bestellung zurücksetzen möchten?"
+msgstr "Sind Sie sicher, dass Sie die PDFs für diese Bestellung zurücksetzen möchten?"
 
-#: pdf-forms-for-woocommerce.php:2468
+#: pdf-forms-for-woocommerce.php:2638
 msgid "Invalid attachment ID"
 msgstr "Ungültige Anhangs-ID"
 
-#: pdf-forms-for-woocommerce.php:2479
+#: pdf-forms-for-woocommerce.php:2649
 msgid "PDF form filling"
 msgstr "PDF-Formular ausfüllen"
 
-#: pdf-forms-for-woocommerce.php:2559
+#: pdf-forms-for-woocommerce.php:2729
 msgid "Could not read attached file"
 msgstr "Angehängte Datei konnte nicht gelesen werden"
 
-#: pdf-forms-for-woocommerce.php:2590
+#: pdf-forms-for-woocommerce.php:2760
 msgid "No service"
 msgstr "Kein Service"
 
-#: pdf-forms-for-woocommerce.php:2668
+#: pdf-forms-for-woocommerce.php:2838
 msgid "Failed to determine upload path"
 msgstr "Upload-Pfad konnte nicht ermittelt werden"
 
-#: pdf-forms-for-woocommerce.php:2708
+#: pdf-forms-for-woocommerce.php:2878
 msgid "Invalid page number"
 msgstr "Ungültige Seitenzahl"
 
-#: pdf-forms-for-woocommerce.php:2717
+#: pdf-forms-for-woocommerce.php:2887
 msgid "Failed to retrieve page snapshot"
 msgstr "Fehler beim Abrufen der Schattenkopie der Seite"
 
 #: src/filesystem/storage.php:134
 msgid "Can't create directory because a file with the same name already exists"
-msgstr ""
-"Verzeichnis kann nicht erstellt werden, da bereits eine Datei mit demselben "
-"Namen existiert"
+msgstr "Verzeichnis kann nicht erstellt werden, da bereits eine Datei mit demselben Namen existiert"
 
 #: src/services/pdf-ninja.php:40 src/services/pdf-ninja.php:44
 msgid "Pdf.Ninja API"
@@ -480,8 +433,7 @@ msgstr "Pdf.Ninja API"
 
 #: src/services/pdf-ninja.php:46
 msgid "The following form allows you to edit your API settings."
-msgstr ""
-"Mit dem folgenden Formular kannst du deine API-Einstellungen bearbeiten."
+msgstr "Mit dem folgenden Formular kannst du deine API-Einstellungen bearbeiten."
 
 #: src/services/pdf-ninja.php:50
 msgid "API Key"
@@ -529,9 +481,7 @@ msgstr "kopiert!"
 
 #: src/services/pdf-ninja.php:179
 msgid "Failed to get the Pdf.Ninja API key on last attempt."
-msgstr ""
-"Der Pdf.Ninja-API-Schlüssel konnte beim letzten Versuch nicht abgerufen "
-"werden."
+msgstr "Der Pdf.Ninja-API-Schlüssel konnte beim letzten Versuch nicht abgerufen werden."
 
 #: src/services/pdf-ninja.php:249
 msgid "Failed to determine the administrator's email address."
@@ -545,8 +495,7 @@ msgstr "Verbindung zu {url} fehlgeschlagen"
 msgid "Failed to decode API server response"
 msgstr "Fehler beim Dekodieren der API-Server-Antwort"
 
-#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497
-#: src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
+#: src/services/pdf-ninja.php:370 src/services/pdf-ninja.php:497 src/services/pdf-ninja.php:625 src/services/pdf-ninja.php:638
 #: src/services/pdf-ninja.php:670 src/services/pdf-ninja.php:776
 msgid "Pdf.Ninja API server did not send an expected response"
 msgstr "Pdf.Ninja API-Server hat eine erwartete Antwort nicht gesendet"
@@ -568,30 +517,20 @@ msgid "Failed to encode JSON data"
 msgstr "Fehler beim Codieren von JSON-Daten"
 
 #: src/services/pdf-ninja.php:812
-msgid ""
-"Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-"
-"service-page}Please retry manually{/a}."
+msgid "Failed to acquire the Pdf.Ninja API key on last attempt. {a-href-edit-service-page}Please retry manually{/a}."
 msgstr ""
-"Fehler beim Abrufen des Pdf.Ninja-API-Schlüssels beim letzten Versuch. {a-"
-"href-edit-service-page}Bitte manuell erneut versuchen{/a}."
+"Fehler beim Abrufen des Pdf.Ninja-API-Schlüssels beim letzten Versuch. {a-href-edit-service-page}Bitte manuell erneut "
+"versuchen{/a}."
 
 #: src/services/pdf-ninja.php:832
 msgid "Warning"
 msgstr "Warnung"
 
 #: src/services/pdf-ninja.php:833
-msgid ""
-"Your WooCommerce settings indicate that you are using an insecure connection "
-"to the Pdf.Ninja API server."
-msgstr ""
-"Ihre WooCommerce-Einstellungen zeigen an, dass Sie eine unsichere Verbindung "
-"zum Pdf.Ninja API-Server verwenden."
+msgid "Your WooCommerce settings indicate that you are using an insecure connection to the Pdf.Ninja API server."
+msgstr "Ihre WooCommerce-Einstellungen zeigen an, dass Sie eine unsichere Verbindung zum Pdf.Ninja API-Server verwenden."
 
-#: src/services/service.php:21 src/services/service.php:26
-#: src/services/service.php:31 src/services/service.php:36
+#: src/services/service.php:21 src/services/service.php:26 src/services/service.php:31 src/services/service.php:36
 #: src/services/service.php:41
 msgid "Missing feature"
 msgstr "Fehlende Funktion"
-
-#~ msgid "Failed to open file for writing"
-#~ msgstr "Fehler beim Öffnen der Datei zum Schreiben"
