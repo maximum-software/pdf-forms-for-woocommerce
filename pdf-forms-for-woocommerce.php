@@ -929,7 +929,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							&& isset( $options['save_directory'] )
 							&& $options['save_directory'] !== "" )
 							{
-								$files = $this->fill_pdfs( $settings, $placeholder_processor );
+								$this->fill_pdfs( $settings, $placeholder_processor );
 								break;
 							}
 						}
@@ -1066,6 +1066,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						|| ! is_array( $attachments = $settings['attachments'] ) )
 							continue;
 						
+						// make a list of attachments that need to be attached to this email
+						$attachments_to_attach = array();
 						foreach( $attachments as $attachment )
 						{
 							if( isset( $attachment['options'] )
@@ -1073,19 +1075,27 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 							&& isset( $options['email_templates'] )
 							&& is_array( $email_templates = $options['email_templates'] )
 							&& in_array( $email_id, $email_templates ) )
-							{
-								if( isset( $this->filled_pdfs[$order_id] ) && isset( $this->filled_pdfs[$order_id][$order_item_id] ) )
-									$email_attachments = array_merge( $email_attachments, $this->filled_pdfs[$order_id][$order_item_id] );
-								else
-								{
-									$files = $this->fill_pdfs( $settings, $placeholder_processor );
-									$email_attachments = array_merge( $email_attachments, $files );
-									$this->filled_pdfs[$order_id][$order_item_id] = $files;
-								}
-								
-								break;
-							}
+								$attachments_to_attach[ $attachment['attachment_id'] ] = $attachment['attachment_id'];
 						}
+						
+						if( count( $attachments_to_attach ) == 0 )
+							continue;
+						
+						// get filled PDFs
+						$filled_pdfs = array();
+						if( isset( $this->filled_pdfs[$order_id] ) && isset( $this->filled_pdfs[$order_id][$order_item_id] ) ) // check cache
+							$filled_pdfs = $this->filled_pdfs[$order_id][$order_item_id];
+						else
+							// cache a list of filled pdfs so that we don't need to fill them again in the same request
+							$filled_pdfs = $this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
+						
+						// filter filled PDFs by attachment ID
+						$filtered_pdfs = array();
+						foreach( $filled_pdfs as $attachment_id => $filled_pdf )
+							if( isset( $attachments_to_attach[$attachment_id] ) )
+								$filtered_pdfs[] = $filled_pdf;
+						
+						$email_attachments = array_merge( $email_attachments, $filtered_pdfs );
 					}
 				}
 			}
@@ -1295,7 +1305,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									$placeholder_processor->set_product_id( $product_id );
 									
 									// fill PDFs so that they are also saved to the order directory
-									// save a list of filled pdfs so that we don't need to fill them again when attaching them to emails
+									// cache a list of filled pdfs so that we don't need to fill them again in the same request
 									$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 									
 									$downloadable_file = $this->get_downloadable_file( $order, $order_item_id, $attachment_id );
@@ -1442,6 +1452,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						$placeholder_processor->set_product_id( $product_id );
 						
 						// fill PDFs so that they are also saved to the order directory
+						// cache a list of filled pdfs so that we don't need to fill them again in the same request
 						$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
 						
 						$downloadable_file = $this->get_downloadable_file( $order_id, $order_item_id, $attachment_id );
@@ -1952,7 +1963,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					
 					foreach( $files as $id => $filedata )
 					{
-						$output_files[] = $filedata['file'];
+						$output_files[ $filedata['attachment_id'] ] = $filedata['file'];
 						
 						$save_directory = strval( $filedata['options']['save_directory'] );
 						if( $save_directory !== "" )
