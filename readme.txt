@@ -1,9 +1,7 @@
 === PDF Forms Filler for WooCommerce ===
 Version: 1.1.0
 Stable tag: 1.1.0
-Requires at least: 5.4
 Tested up to: 6.7
-Requires PHP: 5.5
 Tags: pdf, form, woocommerce, email, download
 Plugin URI: https://pdfformsfiller.org/
 Author: Maximum.Software
