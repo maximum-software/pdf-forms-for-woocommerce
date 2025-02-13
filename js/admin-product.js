@@ -92,11 +92,8 @@ jQuery(document).ready(function($) {
 						if(count > totalNeeded)
 							return false;
 						
-						if(!item.hasOwnProperty("lowerText"))
-							item.lowerText = item.text.toLowerCase();
-						
-						var counts = item.lowerText.indexOf(upperTerm) >= 0;
-						
+						var lowerText = item.hasOwnProperty("lowerText") ? item.lowerText : item.text.toLowerCase();
+						var counts = lowerText.indexOf(upperTerm) >= 0;
 						if(counts)
 							count++;
 						
@@ -113,9 +110,8 @@ jQuery(document).ready(function($) {
 					var exists = false;
 					jQuery.each(items, function(index, item)
 					{
-						if(!item.hasOwnProperty("lowerText"))
-							item.lowerText = String(item.text).toLowerCase();
-						if(item.id == tag || item.lowerText == lowerTag)
+						var lowerText = item.hasOwnProperty("lowerText") ? item.lowerText : String(item.text).toLowerCase();
+						if(item.id == tag || lowerText == lowerTag)
 						{
 							exists = true;
 							return false; // break
@@ -123,7 +119,7 @@ jQuery(document).ready(function($) {
 					});
 					if(!exists)
 					{
-						items = Object.assign([], items); // shallow copy
+						items = shallowCopy(items);
 						items.unshift({id: tag, text: tag, lowerText: lowerTag});
 					}
 				}
@@ -133,7 +129,7 @@ jQuery(document).ready(function($) {
 				items = items.slice((params.page - 1) * pageSize, totalNeeded); // paginate
 				
 				callback({
-					results: items,
+					results: deepCopy(items),
 					pagination: { more: more }
 				});
 			};
@@ -268,6 +264,51 @@ jQuery(document).ready(function($) {
 		dataAdapter: jQuery.fn.select2.amd.require("pdf-forms-for-woocommerce-shared-data-adapter")
 	});
 	
+	var shallowCopy = function(obj)
+	{
+		if(obj === null || typeof obj !== 'object')
+			return obj;
+		if(Array.isArray(obj))
+			return obj.slice();
+		try
+		{
+			return Object.assign({}, obj);
+		}
+		catch (e)
+		{
+			console.error('shallowCopy: failed to copy value of type ' + typeof obj);
+			return obj;
+		}
+	};
+	
+	var deepCopy = function(obj)
+	{
+		// return primitive values as-is
+		if(obj === null || typeof obj !== 'object')
+			return obj;
+		
+		// use structuredClone if available (modern browsers)
+		if(typeof structuredClone === 'function')
+			try { return structuredClone(obj); } catch (e) { } // ignore failure
+		
+		// fallback implementation for older browsers
+		
+		if(Array.isArray(obj))
+			return obj.map(function(item) { return deepCopy(item); });
+		
+		try
+		{
+			var copy = {};
+			Object.keys(obj).forEach(function(key) { copy[key] = deepCopy(obj[key]); });
+			return copy;
+		}
+		catch (e)
+		{
+			console.error('deepCopy: failed to copy value of type ' + typeof obj);
+			return obj;
+		}
+	};
+	
 	var clearMessages = function()
 	{
 		jQuery('.pdf-forms-for-woocommerce-admin .messages').empty();
@@ -380,8 +421,8 @@ jQuery(document).ready(function($) {
 				if(!(type === 'text' || type === 'radio' || type === 'select' || type === 'checkbox'))
 					return;
 				
-				var all_attachment_data = Object.assign({}, field); // shallow copy
-				var current_attachment_data = Object.assign({}, field); // shallow copy
+				var all_attachment_data = shallowCopy(field);
+				var current_attachment_data = shallowCopy(field);
 				
 				all_attachment_data['id'] = 'all-' + field.id;
 				all_attachment_data['text'] = name;
@@ -554,7 +595,7 @@ jQuery(document).ready(function($) {
 		var options = data.options;
 		
 		var attachments = getAttachments();
-		attachments.push( data );
+		attachments.push(deepCopy(data));
 		setAttachments(attachments);
 		
 		jQuery('.pdf-forms-for-woocommerce-admin .instructions').remove();
