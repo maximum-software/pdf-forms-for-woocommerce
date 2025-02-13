@@ -3,12 +3,12 @@
  * Plugin Name: PDF Forms Filler for WooCommerce
  * Plugin URI: https://pdfformsfiller.org/
  * Description: Automatically fill PDF forms with WooCommerce orders and attach generated PDFs to email notifications and order downloads.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires at least: 5.4
  * Requires PHP: 5.5
  * Requires Plugins: woocommerce
  * WC requires at least: 7.1.0
- * WC tested up to: 9.5
+ * WC tested up to: 9.6
  * Author: Maximum.Software
  * Author URI: https://maximum.software/
  * Text Domain: pdf-forms-for-woocommerce
@@ -26,9 +26,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 {
 	class Pdf_Forms_For_WooCommerce
 	{
-		const VERSION = '1.1.0';
+		const VERSION = '1.1.1';
 		const MIN_WC_VERSION = '7.1.0';
-		const MAX_WC_VERSION = '9.5.99';
+		const MAX_WC_VERSION = '9.6.99';
 		private static $BLACKLISTED_WC_VERSIONS = array();
 		
 		const META_KEY = '_pdf-forms-for-woocommerce-data';
