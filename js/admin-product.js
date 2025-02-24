@@ -591,6 +591,8 @@ jQuery(document).ready(function($) {
 		if(!info)
 			return;
 		
+		data = deepCopy(data);
+		
 		var filename = info.filename;
 		var options = data.options;
 		
@@ -768,6 +770,8 @@ jQuery(document).ready(function($) {
 			var mappings = getMappings();
 			jQuery.each(data.value_mappings, function(index, value_mapping) {
 				
+				value_mapping = shallowCopy(value_mapping);
+				
 				// find mapping id
 				for(var i=0, l=mappings.length; i<l; i++)
 				{
@@ -899,6 +903,8 @@ jQuery(document).ready(function($) {
 		|| typeof data.pdf_value == 'undefined')
 			return;
 		
+		data = deepCopy(data);
+		
 		data.value_mapping_id = generateId();
 		pluginData["value_mappings"].push(data);
 		
@@ -1014,6 +1020,8 @@ jQuery(document).ready(function($) {
 	
 	var addMapping = function(data)
 	{
+		data = deepCopy(data);
+		
 		if(!data.hasOwnProperty('placeholders'))
 			return;
 		
@@ -1139,6 +1147,8 @@ jQuery(document).ready(function($) {
 			if(!attachment)
 				return;
 		}
+		
+		embed = deepCopy(embed);
 		
 		if(!embed.id)
 			embed.id = ++embed_id_autoinc;
@@ -1487,7 +1497,7 @@ jQuery(document).ready(function($) {
 						if(!confirm(pdf_forms_for_woocommerce.__Confirm_Attach_Empty_Pdf))
 							return;
 					setAttachmentData(data.attachment_id, data);
-					addAttachment({'attachment_id': data.attachment_id, options: defaultPdfOptions});
+					addAttachment({'attachment_id': data.attachment_id, options: deepCopy(defaultPdfOptions)});
 				}
 			},
 			
