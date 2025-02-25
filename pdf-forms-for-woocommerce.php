@@ -808,6 +808,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					"image/x-ms-bmp",
 					"image/svg+xml",
 					"image/webp",
+					"application/pdf",
 				);
 			
 			if( $mimetype )
