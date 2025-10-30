@@ -133,7 +133,6 @@
 					
 					wp_register_script( 'pdf_forms_for_woocommerce_new_key_script', plugins_url( '../../js/new-key.js', __FILE__ ), array( 'jquery', 'pdf_forms_filler_spinner_script' ), Pdf_Forms_For_WooCommerce::VERSION );
 					wp_localize_script( 'pdf_forms_for_woocommerce_new_key_script', 'pdf_forms_for_woocommerce_new_key', array(
-						'ajax_url' => admin_url( 'admin-ajax.php' ),
 						'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
 						'__Unknown_error' => __( 'Unknown error', 'pdf-forms-for-woocommerce' ),
 					) );

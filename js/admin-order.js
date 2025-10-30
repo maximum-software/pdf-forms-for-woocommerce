@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 			return;
 		
 		jQuery.ajax({
-			url: pdf_forms_for_woocommerce.ajax_url,
+			url: ajaxurl,
 			type: 'POST',
 			data: {
 				'action': 'pdf_forms_for_woocommerce_reset_order_settings',
@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
 			return;
 		
 		jQuery.ajax({
-			url: pdf_forms_for_woocommerce.ajax_url,
+			url: ajaxurl,
 			type: 'POST',
 			data: {
 				'action': 'pdf_forms_for_woocommerce_reset_order_pdfs',

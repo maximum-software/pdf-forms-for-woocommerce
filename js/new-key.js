@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
 		var email = jQuery('#pdf-forms-woocommerce-new-key-email').val();
 		
 		jQuery.ajax({
-			url: pdf_forms_for_woocommerce_new_key.ajax_url,
+			url: ajaxurl,
 			type: 'POST',
 			data: {
 				'action': 'pdf_forms_for_woocommerce_generate_pdf_ninja_key',

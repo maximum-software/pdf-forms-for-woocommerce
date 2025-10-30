@@ -2549,7 +2549,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			wp_register_style( 'pdf_forms_for_woocommerce_notices_style', plugin_dir_url( __FILE__ ) . 'css/notices.css', array( ), self::VERSION );
 			
 			wp_localize_script( 'pdf_forms_for_woocommerce_notices_script', 'pdf_forms_for_woocommerce', array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
 			) );
 			
@@ -2574,7 +2573,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				wp_register_style( 'pdf_forms_for_woocommerce_admin_product_style', plugin_dir_url( __FILE__ ) . 'css/admin-product.css', array( 'jcrop', 'select2' ), self::VERSION );
 				
 				wp_localize_script( 'pdf_forms_for_woocommerce_admin_product_script', 'pdf_forms_for_woocommerce', array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
 					'__No_Post_ID' => __( "Failed to determine post ID", 'pdf-forms-for-woocommerce' ),
 					'__No_Preload_Data' => __( 'Failed to load PDF form data', 'pdf-forms-for-woocommerce' ),
@@ -2613,7 +2611,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				$order = wc_get_order();
 				wp_localize_script( 'pdf_forms_for_woocommerce_admin_order_script', 'pdf_forms_for_woocommerce', array(
-					'ajax_url' => admin_url( 'admin-ajax.php' ),
 					'ajax_nonce' => wp_create_nonce( 'pdf-forms-for-woocommerce-ajax-nonce' ),
 					'order_id' => is_a( $order, 'WC_Order' ) ? $order->get_id() : null,
 					'__Confirm_Reset_Settings' => __( 'Are you sure you want to reset settings for this order?', 'pdf-forms-for-woocommerce' ),

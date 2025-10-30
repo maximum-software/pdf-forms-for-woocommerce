@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
 	jQuery('.pdf-forms-for-woocommerce-notice').on("click", ".pdf-forms-for-woocommerce-clear-msgs", function(event) {
 		var notice = jQuery(this).closest('.pdf-forms-for-woocommerce-notice');
 		jQuery.ajax({
-			url: pdf_forms_for_woocommerce.ajax_url,
+			url: ajaxurl,
 			type: 'POST',
 			data: {
 				'action': 'pdf_forms_for_woocommerce_clear_messages',
