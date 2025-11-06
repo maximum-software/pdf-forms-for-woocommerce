@@ -934,10 +934,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								break;
 							}
 						}
-						
-						// clear temporary files
-						self::remove_tmp_storage();
 					}
+					
+					// clear temporary files
+					self::remove_tmp_storage();
 				}
 			}
 			catch ( Exception $e )
