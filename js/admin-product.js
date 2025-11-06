@@ -710,7 +710,7 @@ jQuery(document).ready(function($) {
 	var preloadData = function()
 	{
 		if(!post_id)
-			return errorMessage(pdf_forms_for_wpforms.__No_Post_ID);
+			return errorMessage(pdf_forms_for_woocommerce.__No_Post_ID);
 		
 		// get initial form data
 		var data_json = data_tag.val();
