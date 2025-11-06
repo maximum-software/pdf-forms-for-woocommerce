@@ -2567,7 +2567,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			if( ( 'post.php' == $hook || 'post-new.php' == $hook ) && 'product' == $post_type )
 			{
 				wp_register_style( 'select2', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), '4.0.13' );
-				wp_register_script( 'select2', plugin_dir_url(  __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), '4.0.13' );
+				wp_register_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2/select2.min.js', array( 'jquery' ), '4.0.13' );
 				
 				wp_register_script( 'pdf_forms_for_woocommerce_admin_product_script', plugin_dir_url( __FILE__ ) . 'js/admin-product.js', array( 'jquery', 'jcrop', 'select2' ), self::VERSION );
 				wp_register_style( 'pdf_forms_for_woocommerce_admin_product_style', plugin_dir_url( __FILE__ ) . 'css/admin-product.css', array( 'jcrop', 'select2' ), self::VERSION );
