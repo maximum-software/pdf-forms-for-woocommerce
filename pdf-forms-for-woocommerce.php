@@ -291,7 +291,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$messages = self::get_admin_messages();
 				if( count( $messages ) > 0 )
 				{
-					$messages = array_map( function( $message ) { return "<span class='".esc_attr($message['type'])."'>".esc_html($message['message'])."</span>"; }, $messages );
+					$messages = array_map( function( $message ) { return "<span class='".esc_attr($message['type'])."'>".esc_textarea($message['message'])."</span>"; }, $messages );
 					$messageHtml = self::render(
 						'admin-messages',
 						array(
@@ -2273,11 +2273,11 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						woocommerce_wp_hidden_input( array(
 							'id'    => 'pdf-forms-for-woocommerce-data',
 							'class' => 'pdf-forms-for-woocommerce-data',
-							'value' => Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $settings ),
+							'value' => esc_textarea( Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $settings ) ), //  esc_attr() is used to output this value which does not double-escape by design, which causes issues with JSON already containing entities like &quot;, so we need to pre-emptively double-escape with esc_textarea()
 						) );
 						return ob_get_clean(); // no escaping needed
 					} ),
-					'preload-data' => esc_html( Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $preload_data ) ),
+					'preload-data' => esc_textarea( Pdf_Forms_For_WooCommerce_Wrapper::json_encode( $preload_data ) ), // esc_textarea() is used to double-escape for correct JSON, esc_html() does not double-escape by design
 					'instructions' => esc_html__( "You can use this section to attach a PDF file to your product and link WooCommerce placeholders to fields in the PDF file. You can also embed images from a URL into the PDF file. Changes here are applied when the product is saved.", 'pdf-forms-for-woocommerce' ),
 					'attach-pdf' => esc_html__( "Attach a PDF File", 'pdf-forms-for-woocommerce' ),
 					'delete' => esc_html__( 'Delete', 'pdf-forms-for-woocommerce' ),
