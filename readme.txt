@@ -1,6 +1,6 @@
 === PDF Forms Filler for WooCommerce ===
-Version: 1.1.2
-Stable tag: 1.1.2
+Version: 1.1.3
+Stable tag: 1.1.3
 Tested up to: 6.7
 Tags: pdf, form, woocommerce, email, download
 Plugin URI: https://pdfformsfiller.org/
@@ -53,6 +53,12 @@ Special thanks to the following sponsors of this plugin:
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
 
 == Changelog ==
+
+= 1.1.3 =
+
+* Release date: November 13, 2025
+
+* Bug fix: Only the first email receives PDF attachment when multiple emails are sent on order submission
 
 = 1.1.2 =
 
