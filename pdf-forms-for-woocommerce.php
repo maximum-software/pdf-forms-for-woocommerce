@@ -89,7 +89,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_after_order_object_save', array( $this, 'woocommerce_after_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
-			add_action( 'woocommerce_email_sent', array( $this, 'remove_tmp_storage' ), 99, 0 ); // since WC 5.6.0
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
 			
