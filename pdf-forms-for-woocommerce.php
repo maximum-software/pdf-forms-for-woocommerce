@@ -40,7 +40,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		private $tmp_storage = null;
 		private $filled_pdfs = array();
 		private $new_orders = array();
-		private $delayed_saving_orders = array();
 		private $do_not_save_orders = array();
 		
 		private function __construct()
@@ -507,8 +506,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function set_order_metadata( $order, $key = null, $value = null )
 		{
-			$by_id = is_numeric( $order );
-			
 			if( ! is_a( $order, 'WC_Order' ) )
 			{
 				// $order is probably order ID or post
@@ -535,34 +532,10 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				
 				$order_id = $order->get_id();
 				if( ! isset( $this->do_not_save_orders[$order_id] ) )
-				{
-					if( $by_id )
-						$order->save();
-					else
-					{
-						// save after all changes have been made
-						if( $order_id )
-						{
-							if( count( $this->delayed_saving_orders ) == 0 )
-								add_action( 'shutdown', array( $this, 'save_delayed_orders' ) );
-							$this->delayed_saving_orders[$order_id] = $order;
-						}
-					}
-				}
+					$order->save_meta_data();
 			}
 			
 			return $value;
-		}
-		
-		/**
-		 * Function for delay-saving orders
-		 * Used to avoid multiple unnecessary saves and other issues
-		 */
-		public function save_delayed_orders()
-		{
-			foreach( $this->delayed_saving_orders as $order )
-				$order->save();
-			$this->delayed_saving_orders = array();
 		}
 		
 		/**
