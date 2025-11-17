@@ -163,10 +163,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			$order_item_product_has_attachments = false;
 			
 			// check order metadata for attachments
-			$settings = $this->get_order_metadata( $order );
-			if( is_array( $settings )
-			&& isset( $settings['product-settings'] )
-			&& is_array( $product_settings = $settings['product-settings'] ) )
+			$product_settings = $this->get_order_metadata( $order, 'product-settings' );
+			if( is_array( $product_settings ) )
 			{
 				foreach( $product_settings as $settings )
 				{
