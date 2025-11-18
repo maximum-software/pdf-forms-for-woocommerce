@@ -952,15 +952,19 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			{
 				// check if this order is in the database
 				$order_id = $order->get_id();
-				if( $order_id )
+				if( $order_id !== 0 )
 				{
-					$new_status = $order->get_status();
-					$old_order = wc_get_order( $order_id );
-					$old_status = $old_order->get_status();
-					if( $old_status != $new_status )
+					$changes = $order->get_changes();
+					if( isset( $changes['status'] ) )
 					{
-						// remove stale downloadable files
-						$this->unset_downloadable_files( $order );
+						$old_data = $order->get_data();
+						$old_status = $old_data['status'];
+						$new_status = $changes['status'];
+						if( $old_status !== $new_status )
+						{
+							// remove stale downloadable files
+							$this->unset_downloadable_files( $order );
+						}
 					}
 				}
 			}
