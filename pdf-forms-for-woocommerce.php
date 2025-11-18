@@ -39,7 +39,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		private $registered_services = false;
 		private $tmp_storage = null;
 		private $filled_pdfs = array();
-		private $new_orders = array();
 		private $do_not_save_orders = array();
 		
 		private function __construct()
@@ -86,7 +85,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 			add_action( 'before_woocommerce_init', array( $this, 'before_woocommerce_init' ) );
 			add_action( 'woocommerce_new_order', array( $this, 'woocommerce_new_order' ), 10, 2 ); // since 2.7.0
 			add_filter( 'woocommerce_before_order_object_save', array( $this, 'woocommerce_before_order_object_save' ), 10, 2 );
-			add_filter( 'woocommerce_after_order_object_save', array( $this, 'woocommerce_after_order_object_save' ), 10, 2 );
 			add_filter( 'woocommerce_email_attachments', array( $this, 'attach_pdfs' ), 10, 4 );
 			add_filter( 'woocommerce_get_item_downloads', array( $this, 'woocommerce_get_item_downloads' ), 10, 3 );
 			add_filter( 'woocommerce_customer_available_downloads', array( $this, 'woocommerce_customer_available_downloads' ), 10, 2 );
@@ -928,7 +926,16 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function woocommerce_new_order( $order_id, $order )
 		{
-			$this->new_orders[$order_id] = $order_id;
+			// Get the order object if needed
+			if( ! is_a( $order, 'WC_Order' ) )
+			{
+				$order = wc_get_order( $order_id );
+				if( ! is_a( $order, 'WC_Order' ) )
+					return;
+			}
+			
+			// Save product settings snapshot for new orders
+			$this->reset_order_settings( $order );
 		}
 		
 		/**
@@ -983,25 +990,6 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				$this->unset_order_metadata( $order, 'product-settings' );
 			else
 				$this->set_order_metadata( $order, 'product-settings', $product_settings );
-		}
-		
-		/**
-		 * Saves product settings in order metadata
-		 */
-		public function woocommerce_after_order_object_save( $order, $data_store )
-		{
-			if( ! is_a( $order, 'WC_Order' ) )
-				return;
-			
-			$order_id = $order->get_id();
-			
-			// don't do anything if this order is not new
-			if( ! isset( $this->new_orders[$order_id] ) )
-				return;
-			
-			unset( $this->new_orders[$order_id] );
-			
-			$this->reset_order_settings( $order );
 		}
 		
 		/**
