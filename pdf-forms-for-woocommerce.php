@@ -1509,6 +1509,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 					$order_id = $download['order_id'];
 					$order_item = $downloads_items[$download_index];
 					$order_item_id = $order_item->get_id();
+					$product_id = $order_item->get_product_id();
 					
 					$downloadable_file = $this->get_downloadable_file( $order_id, $order_item_id, $attachment_id );
 					
