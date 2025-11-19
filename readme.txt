@@ -1,6 +1,6 @@
 === PDF Forms Filler for WooCommerce ===
-Version: 1.1.3
-Stable tag: 1.1.3
+Version: 1.1.4
+Stable tag: 1.1.4
 Tested up to: 6.7
 Tags: pdf, form, woocommerce, email, download
 Plugin URI: https://pdfformsfiller.org/
@@ -53,6 +53,14 @@ Special thanks to the following sponsors of this plugin:
 4. Start using the 'PDF Forms' section on the WooCommerce product editor page.
 
 == Changelog ==
+
+= 1.1.4 =
+
+* Release date: November 19, 2025
+
+* Added the `Downloads` table in the edit order page meta box
+* Bug fix: plugin randomly failing to work due to a race condition causing product settings not to be stored in new orders (when HPOS is enabled with compatibility mode)
+* Other minor bug fixes and improvements
 
 = 1.1.3 =
 
