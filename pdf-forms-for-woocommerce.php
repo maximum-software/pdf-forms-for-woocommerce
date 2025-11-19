@@ -1328,7 +1328,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( isset( $downloadable_files[$attachment_id] )
 				&& is_array( $downloadable_file = $downloadable_files[$attachment_id] )
 				&& isset( $downloadable_file['file'] ) )
-					@unlink( $downloadable_file['file'] );
+					@unlink( trailingslashit( ABSPATH ) . $downloadable_file['file'] );
 				
 				unset( $downloadable_files[$attachment_id] );
 				
