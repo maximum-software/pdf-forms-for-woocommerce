@@ -2490,10 +2490,18 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 									// don't create a new download if one already exists
 									if( $download_id == '' && $product)
 									{
-										if( ! empty( $attachment['options']['filename'] ) )
+										// come up with a download name
+										$name = get_the_title( $attachment_id );
+										if( $name === '' )
+										{
+											$filepath = get_attached_file( $attachment_id );
+											if( $filepath !== false )
+												$name = wp_basename( $filepath );
+										}
+										if( $name === '' )
 											$name = strval( $attachment['options']['filename'] );
-										else
-											$name = get_the_title( $attachment_id );
+										if( $name === '' )
+											$name = __( 'Download', 'pdf-forms-for-woocommerce' );
 										
 										$downloads[] = array(
 											'name' => $name,
