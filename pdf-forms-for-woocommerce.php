@@ -792,6 +792,111 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 		 */
 		public function display_order_metabox( $post_or_order_object = null )
 		{
+			$order = wc_get_order( $post_or_order_object );
+			$downloads_rows = '';
+			
+			// only proceed if we have a valid order object
+			if( ! is_a( $order, 'WC_Order' ) )
+				return;
+			
+			$order_id = $order->get_id();
+			
+			// ensure that this order's filled PDFs exist, if not, create them
+			// product_settings is the per-product PDF configuration snapshot stored on this order; if it's empty then there is nothing to fill
+			$product_settings = $this->get_order_metadata( $order, 'product-settings' );
+			if( is_array( $product_settings ) && ! empty( $product_settings ) )
+			{
+				$placeholder_processor = $this->get_placeholder_processor();
+				$placeholder_processor->set_order( $order );
+				
+				$downloadable_files_map = $this->get_downloadable_files( $order );
+				
+				$items = $order->get_items();
+				foreach( $items as $item )
+				{
+					$order_item_id = $item->get_id();
+					$placeholder_processor->set_order_item( $item );
+					
+					$product_id = $item->get_product_id();
+					$placeholder_processor->set_product_id( $product_id );
+					
+					// skip items whose products do not have any PDF settings stored on this order
+					if( ! isset( $product_settings[$product_id] ) )
+						continue;
+					
+					$settings = $product_settings[$product_id];
+					
+					// skip products that have no attachments configuration; there are no PDFs to generate
+					if( ! is_array( $settings )
+					|| ! isset( $settings['attachments'] )
+					|| ! is_array( $attachments = $settings['attachments'] ) )
+						continue;
+					
+					$order_item_downloads = array();
+					if( isset( $downloadable_files_map[$order_item_id] ) && is_array( $downloadable_files_map[$order_item_id] ) )
+						$order_item_downloads = $downloadable_files_map[$order_item_id];
+					
+					foreach( $attachments as $attachment )
+					{
+						$attachment_id = $attachment['attachment_id'];
+						
+						// skip attachments that are not configured as downloads (no download_id)
+						if( ! isset( $attachment['options'] )
+						|| ! is_array( $options = $attachment['options'] )
+						|| ! isset( $options['download_id'] )
+						|| $options['download_id'] === "" )
+							continue;
+						
+						$downloadable_file = isset( $order_item_downloads[$attachment_id] ) ? $order_item_downloads[$attachment_id] : null;
+						
+						// if we already have a filled PDF for this attachment, we don't need to refill anything
+						if( is_array( $downloadable_file ) && isset( $downloadable_file['file'] ) )
+							continue;
+						
+						// cache a list of filled pdfs so that we don't need to fill them again in the same request
+						$this->filled_pdfs[$order_id][$order_item_id] = $this->fill_pdfs( $settings, $placeholder_processor );
+						
+						// after filling once for this item, stop checking further attachments here
+						break;
+					}
+				}
+			}
+			
+			$downloadable_files = $this->get_downloadable_files( $order );
+			if( is_array( $downloadable_files ) && ! empty( $downloadable_files ) )
+			{
+				foreach( $downloadable_files as $files )
+				{
+					if( ! is_array( $files ) )
+						continue;
+					foreach( $files as $downloadable_file )
+					{
+						if( ! is_array( $downloadable_file ) || ! isset( $downloadable_file['file'] ) )
+							continue;
+						$filename = isset( $downloadable_file['filename'] ) ? $downloadable_file['filename'] : wp_basename( $downloadable_file['file'] );
+						$url = trailingslashit( get_site_url() ) . $downloadable_file['file'];
+						$downloads_rows .= self::render(
+							'order-metabox-pdf-row',
+							array(
+								'download-name' => esc_html( $filename ),
+								'url' => esc_url( $url ),
+							)
+						);
+					}
+				}
+			}
+			
+			if( $downloads_rows === '' )
+				$downloads_rows = '<tr><td>' . esc_html__( "None", 'pdf-forms-for-woocommerce' ) . '</td></tr>';
+			
+			$downloads_table = self::render(
+				'order-metabox-pdfs-table',
+				array(
+					'column-download' => esc_html__( "Downloads", 'pdf-forms-for-woocommerce' ),
+					'downloads-rows' => $downloads_rows,
+				)
+			);
+			
 			print(
 				self::render( 'spinner' ) .
 				self::render(
@@ -801,6 +906,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						'reset-settings' => esc_html__( "Reset Settings", 'pdf-forms-for-woocommerce' ),
 						'reset-pdfs-instructions' => esc_html__( "PDFs are refilled when orders status changes. Sometimes you may want to manually trigger PDFs to be refilled after changing some aspect of the order, such as the billing address.", 'pdf-forms-for-woocommerce' ),
 						'reset-pdfs' => esc_html__( "Reset PDFs", 'pdf-forms-for-woocommerce' ),
+						'downloads-table' => $downloads_table,
 					)
 				)
 			);
