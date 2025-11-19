@@ -2104,7 +2104,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 								$this->set_downloadable_file(
 									$order,
 									$order_item_id,
-									$attachment_id,
+									$filedata['attachment_id'],
 									trailingslashit( $order_storage->get_site_root_relative_path() ) . $dstfilename,
 									$filedata['filename']
 								);
