@@ -238,11 +238,7 @@
 							'{order_billing_full_name}' => $this->order->get_formatted_billing_full_name(),
 						);
 						
-						$find = array_keys( $placeholders );
-						$replace = array_values( $placeholders );
-						
-						$email->find = array_merge( (array) $email->find, $find );
-						$email->replace = array_merge( (array) $email->replace, $replace );
+						$email->placeholders = array_merge( (array) $email->placeholders, $placeholders );
 						
 						return $email->format_string( $content );
 					}
