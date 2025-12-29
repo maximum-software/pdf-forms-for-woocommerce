@@ -185,10 +185,16 @@
 			private function process_email_placeholders( $content )
 			{
 				if( is_a( $this->email, 'WC_Email' ) )
+				{
+					// ensure {order_billing_full_name} is set if we have an order and it's not already set
+					if( is_a( $this->order, 'WC_Order' ) && empty( $this->email->placeholders['{order_billing_full_name}'] ) )
+						$this->email->placeholders['{order_billing_full_name}'] = $this->order->get_formatted_billing_full_name();
+
 					// this will process {blogname} (hardcoded in format_string),
 					// {site_title}, {site_address}, {site_url} (hardcoded in class WC_Email)
 					// and tags from woocommerce_email_format_string, woocommerce_email_format_string_find and woocommerce_email_format_string_replace filters
 					return $this->email->format_string( $content );
+				}
 				
 				if( is_a( $this->order, 'WC_Order' ) )
 				{
