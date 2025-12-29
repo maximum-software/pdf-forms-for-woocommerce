@@ -973,7 +973,7 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				// remove downloadable files
 				$this->unset_downloadable_files( $order );
 				
-				// refilling is necessary only if PDFs are being saved in wp-uploads
+				// refilling is necessary only if PDFs are being saved in wp-uploads or there are downloadable files
 				$product_settings = $this->get_order_metadata( $order, 'product-settings' );
 				if( is_array( $product_settings ) && ! empty( $product_settings ) )
 				{
@@ -1004,8 +1004,8 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 						{
 							if( isset( $attachment['options'] )
 							&& is_array( $options = $attachment['options'] )
-							&& isset( $options['save_directory'] )
-							&& $options['save_directory'] !== "" )
+							&& ( ( isset( $options['save_directory'] ) && $options['save_directory'] !== "" )
+							  || ( isset( $options['download_id'] ) && $options['download_id'] !== "" ) ) )
 							{
 								$this->fill_pdfs( $settings, $placeholder_processor );
 								break;
