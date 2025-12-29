@@ -933,6 +933,9 @@ if( ! class_exists( 'Pdf_Forms_For_WooCommerce', false ) )
 				if( ! is_a( $order, 'WC_Order' ) )
 					throw new Exception( __( "Invalid order", 'pdf-forms-for-woocommerce' ) );
 				
+				// remove old downloadable files
+				$this->unset_downloadable_files( $order );
+				
 				$this->reset_order_settings( $order );
 			}
 			catch ( Exception $e )
